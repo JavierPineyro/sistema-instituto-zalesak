@@ -4,16 +4,19 @@ import { DrizzleAdapter } from "@auth/drizzle-adapter"
 import { db } from "~/server/db"
 import { eq } from "drizzle-orm"
 import { users } from "~/server/db/schema"
-import { signInSchema } from "~/lib/validations/signin.schema"
+import { loginSchema } from "~/lib/validations/signin.schema"
 import bcrypt from "bcryptjs"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: DrizzleAdapter(db),
+  session:{
+    strategy: "jwt"
+  },
   providers: [
     Credentials({
       authorize: async (credentials) => {
         let user = null
-        const {data, success} = signInSchema.safeParse(credentials)
+        const {data, success} = loginSchema.safeParse(credentials)
         if(!success){
           throw new Error("Credenciales no válidas")
         }
@@ -39,7 +42,6 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if(!isValid){
           throw new Error("Email o Contraseña no válidas")
         }
-        
         return user
       },
     }),

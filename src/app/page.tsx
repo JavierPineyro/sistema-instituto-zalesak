@@ -2,9 +2,14 @@ import { auth, signOut } from "auth";
 import { redirect } from "next/navigation";
 
 export default async function HomePage() {
+
+  // PONER LAS ENV EN VERCEL ANTES DE DESPLEGAR
+
   const session = await auth()
-  if (!session) {
-    redirect("/login")
+  console.log("SESION", session)
+
+  if (!session?.user) {
+    return <div>Not authenticated</div>;
   }
 
   return (

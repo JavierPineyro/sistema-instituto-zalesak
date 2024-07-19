@@ -1,6 +1,6 @@
 import { string } from "zod";
-import { signInSchema } from "./signin.schema";
+import { loginSchema } from "./signin.schema";
 
-export const loginSchema = signInSchema.extend({
+export const registerSchema = loginSchema.extend({
   name: string({ required_error: "Name is required" }).min(1, "Name is required")
 });
