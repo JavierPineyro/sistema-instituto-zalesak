@@ -42,6 +42,13 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         if(!isValid){
           throw new Error("Email o Contraseña no válidas")
         }
+
+        // remove password from response for security reasons
+        user = {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        }
         return user
       },
     }),
