@@ -6,10 +6,11 @@ export default async function HomePage() {
   // PONER LAS ENV EN VERCEL ANTES DE DESPLEGAR
 
   const session = await auth()
-  console.log("SESION", session)
 
   if (!session?.user) {
     return <div>Not authenticated</div>;
+    // redirigir al login
+    // redirect("/login");
   }
 
   return (
