@@ -2,5 +2,5 @@ import { string } from "zod";
 import { loginSchema } from "./signin.schema";
 
 export const registerSchema = loginSchema.extend({
-  name: string({ required_error: "Name is required" }).min(1, "Name is required")
+  name: string({ required_error: "El nombre es obligatorio" }).min(1, "El nombre es requerido")
 });
