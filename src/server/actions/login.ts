@@ -4,8 +4,7 @@ import { signIn } from "auth"
 import { ServiceProvider } from "~/lib/types"
 
 export default async function loginAction(formData: FormData){
-
-  await signIn(ServiceProvider.CREDENTIALS, formData, {
-    redirectTo: "/"
-  })
+  
+    await signIn(ServiceProvider.CREDENTIALS, formData)
+  
 }
