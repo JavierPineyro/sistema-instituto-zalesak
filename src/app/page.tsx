@@ -8,9 +8,9 @@ export default async function HomePage() {
   const session = await auth()
 
   if (!session?.user) {
-    return <div>Not authenticated</div>;
-    // redirigir al login
-    // redirect("/login");
+    // return <div>Not authenticated</div>;
+    // // redirigir al login
+    redirect("/login");
   }
 
   return (
