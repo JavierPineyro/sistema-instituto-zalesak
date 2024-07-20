@@ -14,8 +14,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className={`${GeistSans.variable}`}>
-      <body>{children}</body>
+    <html lang="es" className={`${GeistSans.variable} "h-full bg-white"`}>
+      <body className="h-full">{children}</body>
     </html>
   );
 }
