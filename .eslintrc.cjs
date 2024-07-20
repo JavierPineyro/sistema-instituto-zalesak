@@ -14,6 +14,7 @@ const config = {
     "plugin:@typescript-eslint/stylistic-type-checked"
   ],
   "rules": {
+    "@next/next/no-img-element": "off",
     "@typescript-eslint/prefer-optional-chain": "off",
     "@typescript-eslint/no-unsafe-member-access": "off",
     "@typescript-eslint/no-unsafe-assignment":"off",
