@@ -6,6 +6,7 @@ import { eq } from "drizzle-orm"
 import { users } from "~/server/db/schema"
 import { loginSchema } from "~/lib/validations/signin.schema"
 import bcrypt from "bcryptjs"
+import { ValidationMessage } from "~/lib/types"
 
 export const { handlers, signIn, signOut, auth } = NextAuth({
   adapter: DrizzleAdapter(db),
@@ -18,7 +19,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         let user = null
         const {data, success} = loginSchema.safeParse(credentials)
         if(!success){
-          throw new Error("Credenciales no válidas")
+          throw new Error(ValidationMessage.BAD_CREDENTIALS)
         }
 
         // verifico que el usuario exista
@@ -33,14 +34,14 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         })
 
         if(!user || !user.password){
-          throw new Error("Email o Contraseña no válidas")
+          throw new Error(ValidationMessage.WRONG_EMAIL_OR_PASSWORD)
         }
 
         // verificar si la contraseña es correcta
         const isValid = await bcrypt.compare(data.password, user.password)
 
         if(!isValid){
-          throw new Error("Email o Contraseña no válidas")
+          throw new Error(ValidationMessage.WRONG_EMAIL_OR_PASSWORD)
         }
 
         // remove password from response for security reasons
