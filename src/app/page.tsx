@@ -23,7 +23,7 @@ export default async function HomePage() {
             await signOut({ redirectTo: "/login" })
           }}
         >
-          <button type="submit">Sign Out</button>
+          <button type="submit">Cerrar sesión</button>
         </form>
       </div>
     </main>
