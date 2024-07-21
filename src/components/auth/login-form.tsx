@@ -5,9 +5,14 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { loginSchema } from "~/lib/validations/signin.schema"
 import { z } from "zod"
+import { cn } from "~/lib/utils"
+
+import { useState, useTransition } from "react"
+import { useRouter } from "next/navigation"
 
 import { Button } from "~/components/ui/button"
 import { Input } from "~/components/ui/input"
+import TextMessage from "~/components/text-gray-message"
 import {
   Form,
   FormControl,
@@ -16,10 +21,15 @@ import {
   FormLabel,
   FormMessage
 } from "~/components/ui/form"
-import { cn } from "~/lib/utils"
+import { AuthError } from "next-auth"
+import { ValidationMessage } from "~/lib/types"
+
 
 export default function LoginForm() {
 
+  const [error, setError] = useState<string | undefined | null>(null)
+  const [isPending, startTransition] = useTransition()
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof loginSchema>>({
     resolver: zodResolver(loginSchema),
@@ -30,8 +40,32 @@ export default function LoginForm() {
   })
 
   function onSubmit(values: z.infer<typeof loginSchema>) {
-    // do something
-    console.log(values)
+    setError(null)
+    startTransition(async () => {
+      try {
+        const response = await loginAction(values)
+        if (response.success) {
+          setError(null)
+          router.push("/admin")
+        }
+        else {
+          setError(ValidationMessage.WRONG_EMAIL_OR_PASSWORD)
+        }
+
+      } catch (err) {
+        if (err instanceof AuthError) {
+          switch (err.type) {
+            case "CredentialsSignin":
+              setError(ValidationMessage.WRONG_EMAIL_OR_PASSWORD)
+            default:
+              setError(ValidationMessage.UNEXPECTED_ERROR)
+          }
+        }
+        else {
+          setError(ValidationMessage.UNEXPECTED_ERROR)
+        }
+      }
+    })
 
   }
 
@@ -78,13 +112,16 @@ export default function LoginForm() {
             />
 
             <div>
-              <Button className={cn("flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600")} type="submit">Iniciar Sesión</Button>
+              <Button disabled={isPending} className={cn("flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600")} type="submit">Iniciar Sesión</Button>
             </div>
           </form>
         </Form>
-        <p className="mt-8 text-center text-sm text-gray-500">
-          Asegúrate de completar todos los campos
-        </p>
+        <div>
+          {error !== null
+            ? <p className="text-red-500 mt-8 text-center text-sm">{error}</p>
+            : <TextMessage>Asegúrate de completar todos los campos</TextMessage>
+          }
+        </div>
       </div>
     </div>
   )
