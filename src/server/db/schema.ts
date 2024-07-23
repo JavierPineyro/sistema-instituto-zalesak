@@ -1,6 +1,5 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import {
-  index,
   pgTableCreator,
   serial,
   timestamp,
@@ -10,8 +9,10 @@ import {
   text,
   primaryKey,
   integer,
+  date,
+  real,
 } from "drizzle-orm/pg-core";
-import type { AdapterAccountType } from "next-auth/adapters"
+import type { AdapterAccountType } from "next-auth/adapters";
 
 export const createTable = pgTableCreator((name) => `seminario_${name}`);
 
@@ -20,12 +21,12 @@ export const users = pgTable("user", {
     .primaryKey()
     .$defaultFn(() => crypto.randomUUID()),
   name: text("name"),
-  password: text("password"), 
+  password: text("password"),
   email: text("email").notNull().unique(),
   emailVerified: timestamp("emailVerified", { mode: "date" }),
   image: text("image"),
-})
- 
+});
+
 export const accounts = pgTable(
   "account",
   {
@@ -47,9 +48,9 @@ export const accounts = pgTable(
     compoundKey: primaryKey({
       columns: [account.provider, account.providerAccountId],
     }),
-  })
-)
- 
+  }),
+);
+
 export const authenticators = pgTable(
   "authenticator",
   {
@@ -68,5 +69,130 @@ export const authenticators = pgTable(
     compositePK: primaryKey({
       columns: [authenticator.userId, authenticator.credentialID],
     }),
-  })
-)
+  }),
+);
+
+export const alumnos = pgTable("alumnos", {
+  id: serial("id").primaryKey(),
+  fullname: varchar("nombre_completo", { length: 255 }),
+  phoneNumber: varchar("num_tel", { length: 100 }),
+  birthday: date("fecha_nac").notNull(),
+  tutor: varchar("tutor", { length: 255 }),
+  active: boolean("activo").notNull().default(true), // Actualizado
+  idBelt: integer("id_cinturon").references(() => cinturones.id),
+});
+
+export const alumnosRelation = relations(alumnos, ({ one, many }) => ({
+  cinturon: one(cinturones, {
+    fields: [alumnos.idBelt],
+    references: [cinturones.id],
+  }),
+  pagos: many(pagos),
+  pedidos: many(pedidos),
+  recibos: many(recibos),
+}));
+
+export const cinturones = pgTable("cinturones", {
+  id: serial("id").primaryKey(),
+  name: varchar("nombre", { length: 100 }).notNull(),
+  description: text("descripcion"),
+});
+
+export const cinturonesRelation = relations(cinturones, ({ many }) => ({
+  alumnos: many(alumnos),
+}));
+
+export const precios = pgTable("precios", {
+  id: serial("id").primaryKey(),
+  name: varchar("nombre", { length: 255 }).notNull(),
+  publicPrice: real("precio_publico").notNull(),
+  teacherPrice: real("precio_instructor").notNull(),
+  active: boolean("activo").notNull().default(true),
+});
+
+export const preciosRelation = relations(precios, ({ many }) => ({
+  producto: many(pedidos),
+}));
+
+export const recibos = pgTable("recibos", {
+  id: serial("id").primaryKey(),
+  amount: real("monto").notNull(),
+  date: date("fecha")
+    .notNull()
+    .default(sql`CURRENT_DATE`),
+  nameClient: varchar("nombre_receptor", { length: 255 }).notNull(),
+  idAlumn: integer("id_alumno").references(() => alumnos.id), // Actualizado
+  concept: varchar("concepto", { length: 255 }),
+  recharge: boolean("recargo").notNull().default(false),
+  total: real("total").notNull(),
+});
+
+export const recibosRelation = relations(recibos, ({ one }) => ({
+  pago: one(pagos),
+  alumno: one(alumnos, {
+    fields: [recibos.idAlumn],
+    references: [alumnos.id],
+  }),
+}));
+
+// Actualizado
+export const pedidos = pgTable("pedidos", {
+  id: serial("id").primaryKey(),
+  idProduct: integer("id_producto")
+    .references(() => precios.id)
+    .notNull(),
+  quantity: integer("cantidad").notNull(),
+  idAlumn: integer("id_alumno").references(() => alumnos.id),
+  total: real("total").notNull(),
+  state: varchar("estado", { length: 20 }).notNull().default("pendiente"), //entregado, pendiente, cancelado?
+});
+
+export const pedidosRelation = relations(pedidos, ({ one }) => ({
+  alumno: one(alumnos, {
+    fields: [pedidos.idAlumn],
+    references: [alumnos.id],
+  }),
+  producto: one(precios, {
+    fields: [pedidos.idProduct],
+    references: [precios.id],
+  }),
+}));
+
+export const pagos = pgTable("pagos", {
+  id: serial("id").primaryKey(),
+  month: varchar("mes", { length: 50 }).notNull(),
+  date: date("fecha")
+    .notNull()
+    .default(sql`CURRENT_DATE`),
+  idAlumn: integer("id_alumno")
+    .references(() => alumnos.id)
+    .notNull(),
+  idRecieve: integer("id_recibo")
+    .references(() => recibos.id)
+    .notNull(),
+});
+
+export const pagosRelation = relations(pagos, ({ one }) => ({
+  alumno: one(alumnos, {
+    fields: [pagos.idAlumn],
+    references: [alumnos.id],
+  }),
+  recibo: one(recibos, {
+    fields: [pagos.idRecieve],
+    references: [recibos.id],
+  }),
+}));
+
+export const inventario = pgTable("inventario", {
+  id: serial("id").primaryKey(),
+  name: varchar("nombre", { length: 255 }).notNull(),
+  quantity: integer("cantidad").notNull(),
+  observation: text("observaciones"),
+});
+
+export const precioCuota = pgTable("precio_servicios", {
+  id: serial("id").primaryKey(),
+  name: varchar("nombre", { length: 255 }).notNull(),
+  price: real("valor").notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
