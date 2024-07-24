@@ -74,12 +74,14 @@ export const authenticators = pgTable(
 
 export const alumnos = pgTable("alumnos", {
   id: serial("id").primaryKey(),
-  fullname: varchar("nombre_completo", { length: 255 }),
-  phoneNumber: varchar("num_tel", { length: 100 }),
+  fullname: varchar("nombre_completo", { length: 255 }).notNull(),
   birthday: date("fecha_nac").notNull(),
+  phoneNumber: varchar("num_tel", { length: 100 }),
   tutor: varchar("tutor", { length: 255 }),
   active: boolean("activo").notNull().default(true), // Actualizado
-  idBelt: integer("id_cinturon").references(() => cinturones.id),
+  idBelt: integer("id_cinturon")
+    .notNull()
+    .references(() => cinturones.id),
 });
 
 export const alumnosRelation = relations(alumnos, ({ one, many }) => ({
@@ -117,6 +119,7 @@ export const preciosRelation = relations(precios, ({ many }) => ({
 export const recibos = pgTable("recibos", {
   id: serial("id").primaryKey(),
   amount: real("monto").notNull(),
+  writtenAmount: text("monto_escrito"),
   date: date("fecha")
     .notNull()
     .default(sql`CURRENT_DATE`),
