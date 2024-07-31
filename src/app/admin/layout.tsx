@@ -2,9 +2,9 @@ import "~/styles/globals.css";
 import { type Metadata } from "next"
 
 import { GeistSans } from "geist/font/sans";
-import UserNav from "~/components/layout-components/user-nav";
-import Search from "~/components/layout-components/search";
-import MainNav from "~/components/layout-components/main-nav";
+import MainNav from "~/components/ui/main-nav";
+import Search from "~/components/ui/search-nav";
+import UserNav from "~/components/ui/user-nav";
 
 export const metadata: Metadata = {
   title: "Panel de Administración - Instituto Zalesak",
