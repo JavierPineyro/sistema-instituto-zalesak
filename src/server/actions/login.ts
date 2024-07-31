@@ -26,7 +26,6 @@ export default async function loginAction(formData: z.infer<typeof loginSchema>)
             message: ValidationMessage.WRONG_EMAIL_OR_PASSWORD,
         }
         default:
-          console.log("error default")
           return{
             success: false,
             message: ValidationMessage.UNEXPECTED_ERROR,
