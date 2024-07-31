@@ -11,28 +11,46 @@ export default function MainNav({
       {...props}
     >
       <Link
-        href="/examples/dashboard"
-        className="text-sm font-medium transition-colors hover:text-primary"
+        href="/admin/alumnos"
+        className="text-sm font-medium transition-colors hover:text-primary hover:bg-slate-400/25 px-2 py-1 rounded-md"
       >
-        Overview
+        Alumnos
       </Link>
       <Link
-        href="/examples/dashboard"
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+        href="/admin/pedidos"
+        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary hover:bg-slate-400/25 px-2 py-1 rounded-md"
       >
-        Customers
+        Pedidos
       </Link>
       <Link
-        href="/examples/dashboard"
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+        href="/admin/equipamiento"
+        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary hover:bg-slate-400/25 px-2 py-1 rounded-md"
       >
-        Products
+        Equipamiento
       </Link>
       <Link
-        href="/examples/dashboard"
-        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+        href="/admin/precios"
+        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary hover:bg-slate-400/25 px-2 py-1 rounded-md"
       >
-        Settings
+        Lista de Precios
+      </Link>
+      <Link
+        href="/admin/pagos"
+        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary hover:bg-slate-400/25 px-2 py-1 rounded-md"
+      >
+        Pagos
+      </Link>
+      <Link
+        href="/admin/recibos"
+        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary hover:bg-slate-400/25 px-2 py-1 rounded-md"
+      >
+        Recibos
+      </Link>
+      <Link
+        href="/admin/ajustes"
+        className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary hover:bg-slate-400/25 px-2 py-1 rounded-md"
+      >
+        Ajustes {/* aca van los precios de cuota, lista cinturones y otras configs */}
       </Link>
     </nav>
   )
