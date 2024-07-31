@@ -119,7 +119,7 @@ export default function LoginForm() {
         <div>
           {error !== null
             ? <p className="text-red-500 mt-8 text-center text-sm">{error}</p>
-            : <TextMessage>Asegúrate de completar todos los campos</TextMessage>
+            : <TextMessage isGray={true}>Asegúrate de completar todos los campos</TextMessage>
           }
         </div>
       </div>
