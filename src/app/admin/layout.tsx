@@ -1,16 +1,5 @@
-import "~/styles/globals.css";
-import { type Metadata } from "next"
-
-import { GeistSans } from "geist/font/sans";
 import MainNav from "~/components/ui/main-nav";
-import Search from "~/components/ui/search-nav";
 import UserNav from "~/components/ui/user-nav";
-
-export const metadata: Metadata = {
-  title: "Panel de Administración - Instituto Zalesak",
-  description: "Dashboard del Sistema de gestión para el instituto de taekwondo Zalesak",
-  icons: [{ rel: "icon", url: "/favicon.ico" }],
-};
 
 export default function LayoutAdmin({
   children,
@@ -18,22 +7,19 @@ export default function LayoutAdmin({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="es" className={`${GeistSans.variable} "h-full bg-white"`}>
-      <body className="h-full">
-        <div className="hidden flex-col md:flex">
-          <div className="border-b">
-            <div className="flex h-16 items-center px-4">
-              <h1 className="font-bold">Instituto Zalesak</h1>
-              <MainNav className="mx-6" />
-              <div className="ml-auto flex items-center space-x-4">
-                {/* <Search /> */}
-                <UserNav />
-              </div>
+    <main className="h-full">
+      <div className="flex-col md:flex">
+        <div className="border-b">
+          <div className="flex h-16 items-center px-4">
+            <h1 className="font-bold">Instituto Zalesak</h1>
+            <MainNav className="mx-6" />
+            <div className="ml-auto flex items-center space-x-4">
+              <UserNav />
             </div>
           </div>
         </div>
-        {children}
-      </body>
-    </html>
+      </div>
+      {children}
+    </main>
   )
 }
