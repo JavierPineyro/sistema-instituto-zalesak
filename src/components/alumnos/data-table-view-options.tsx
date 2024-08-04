@@ -2,7 +2,7 @@
 
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu"
 import { GripHorizontal } from "lucide-react"
-import { Table } from "@tanstack/react-table"
+import { Column, Table } from "@tanstack/react-table"
 import { Button } from "../ui/button"
 import { DropdownMenu, DropdownMenuCheckboxItem, DropdownMenuContent, DropdownMenuLabel, DropdownMenuSeparator } from "../ui/dropdown-menu"
 
@@ -15,11 +15,22 @@ export function DataTableViewOptions<TData>({
   table,
 }: DataTableViewOptionsProps<TData>) {
 
-  const labels = {
-    cellphone: "Num. Teléfono",
-    birthday: "Fecha de Nac.",
-    tutor: "Tutor",
-    active: "Estado"
+  const labels = new Map<string, string>()
+  // {
+  //   cellphone: "Num. Teléfono",
+  //   birthday: "Fecha de Nac.",
+  //   tutor: "Tutor",
+  //   active: "Estado"
+  // }
+  labels.set("cellphone", "Num. Teléfono")
+  labels.set("birthday", "Fecha de Nac.")
+  labels.set("tutor", "Tutor")
+  labels.set("active", "Estado")
+  labels.set("idBelt", "Id Cinturon")
+  labels.set("belt", "Cinturon")
+
+  function getLabelText(column: string) {
+    return labels.get(column) ?? null
   }
   return (
     <DropdownMenu>
@@ -43,7 +54,7 @@ export function DataTableViewOptions<TData>({
               typeof column.accessorFn !== "undefined" && column.getCanHide()
           )
           .map((column) => {
-            const text = Object.entries(labels).find(([key]) => key === column.id)[1]
+            const text = getLabelText(column.id)
             return (
               <DropdownMenuCheckboxItem
                 key={column.id}
