@@ -9,8 +9,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger
-} from "../ui/dropdown-menu"
-import { Button } from "../ui/button"
+} from "~/components/ui/dropdown-menu"
+import { Button } from "~/components/ui/button"
+import Link from "next/link"
 
 
 interface DataTableRowActionsProps<TData> {
@@ -22,6 +23,8 @@ export function DataTableRowActions<TData>({
 }: DataTableRowActionsProps<TData>) {
 
   // del row saco el id
+  const id = row.getValue("id")
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -30,17 +33,18 @@ export function DataTableRowActions<TData>({
           className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
         >
           <MoreHorizontal className="h-4 w-4" />
-          <span className="sr-only">Ver</span>
+          <span className="sr-only">Ver opciones</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem>Ver más</DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href={`/admin/alumnos/${id}`}>Ver más</Link>
+        </DropdownMenuItem>
         <DropdownMenuItem>Editar</DropdownMenuItem>
-        <DropdownMenuItem>Favorite</DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           Desactivar
-          <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+          <DropdownMenuShortcut>⌫</DropdownMenuShortcut>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

@@ -2,8 +2,8 @@
 
 import { CrossIcon } from "lucide-react"
 import { Table } from "@tanstack/react-table"
-import { Input } from "../ui/input"
-import { Button } from "../ui/button"
+import { Input } from "~/components/ui/input"
+import { Button } from "~/components/ui/button"
 import { DataTableViewOptions } from "./data-table-view-options"
 import { DataTableFacetedFilter } from "./data-table-faceted-filter"
 import { statuses } from "./data"
@@ -22,7 +22,7 @@ export function DataTableToolbar<TData>({
     <div className="flex items-center justify-between">
       <div className="flex flex-1 items-center space-x-2">
         <Input
-          placeholder="Filter tasks..."
+          placeholder="Filtrar por..."
           value={(table.getColumn("fullname")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("fullname")?.setFilterValue(event.target.value)
@@ -42,7 +42,7 @@ export function DataTableToolbar<TData>({
             onClick={() => table.resetColumnFilters()}
             className="h-8 px-2 lg:px-3"
           >
-            Reset
+            Limpiar filtros
             <CrossIcon className="ml-2 h-4 w-4" />
           </Button>
         )}

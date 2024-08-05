@@ -5,7 +5,7 @@ import { ColumnDef } from "@tanstack/react-table"
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
 import { Alumn } from "~/lib/types"
-import { Checkbox } from "../ui/checkbox"
+import { Checkbox } from "~/components/ui/checkbox"
 import { statuses } from "./data"
 import { getIsActiveText } from "~/lib/utils"
 
