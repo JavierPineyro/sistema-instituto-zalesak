@@ -2,10 +2,10 @@ import { type Metadata } from "next"
 import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
-import HeaderAlumno from "~/components/alumnos/header-nav";
-import { mockAlumn } from "~/components/alumnos/data";
-import { columns } from "~/components/alumnos/columns";
-import { DataTable } from "~/components/alumnos/data-table";
+import HeaderAlumno from "~/components/alumnos/tables/header-nav";
+import { columns } from "~/components/alumnos/tables/columns";
+import { DataTable } from "~/components/alumnos/tables/data-table";
+import { service } from "~/server/services";
 
 export const metadata: Metadata = {
   title: "Gestión de Alumnos - Instituto Zalesak",
@@ -14,12 +14,12 @@ export const metadata: Metadata = {
 };
 
 export default async function AlumnsPage() {
-  // const data = await api.alumnos.list()
+  const data = await service.alumnos.list()
   return (
     <main className={`${GeistSans.variable} h-full flex-1 flex-col space-y-8 p-8 md:flex`}>
       <div className="space-y-2">
         <HeaderAlumno />
-        <DataTable data={mockAlumn} columns={columns} />
+        <DataTable data={data} columns={columns} />
       </div>
     </main>
   )
