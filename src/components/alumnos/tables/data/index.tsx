@@ -18,19 +18,27 @@ export const mockAlumn: Alumn[] = [
   {
     id: 1,
     fullname: "John Doe",
-    cellphone: "1234567890",
+    phoneNumber: "1234567890",
     active: true,
-    birthday: new Date(1999, 5, 22),
+    birthday: "1998-3-6",
     idBelt: 1,
-    tutor: "Maria Torres"
+    tutor: "Maria Torres",
+    cinturon: {
+      name: "blanco",
+      id: 1
+    }
   },
   {
     id: 2,
     fullname: "Jane Smith",
-    cellphone: "0987654321",
+    phoneNumber: "0987654321",
     active: false,
-    birthday: new Date(2000, 8, 15),
+    birthday: "1998-10-12",
     idBelt: 1,
-    tutor: "Pedro Rodriguez"
+    tutor: "Pedro Rodriguez",
+    cinturon: {
+      name: "blanco",
+      id: 1
+    }
   }
 ]
