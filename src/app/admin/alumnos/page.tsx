@@ -2,7 +2,7 @@ import { type Metadata } from "next"
 import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
-import HeaderAlumno from "~/components/alumnos/tables/header-nav";
+import HeaderAlumno from "~/components/alumnos/header-nav";
 import { columns } from "~/components/alumnos/tables/columns";
 import { DataTable } from "~/components/alumnos/tables/data-table";
 import { service } from "~/server/services";
