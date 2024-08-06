@@ -7,7 +7,7 @@ export const alumnSchema = object({
     .max(255, "Máximo 255 caracteres"),
   birthday: date({ required_error: "Fecha de nacimiento obligatorio" }),
   idBelt: number({ required_error: "El cinturón es requerido" }),
-  cellphone: string().max(100, "Máximo 100 caracteres").optional(),
+  phoneNumber: string().max(100, "Máximo 100 caracteres").optional(),
   tutor: string().max(255, "Máximo 255 caracteres").optional(),
   active: boolean({ required_error: "El estatus es obligatorio" }),
 });

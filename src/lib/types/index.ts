@@ -15,3 +15,9 @@ export enum StatusActive {
   ACTIVE = "activo",
   INACTIVE = "inactivo",
 }
+
+export type Belt = {
+  id: number;
+  name: string;
+  description?: string;
+};

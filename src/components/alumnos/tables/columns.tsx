@@ -4,10 +4,10 @@ import { ColumnDef } from "@tanstack/react-table"
 
 import { DataTableColumnHeader } from "./data-table-column-header"
 import { DataTableRowActions } from "./data-table-row-actions"
-import { Alumn } from "~/lib/types"
+import { Alumn, Belt } from "~/lib/types"
 import { Checkbox } from "~/components/ui/checkbox"
 import { statuses } from "./data"
-import { getIsActiveText } from "~/lib/utils"
+import { getIsActiveText, parseToLocalDate } from "~/lib/utils"
 
 export const columns: ColumnDef<Alumn>[] = [
   {
@@ -60,7 +60,7 @@ export const columns: ColumnDef<Alumn>[] = [
     enableHiding: false,
   },
   {
-    accessorKey: "cellphone",
+    accessorKey: "phoneNumber",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Nro. Teléfono" />
     ),
@@ -68,7 +68,7 @@ export const columns: ColumnDef<Alumn>[] = [
       return (
         <div className="flex space-x-2">
           <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("cellphone") ?? "-"}
+            {row.getValue("phoneNumber") ?? "-"}
           </span>
         </div>
       )
@@ -81,15 +81,35 @@ export const columns: ColumnDef<Alumn>[] = [
       <DataTableColumnHeader column={column} title="Fecha de nac." />
     ),
     cell: ({ row }) => {
+      const birthday = parseToLocalDate(row.getValue("birthday"))
       return (
         <div className="flex space-x-2">
           <span className="max-w-[500px] truncate font-medium">
-            {(row.getValue("birthday") as Date).toLocaleDateString()}
+            {birthday}
           </span>
         </div>
       )
     },
     enableSorting: true,
+  },
+  {
+    accessorKey: "cinturon",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Cinturón" />
+    ),
+    cell: ({ row }) => {
+      // en el original aparece idBelt y cinturon
+      const cinturon = row.getValue("cinturon") as Belt
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">
+            {cinturon.name ?? "-"}
+          </span>
+        </div>
+      )
+    },
+    enableSorting: true,
+    enableHiding: false,
   },
   {
     accessorKey: "tutor",

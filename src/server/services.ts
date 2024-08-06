@@ -1,10 +1,22 @@
 import { mockAlumn } from "~/components/alumnos/tables/data";
 import { Alumn } from "~/lib/types";
+import { db } from "./db";
 
 export const service = {
   alumnos: {
     list: async () => {
-      return mockAlumn;
+      const data = await db.query.alumnos.findMany({
+        with: {
+          cinturon: {
+            columns: {
+              name: true,
+              id: true,
+            },
+          },
+        },
+      });
+      console.log("DESDE DB", data);
+      return data;
     },
     getById: async (id: number): Promise<Alumn | null> => {
       return new Promise((resolve, reject) => {

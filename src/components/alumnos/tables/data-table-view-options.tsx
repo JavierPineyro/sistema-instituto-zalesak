@@ -17,17 +17,17 @@ export function DataTableViewOptions<TData>({
 
   const labels = new Map<string, string>()
   // {
-  //   cellphone: "Num. Teléfono",
+  //   phoneNumber: "Num. Teléfono",
   //   birthday: "Fecha de Nac.",
   //   tutor: "Tutor",
   //   active: "Estado"
   // }
-  labels.set("cellphone", "Num. Teléfono")
+  labels.set("phoneNumber", "Num. Teléfono")
   labels.set("birthday", "Fecha de Nac.")
   labels.set("tutor", "Tutor")
   labels.set("active", "Estado")
   labels.set("idBelt", "Id Cinturon")
-  labels.set("belt", "Cinturon")
+  labels.set("cinturon", "Cinturon")
 
   function getLabelText(column: string) {
     return labels.get(column) ?? null
