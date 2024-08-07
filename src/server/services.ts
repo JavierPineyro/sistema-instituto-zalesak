@@ -15,7 +15,6 @@ export const service = {
           },
         },
       });
-      console.log("DESDE DB", data);
       return data;
     },
     getById: async (id: number): Promise<Alumn | null> => {

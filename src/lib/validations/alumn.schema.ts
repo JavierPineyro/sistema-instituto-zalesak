@@ -1,4 +1,6 @@
-import { boolean, date, number, object, string, z } from "zod";
+import { boolean, number, object, string, date } from "zod";
+
+// Por ahora uso los tipos asi por tiempo pero despues lo mejoro todo lo juro ajja
 
 export const alumnSchema = object({
   id: number().optional(),
@@ -30,3 +32,13 @@ export type Alumn = {
     name: string;
   };
 };
+
+export const AlumnCreateSchema = object({
+  fullname: string({ required_error: "El nombre es obligatorio" })
+    .min(1, "El nombre es requerido")
+    .max(255, "Máximo 255 caracteres"),
+  birthday: string({ required_error: "Fecha de nacimiento obligatorio" }),
+  idBelt: string({ required_error: "El cinturón es requerido" }),
+  phoneNumber: string().max(100, "Máximo 100 caracteres").optional(),
+  tutor: string().max(255, "Máximo 255 caracteres").optional(),
+});

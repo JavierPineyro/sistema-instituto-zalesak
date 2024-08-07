@@ -1,4 +1,5 @@
 import { Button } from "~/components/ui/button";
+import CreateAlumnModal from "./modals/create-alumn-modal";
 
 export default function HeaderAlumno() {
   return (
@@ -9,8 +10,8 @@ export default function HeaderAlumno() {
           Aquí podrás ver la lista de alumnos
         </p>
       </div>
-      <div className="flex items-center space-x-2">
-        <Button>Agregar nuevo Alumno</Button>
+      <div className="flex items-center">
+        <CreateAlumnModal>Agregar Nuevo Alumno</CreateAlumnModal>
       </div>
     </div>
   )
