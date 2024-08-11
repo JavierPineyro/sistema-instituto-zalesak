@@ -67,8 +67,12 @@ export const columns: ColumnDef<Alumn>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("phoneNumber") ?? "-"}
+          <span className="max-w-[500px] text-center truncate font-medium">
+            {
+              row.getValue("phoneNumber") !== ""
+                ? row.getValue("phoneNumber")
+                : "---"
+            }
           </span>
         </div>
       )
@@ -120,7 +124,7 @@ export const columns: ColumnDef<Alumn>[] = [
       return (
         <div className="flex space-x-2">
           <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("tutor") ?? "-"}
+            {row.getValue("tutor") ?? "---"}
           </span>
         </div>
       )

@@ -1,7 +1,6 @@
 "use client"
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useRouter } from "next/navigation"
 import { useState, useTransition } from "react"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -20,6 +19,7 @@ import { cn } from "~/lib/utils"
 import { Input } from "~/components/ui/input"
 import { Belt } from "~/lib/types"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "~/components/ui/select"
+import createAlumnAction from "~/server/actions/alumnos/create-action"
 
 type Props = {
   belts?: Belt[]
@@ -29,7 +29,6 @@ export default function CreateAlumnForm({ belts }: Props) {
 
   const [error, setError] = useState<string | undefined | null>(null)
   const [isPending, startTransition] = useTransition()
-  // const router = useRouter()
 
   const form = useForm<z.infer<typeof AlumnCreateSchema>>({
     resolver: zodResolver(AlumnCreateSchema),
@@ -42,35 +41,19 @@ export default function CreateAlumnForm({ belts }: Props) {
     },
   })
 
-  function onSubmit(values: z.infer<typeof AlumnCreateSchema>) {
-    console.log(values)
-    // setError(null)
-    // startTransition(async () => {
-    //   try {
-    //     const response = await createAlumnAction(values)
-    //     if (response.success) {
-    //       setError(null)
-    //       router.push("/admin")
-    //     }
-    //     else {
-    //       setError(ValidationMessage.WRONG_EMAIL_OR_PASSWORD)
-    //     }
+  async function onSubmit(values: z.infer<typeof AlumnCreateSchema>) {
+    setError(null)
+    startTransition(async () => {
 
-    //   } catch (err) {
-    //     if (err instanceof AuthError) {
-    //       switch (err.type) {
-    //         case "CredentialsSignin":
-    //           setError(ValidationMessage.WRONG_EMAIL_OR_PASSWORD)
-    //         default:
-    //           setError(ValidationMessage.UNEXPECTED_ERROR)
-    //       }
-    //     }
-    //     else {
-    //       setError(ValidationMessage.UNEXPECTED_ERROR)
-    //     }
-    //   }
-    // })
-
+      const response = await createAlumnAction(values)
+      if (response.success) {
+        setError(null)
+        window.location.reload()
+      }
+      else {
+        setError(response.message)
+      }
+    })
   }
 
   return (
@@ -120,8 +103,12 @@ export default function CreateAlumnForm({ belts }: Props) {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="1">Blanco</SelectItem>
-                    <SelectItem value="2">p/ amarilla</SelectItem>
+                    {
+                      Array.isArray(belts) &&
+                      belts.map(belt => {
+                        return <SelectItem key={belt.id} value={String(belt.id)}>{belt.name}</SelectItem>
+                      })
+                    }
                   </SelectContent>
                 </Select>
                 <div className="h-3 text-sm items-center">
@@ -174,18 +161,12 @@ export default function CreateAlumnForm({ belts }: Props) {
         </form>
       </Form>
       <div>
-        {error !== null && <p className="text-red-500 mt-1 text-center text-sm">{error}</p>
+        {
+          error !== null && (
+            <p className="text-red-500 mt-1 text-center text-sm">{error}</p>
+          )
         }
       </div>
     </>
   )
 }
-
-{/* <DialogFooter>
-<DialogClose asChild>
-  <Button type="button" variant="secondary">
-    Cancelar
-  </Button>
-</DialogClose>
-<Button type="submit">Guardar</Button>
-</DialogFooter> */}

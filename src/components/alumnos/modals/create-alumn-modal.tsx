@@ -1,12 +1,16 @@
 import { Button } from "~/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "~/components/ui/dialog";
 import CreateAlumnForm from "../forms/create-alumn-form";
+import { service } from "~/server/services";
 
 type Props = {
   children: React.ReactNode // As button text we use the children
 }
 
-export default function CreateAlumnModal({ children }: Props) {
+export default async function CreateAlumnModal({ children }: Props) {
+
+  const belts = await service.cinturones.list()
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -16,7 +20,7 @@ export default function CreateAlumnModal({ children }: Props) {
         <DialogHeader>
           <DialogTitle>Crear nuevo alumno</DialogTitle>
         </DialogHeader>
-        <CreateAlumnForm />
+        <CreateAlumnForm belts={belts} />
       </DialogContent>
     </Dialog>
   )

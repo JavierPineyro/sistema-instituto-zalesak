@@ -1,6 +1,8 @@
 import { mockAlumn } from "~/components/alumnos/tables/data";
-import { Alumn } from "~/lib/types";
+import { Alumn, NewAlumn } from "~/lib/types";
 import { db } from "./db";
+import { eq } from "drizzle-orm";
+import { alumnos } from "./db/schema";
 
 export const service = {
   alumnos: {
@@ -27,8 +29,25 @@ export const service = {
         }
       });
     },
-    save: async (alumn: Alumn) => {
-      mockAlumn.push(alumn);
+    checkIfAlreadyExist: async (name: string) => {
+      const data = await db.query.alumnos.findFirst({
+        where: eq(alumnos.fullname, name),
+        columns: {
+          id: true,
+        },
+      });
+      return !!data;
+    },
+    save: async (alumn: NewAlumn) => {
+      const { fullname, birthday, phoneNumber, tutor, idBelt: belt } = alumn;
+      const idBelt = Number(belt);
+      await db.insert(alumnos).values({
+        fullname,
+        birthday,
+        idBelt,
+        phoneNumber,
+        tutor,
+      });
       return alumn;
     },
     update: async (alumn: Alumn) => {
@@ -40,6 +59,12 @@ export const service = {
       const index = mockAlumn.findIndex((a) => a.id === id);
       mockAlumn.splice(index, 1);
       return true;
+    },
+  },
+  cinturones: {
+    list: async () => {
+      const data = await db.query.cinturones.findMany();
+      return data;
     },
   },
 };
