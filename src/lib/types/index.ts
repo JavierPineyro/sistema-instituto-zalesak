@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { AlumnCreateSchema } from "~/lib/validations/alumn.schema";
+import {
+  AlumnCreateSchema,
+  AlumnUpdateSchema,
+} from "~/lib/validations/alumn.schema";
 
 export { type Alumn } from "~/lib/validations/alumn.schema";
 
@@ -17,13 +20,14 @@ export enum ValidationMessage {
   ALUMN_ALREADY_EXISTS = "El alumno ya existe",
   ALUMN_NOT_FOUND = "El alumno no existe",
   ALUMN_UPDATED = "El alumno se actualizó correctamente",
+  ALUMN_UPDATE_ERROR = "Error al actualizar el alumno",
   ALUMN_CREATE_ERROR = "Error al crear el alumno",
+  WRONG_ALUMN_DATA = "Datos incorrectos o malformados del alumno",
   BELT_NOT_FOUND = "El cinturón no existe",
   BELT_ALREADY_EXISTS = "El cinturón ya existe",
   BELT_UPDATED = "El cinturón se actualizó correctamente",
   BELT_DELETED = "El cinturón se eliminó correctamente",
   SUCCESSFUL_LOGOUT = "Se cerró sesión correctamente",
-  WRONG_ALUMN_DATA = "Datos incorrectos o malformados al intentar crear un nuevo alumno",
 }
 
 export enum StatusActive {
@@ -38,6 +42,10 @@ export type Belt = {
 };
 
 export type NewAlumn = z.infer<typeof AlumnCreateSchema>;
+export type UpdateAlumn = z.infer<typeof AlumnUpdateSchema>;
+export type UpdateAlumnWithNumberBeltId = Omit<UpdateAlumn, "idBelt"> & {
+  idBelt: number;
+};
 
 export type ResponseAction = {
   success: boolean;
