@@ -1,7 +1,7 @@
 import { mockAlumn } from "~/components/alumnos/tables/data";
-import { Alumn, NewAlumn } from "~/lib/types";
+import { Alumn, NewAlumn, UpdateAlumnWithNumberBeltId } from "~/lib/types";
 import { db } from "./db";
-import { eq } from "drizzle-orm";
+import { count, eq } from "drizzle-orm";
 import { alumnos } from "./db/schema";
 
 export const service = {
@@ -50,15 +50,39 @@ export const service = {
       });
       return alumn;
     },
-    update: async (alumn: Alumn) => {
-      const index = mockAlumn.findIndex((a) => a.id === alumn.id);
-      mockAlumn[index] = alumn;
-      return alumn;
+    update: async (alumn: UpdateAlumnWithNumberBeltId) => {
+      const { fullname, birthday, phoneNumber, tutor, idBelt, id, active } =
+        alumn;
+      const result = await db
+        .update(alumnos)
+        .set({
+          active,
+          birthday,
+          fullname,
+          idBelt,
+          phoneNumber,
+          tutor,
+        })
+        .where(eq(alumnos.id, id))
+        .returning({ id: alumnos.id });
+      return result;
     },
     delete: async (id: number) => {
       const index = mockAlumn.findIndex((a) => a.id === id);
       mockAlumn.splice(index, 1);
       return true;
+    },
+    count: async () => {
+      const data = await db.select({ count: count() }).from(alumnos);
+      return data;
+    },
+    changeIsActive: async (id: number, active: boolean) => {
+      const result = await db
+        .update(alumnos)
+        .set({ active: active })
+        .where(eq(alumnos.id, id))
+        .returning({ id: alumnos.id });
+      return result;
     },
   },
   cinturones: {
