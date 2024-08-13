@@ -2,8 +2,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "~/com
 
 import { Package, BookOpenCheck } from "lucide-react"
 import RecentSales from "~/components/recent-sales";
+import { service } from "~/server/services";
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  const alumns = await service.alumnos.count()
+  console.log(alumns)
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
@@ -58,7 +61,7 @@ export default function AdminPage() {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">28</div>
+            <div className="text-2xl font-bold">{alumns[0]?.count ?? 999}</div>
             <p className="text-xs text-muted-foreground">
               alumnos en total.
             </p>
