@@ -1,4 +1,3 @@
-import { Button } from "~/components/ui/button";
 import CreateAlumnModal from "./modals/create-alumn-modal";
 
 export default function HeaderAlumno() {

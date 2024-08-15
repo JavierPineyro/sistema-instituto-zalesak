@@ -1,4 +1,4 @@
-import { boolean, number, object, string, date } from "zod";
+import { boolean, number, object, string, z } from "zod";
 
 // Por ahora uso los tipos asi por tiempo pero despues lo mejoro todo lo juro ajja
 
@@ -42,3 +42,10 @@ export const AlumnCreateSchema = object({
   phoneNumber: string().max(100, "Máximo 100 caracteres").optional(),
   tutor: string().max(255, "Máximo 255 caracteres").optional(),
 });
+
+export const AlumnUpdateSchema = z
+  .object({
+    id: z.number(),
+    active: z.boolean(),
+  })
+  .merge(AlumnCreateSchema);

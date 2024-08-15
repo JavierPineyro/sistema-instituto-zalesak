@@ -7,11 +7,13 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger
 } from "~/components/ui/dropdown-menu"
 import { Button } from "~/components/ui/button"
 import Link from "next/link"
+import { Belt, UpdateAlumn } from "~/lib/types"
+import UpdateAlumnModal from "~/components/alumnos/modals/update-alumn-modal"
+import ActiveForm from "~/components/alumnos/forms/active-alumn-form"
 
 
 interface DataTableRowActionsProps<TData> {
@@ -22,8 +24,18 @@ export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
 
-  // del row saco el id
-  const id = row.getValue("id")
+  const id = row.getValue("id") as number
+  const belt = row.getValue("cinturon") as Belt
+
+  const alumn: UpdateAlumn = {
+    id,
+    idBelt: String(belt.id),
+    fullname: row.getValue("fullname"),
+    tutor: row.getValue("tutor"),
+    birthday: row.getValue("birthday"),
+    phoneNumber: row.getValue("phoneNumber"),
+    active: row.getValue("active"),
+  }
 
   return (
     <DropdownMenu>
@@ -40,11 +52,14 @@ export function DataTableRowActions<TData>({
         <DropdownMenuItem>
           <Link href={`/admin/alumnos/${id}`}>Ver más</Link>
         </DropdownMenuItem>
-        <DropdownMenuItem>Editar</DropdownMenuItem>
+        <DropdownMenuItem>
+          <UpdateAlumnModal alumn={alumn}>
+            Editar
+          </UpdateAlumnModal>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          Desactivar
-          <DropdownMenuShortcut>⌫</DropdownMenuShortcut>
+          <ActiveForm id={id} active={alumn.active} />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
