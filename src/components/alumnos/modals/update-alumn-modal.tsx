@@ -1,22 +1,26 @@
-import { Button } from "~/components/ui/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "~/components/ui/dialog";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
+} from "~/components/ui/dialog";
 import { service } from "~/server/services";
 import UpdateAlumnForm from "~/components/alumnos/forms/update-alumn-form"
-import { UpdateAlumn } from "~/lib/types";
+import { Belt, UpdateAlumn } from "~/lib/types";
+import { Button } from "~/components/ui/button";
 
 type Props = {
-  children: React.ReactNode // As button text we use the children
   alumn: UpdateAlumn
 }
 
-export default async function UpdateAlumnModal({ children, alumn }: Props) {
-
+export default async function UpdateAlumnModal({ alumn }: Props) {
   const belts = await service.cinturones.list()
 
   return (
     <Dialog>
       <DialogTrigger asChild>
-        {children}
+        <span>Editar</span>
       </DialogTrigger>
       <DialogContent aria-describedby="Modal es para actualizar el alumno" className="sm:max-w-[425px]">
         <DialogHeader>

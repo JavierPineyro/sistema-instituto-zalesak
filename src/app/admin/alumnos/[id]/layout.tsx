@@ -28,7 +28,9 @@ export default function LayoutAlumnInfo({
   return (
     <section className="h-full flex">
       <ProfileSidebar id={Number(params.id)} />
-      {children}
+      <div className="py-2">
+        {children}
+      </div>
     </section>
   )
 }

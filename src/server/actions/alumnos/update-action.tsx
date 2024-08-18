@@ -40,9 +40,7 @@ export default async function updateAlumnAction(alumn: UpdateAlumn) {
     }
   }
 
-  if (Response.success) {
-    revalidatePath("/admin/alumnos")
-  }
+  revalidatePath("/admin/alumnos")
   return Response
 }
 

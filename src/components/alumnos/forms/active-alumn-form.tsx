@@ -24,8 +24,8 @@ export default function ActiveForm({ id, active }: Props) {
 
   return (
     <form action={(handleSubmit)}>
-      <input className="hidden" name="id" type="number" value={id} />
-      <input className="hidden" name="active" type="text" value={`${active}`} />
+      <input onChange={(e) => console.log("No deberias estar viendo esto")} className="hidden" name="id" type="number" defaultValue={id} />
+      <input onChange={(e) => console.log("No deberias estar viendo esto")} className="hidden" name="active" type="text" defaultValue={`${active}`} />
       <button
         type="submit"
         disabled={isPending}

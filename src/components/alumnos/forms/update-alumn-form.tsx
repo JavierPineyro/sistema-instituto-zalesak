@@ -4,7 +4,7 @@ import { Belt, UpdateAlumn } from "~/lib/types"
 import updateAlumnAction from "~/server/actions/alumnos/update-action"
 import { AlumnUpdateSchema } from "~/lib/validations/alumn.schema"
 import { z } from "zod"
-import { useState, useTransition } from "react"
+import { useTransition } from "react"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import {
@@ -27,41 +27,49 @@ import {
 import { DialogClose, DialogFooter } from "~/components/ui/dialog"
 import { Button } from "~/components/ui/button"
 import { Checkbox } from "~/components/ui/checkbox"
+import { toast } from "sonner"
+import { useRouter } from "next/navigation"
 
 type Props = {
-  belts: Belt[],
-  alumn: UpdateAlumn
+  belts: Belt[] | null,
+  alumn: {
+    id: number;
+    active: boolean;
+    fullname: string;
+    birthday: string;
+    idBelt: number;
+    phoneNumber: string | null;
+    tutor: string | null;
+  }
 }
 
 export default function UpdateAlumnForm({ belts, alumn }: Props) {
 
-  const [error, setError] = useState<string | undefined | null>(null)
   const [isPending, startTransition] = useTransition()
+  const router = useRouter()
 
   const form = useForm<z.infer<typeof AlumnUpdateSchema>>({
     resolver: zodResolver(AlumnUpdateSchema),
     defaultValues: {
       fullname: alumn.fullname,
       birthday: alumn.birthday,
-      phoneNumber: alumn.phoneNumber,
+      phoneNumber: alumn.phoneNumber ?? "",
       active: alumn.active,
-      tutor: alumn.tutor,
-      idBelt: alumn.idBelt
+      tutor: alumn.tutor ?? "",
+      idBelt: String(alumn.idBelt)
     },
   })
 
   async function onSubmit(values: z.infer<typeof AlumnUpdateSchema>) {
-    setError(null)
+
     const data = { ...values, id: alumn.id }
     startTransition(async () => {
-
       const response = await updateAlumnAction(data)
       if (response.success) {
-        setError(null)
-        window.location.reload()
+        router.push(`/admin/alumnos/${alumn.id}`)
       }
       else {
-        setError(response.message)
+        toast.error(response.message)
       }
     })
   }
@@ -177,24 +185,22 @@ export default function UpdateAlumnForm({ belts, alumn }: Props) {
           />
 
           <div>
-            <DialogFooter>
+            <Button
+              disabled={isPending}
+              className={cn("flex w-full justify-center rounded-md bg-indigo-600 px-2 py-1.5 text-sm font-semibold leading-4 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600")} type="submit">
+              Guardar
+            </Button>
+            {/* <DialogFooter>
               <DialogClose asChild>
                 <Button disabled={isPending} type="button" variant="outline">
                   Cancelar
                 </Button>
               </DialogClose>
               <Button disabled={isPending} className={cn("flex w-full justify-center rounded-md bg-indigo-600 px-2 py-1.5 text-sm font-semibold leading-4 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600")} type="submit">Guardar</Button>
-            </DialogFooter>
+            </DialogFooter> */}
           </div>
         </form>
       </Form>
-      <div>
-        {
-          error !== null && (
-            <p className="text-red-500 mt-1 text-center text-sm">{error}</p>
-          )
-        }
-      </div>
     </>
   )
 }

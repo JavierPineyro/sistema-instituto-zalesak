@@ -12,7 +12,6 @@ import {
 import { Button } from "~/components/ui/button"
 import Link from "next/link"
 import { Belt, UpdateAlumn } from "~/lib/types"
-import UpdateAlumnModal from "~/components/alumnos/modals/update-alumn-modal"
 import ActiveForm from "~/components/alumnos/forms/active-alumn-form"
 
 
@@ -53,9 +52,7 @@ export function DataTableRowActions<TData>({
           <Link href={`/admin/alumnos/${id}`}>Ver más</Link>
         </DropdownMenuItem>
         <DropdownMenuItem>
-          <UpdateAlumnModal alumn={alumn}>
-            Editar
-          </UpdateAlumnModal>
+          <Link href={`/admin/alumnos/${id}/editar`}>Editar</Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>

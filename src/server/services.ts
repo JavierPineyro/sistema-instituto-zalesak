@@ -16,18 +16,15 @@ export const service = {
             },
           },
         },
+        // orderBy: (alumnos, { asc }) => [asc(alumnos.active)],
       });
       return data;
     },
-    getById: async (id: number): Promise<Alumn | null> => {
-      return new Promise((resolve, reject) => {
-        const alumn = mockAlumn.find((a) => a.id === id);
-        if (alumn) {
-          resolve(alumn);
-        } else {
-          reject(new Error("Alumn not found"));
-        }
+    getById: async (id: number) => {
+      const alumn = await db.query.alumnos.findFirst({
+        where: eq(alumnos.id, id),
       });
+      return alumn;
     },
     checkIfAlreadyExist: async (name: string) => {
       const data = await db.query.alumnos.findFirst({
