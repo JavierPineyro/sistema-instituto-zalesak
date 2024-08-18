@@ -1,6 +1,7 @@
 import Link from "next/link";
 import MainNav from "~/components/ui/main-nav";
 import UserNav from "~/components/ui/user-nav";
+import { Toaster } from "~/components/ui/sonner"
 
 export default function LayoutAdmin({
   children,
@@ -23,6 +24,7 @@ export default function LayoutAdmin({
         </div>
       </div>
       {children}
+      <Toaster richColors position="top-center" />
     </main>
   )
 }
