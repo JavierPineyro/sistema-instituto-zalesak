@@ -26,14 +26,14 @@ export function DataTableRowActions<TData>({
   const id = row.getValue("id") as number
   const belt = row.getValue("cinturon") as Belt
 
-  const alumn: UpdateAlumn = {
+  const alumn = {
     id,
     idBelt: String(belt.id),
     fullname: row.getValue("fullname"),
     tutor: row.getValue("tutor"),
     birthday: row.getValue("birthday"),
     phoneNumber: row.getValue("phoneNumber"),
-    active: row.getValue("active"),
+    active: row.getValue("active") as boolean,
   }
 
   return (
