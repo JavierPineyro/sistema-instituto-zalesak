@@ -22,11 +22,10 @@ export default async function EditarPage({ params }: Props) {
     </section>
   }
 
-  return <section>
-    Editar Alumno {alumn?.fullname}
-    <pre>
-      {JSON.stringify(alumn, null, 2)}
-    </pre>
+  return <section className="min-w-[400px]">
+    <h2 className="text-gray-800 font-bold text-lg">
+      Editar datos
+    </h2>
     <UpdateAlumnForm alumn={alumn} belts={belts} />
   </section>
 }

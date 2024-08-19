@@ -1,6 +1,6 @@
 "use client"
 
-import { Belt, UpdateAlumn } from "~/lib/types"
+import { Belt } from "~/lib/types"
 import updateAlumnAction from "~/server/actions/alumnos/update-action"
 import { AlumnUpdateSchema } from "~/lib/validations/alumn.schema"
 import { z } from "zod"
@@ -10,6 +10,7 @@ import { useForm } from "react-hook-form"
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -24,11 +25,9 @@ import {
   SelectTrigger,
   SelectValue
 } from "~/components/ui/select"
-import { DialogClose, DialogFooter } from "~/components/ui/dialog"
-import { Button } from "~/components/ui/button"
-import { Checkbox } from "~/components/ui/checkbox"
 import { toast } from "sonner"
 import { useRouter } from "next/navigation"
+import { Button } from "~/components/ui/button"
 
 type Props = {
   belts: Belt[] | null,
@@ -51,18 +50,18 @@ export default function UpdateAlumnForm({ belts, alumn }: Props) {
   const form = useForm<z.infer<typeof AlumnUpdateSchema>>({
     resolver: zodResolver(AlumnUpdateSchema),
     defaultValues: {
+      id: alumn.id,
       fullname: alumn.fullname,
       birthday: alumn.birthday,
       phoneNumber: alumn.phoneNumber ?? "",
-      active: alumn.active,
       tutor: alumn.tutor ?? "",
       idBelt: String(alumn.idBelt)
     },
   })
 
   async function onSubmit(values: z.infer<typeof AlumnUpdateSchema>) {
-
-    const data = { ...values, id: alumn.id }
+    const { id, ...valuesWithoutId } = values
+    const data = { ...valuesWithoutId, id: alumn.id }
     startTransition(async () => {
       const response = await updateAlumnAction(data)
       if (response.success) {
@@ -77,7 +76,22 @@ export default function UpdateAlumnForm({ belts, alumn }: Props) {
   return (
     <>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="">
+        <form onSubmit={form.handleSubmit(onSubmit)}>
+          <FormField
+            control={form.control}
+            name="id"
+            render={({ field }) => (
+              <FormItem>
+                <FormControl>
+                  <Input id="id" className={cn("hidden")} type="number" {...field} />
+                </FormControl>
+                <div className="h-3 text-sm items-center">
+                  <FormMessage />
+                </div>
+              </FormItem>
+            )}
+          />
+
           <FormField
             control={form.control}
             name="fullname"
@@ -98,7 +112,7 @@ export default function UpdateAlumnForm({ belts, alumn }: Props) {
             name="birthday"
             render={({ field }) => (
               <FormItem>
-                <FormLabel htmlFor="birthday" className={cn("block text-sm font-medium mt-2 leading-1 text-gray-900")}>Fecha de nac.</FormLabel>
+                <FormLabel htmlFor="birthday" className={cn("block text-sm font-medium mt-2 leading-1 w-full text-gray-900")}>Fecha de nac.</FormLabel>
                 <FormControl>
                   <Input id="birthday" className={cn("block w-full rounded-md pl-2 border-0 py-1 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-4")} type="date"  {...field} />
                 </FormControl>
@@ -116,7 +130,7 @@ export default function UpdateAlumnForm({ belts, alumn }: Props) {
                 <FormLabel htmlFor="idBelt" className={cn("block text-sm font-medium leading-1 mt-2 text-gray-900")}>Cinturón</FormLabel>
                 <Select required onValueChange={field.onChange} defaultValue={field.value}>
                   <FormControl>
-                    <SelectTrigger className="w-[180px]">
+                    <SelectTrigger aria-required className="w-full">
                       <SelectValue placeholder="Cinturón" />
                     </SelectTrigger>
                   </FormControl>
@@ -165,40 +179,11 @@ export default function UpdateAlumnForm({ belts, alumn }: Props) {
               </FormItem>
             )}
           />
-          <FormField
-            control={form.control}
-            name="active"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel htmlFor="active" className={cn("text-sm font-medium leading-1 text-gray-90 mr-1")}>¿Está activo?</FormLabel>
-                <FormControl>
-                  <Checkbox
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-                <div className="h-3 text-sm items-center">
-                  <FormMessage />
-                </div>
-              </FormItem>
-            )}
-          />
-
-          <div>
-            <Button
-              disabled={isPending}
-              className={cn("flex w-full justify-center rounded-md bg-indigo-600 px-2 py-1.5 text-sm font-semibold leading-4 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600")} type="submit">
-              Guardar
-            </Button>
-            {/* <DialogFooter>
-              <DialogClose asChild>
-                <Button disabled={isPending} type="button" variant="outline">
-                  Cancelar
-                </Button>
-              </DialogClose>
-              <Button disabled={isPending} className={cn("flex w-full justify-center rounded-md bg-indigo-600 px-2 py-1.5 text-sm font-semibold leading-4 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600")} type="submit">Guardar</Button>
-            </DialogFooter> */}
-          </div>
+          <Button
+            disabled={isPending} type="submit"
+            className={cn("flex h-10 items-center w-full justify-center rounded-md bg-indigo-600 px-2 py-1.5 text-sm font-semibold leading-4 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600")}>
+            Guardar
+          </Button>
         </form>
       </Form>
     </>

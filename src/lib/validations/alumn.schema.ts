@@ -46,6 +46,6 @@ export const AlumnCreateSchema = object({
 export const AlumnUpdateSchema = z
   .object({
     id: z.number(),
-    active: z.boolean(),
+    // active: z.boolean(),
   })
   .merge(AlumnCreateSchema);

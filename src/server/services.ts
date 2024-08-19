@@ -48,12 +48,11 @@ export const service = {
       return alumn;
     },
     update: async (alumn: UpdateAlumnWithNumberBeltId) => {
-      const { fullname, birthday, phoneNumber, tutor, idBelt, id, active } =
+      const { fullname, birthday, phoneNumber, tutor, idBelt, id } =
         alumn;
       const result = await db
         .update(alumnos)
         .set({
-          active,
           birthday,
           fullname,
           idBelt,
