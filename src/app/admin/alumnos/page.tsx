@@ -12,6 +12,7 @@ export const metadata: Metadata = {
   description: "Panel de Gestión de Alumnos - Instituto Zalesak",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
+export const dynamic = "force-dynamic"
 
 export default async function AlumnsPage() {
   const data = await service.alumnos.list()
