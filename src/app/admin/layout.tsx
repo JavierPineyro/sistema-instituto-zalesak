@@ -2,12 +2,20 @@ import Link from "next/link";
 import MainNav from "~/components/ui/main-nav";
 import UserNav from "~/components/ui/user-nav";
 import { Toaster } from "~/components/ui/sonner"
+import { auth } from "auth";
+import { redirect } from "next/navigation";
 
-export default function LayoutAdmin({
+export default async function LayoutAdmin({
   children,
 }: {
   children: React.ReactNode;
 }) {
+
+  const session = await auth()
+  if (!session || !session?.user) {
+    redirect("/login");
+  }
+
   return (
     <main className="h-full">
       <div className="flex-col md:flex">
