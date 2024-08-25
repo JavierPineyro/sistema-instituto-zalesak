@@ -26,6 +26,19 @@ export const service = {
       });
       return alumn;
     },
+    getByIdWithBelt: async (id: number) => {
+      const alumn = await db.query.alumnos.findFirst({
+        where: eq(alumnos.id, id),
+        with: {
+          cinturon: {
+            columns: {
+              name: true,
+            },
+          },
+        },
+      });
+      return alumn;
+    },
     checkIfAlreadyExist: async (name: string) => {
       const data = await db.query.alumnos.findFirst({
         where: eq(alumnos.fullname, name),
