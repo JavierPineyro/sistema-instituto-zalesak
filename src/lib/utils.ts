@@ -30,6 +30,13 @@ export function parseToLocalDate(date: string) {
   return day + "/" + month + "/" + year;
 }
 
+export function calculateAge(date: string) {
+  const birthday = new Date(date);
+  const ageDifMs = Date.now() - birthday.getTime();
+  const ageDate = new Date(ageDifMs);
+  return Math.abs(ageDate.getUTCFullYear() - 1970);
+}
+
 export class ValidationError extends Error {
   constructor(message: string) {
     super(message);
