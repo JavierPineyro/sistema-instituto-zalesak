@@ -1,6 +1,7 @@
+import Cuotas from "~/components/cuotas"
 import GoBack from "~/components/go-back"
 import { Button } from "~/components/ui/button"
-import { calculateAge } from "~/lib/utils"
+import { calculateAge, cn, parseToLocalDate } from "~/lib/utils"
 import { service } from "~/server/services"
 
 type Props = {
@@ -11,7 +12,44 @@ type Props = {
 
 export default async function AlumnInfoPage({ params }: Props) {
 
-  const alumn = await service.alumnos.getByIdWithBelt(Number(params.id))
+  // const alumn = await service.alumnos.getByIdWithBelt(Number(params.id))
+  const alumn = {
+    fullname: "Pedro Gonzales",
+    birthday: "2000-05-01",
+    active: true,
+    tutor: null,
+    phoneNumber: "123-456789",
+    cinturon: {
+      name: "blanco"
+    }
+  }
+  const cuotas: { id: number, month: string, date: string }[] = [
+    {
+      id: 5,
+      month: "Marzo",
+      date: '2023-03-13'
+    },
+    {
+      id: 4,
+      month: "Abril",
+      date: '2023-04-20'
+    },
+    {
+      id: 1,
+      month: "Mayo",
+      date: '2023-05-10'
+    },
+    {
+      id: 2,
+      month: "Junio",
+      date: '2023-06-03'
+    },
+    {
+      id: 3,
+      month: "Julio",
+      date: '2023-07-15'
+    },
+  ]
 
   if (!alumn) {
     return <div className="flex flex-col gap-1 items-center justify-center">
@@ -21,53 +59,55 @@ export default async function AlumnInfoPage({ params }: Props) {
   }
 
   return (
-    <section>
-      <header className="flex flex-col gap-1 justify-center">
+    <section className="px-5">
+      <header className="flex flex-col gap-1 justify-center mb-5">
         <GoBack path="/admin/alumnos" />
-        <h2>{alumn.fullname}</h2>
+        <h2 className="font-bold text-center text-3xl">{alumn.fullname}</h2>
       </header>
-      <div className="flex gap-1 justify-evenly">
+      <div className="text-xl flex gap-1 justify-between">
         <div>
-          <span>Fecha Nac: </span>
-          <span>{alumn.birthday}</span>
+          <span className="font-semibold">Fecha Nac</span>:
+          <span className="ml-1">{parseToLocalDate(alumn.birthday)}</span>
         </div>
         <div>
-          <span>Edad: </span>
-          <span>
-            {calculateAge(alumn.birthday)}
+          <span className="font-semibold">Edad</span>:
+          <span className="ml-1">
+            {calculateAge(alumn.birthday)} años
           </span>
         </div>
-        <div className="flex gap-1 justify-evenly">
-          <span>Estado:</span>
-          <span>{alumn.active ? "Activo" : "Inactivo"}</span>
+        <div className="flex gap-1">
+          <span className="font-semibold">Estado</span>:
+          <span className="ml-1">{alumn.active ? "Activo" : "Inactivo"}</span>
         </div>
       </div>
 
-      <div className="flex gap-1 justify-evenly">
+      <div className="text-xl flex gap-1 justify-between">
         <div>
-          <span>Tutor: </span>
-          <span>{alumn.tutor}</span>
+          <span className="font-semibold">Teléfono</span>:
+          <span className="ml-1">{alumn.phoneNumber ?? "No tiene"}</span>
         </div>
         <div>
-          <span>Teléfono: </span>
-          <span>{alumn.phoneNumber}</span>
+          <span className="font-semibold">Tutor</span>:
+          <span className="ml-1">{alumn.tutor ?? "No tiene"}</span>
         </div>
         <div>
-          <span>Cinturón</span>
-          <span>{alumn.cinturon.name}</span>
+          <span className="font-semibold">Cinturón</span>:
+          <span className="ml-1">{alumn.cinturon.name}</span>
         </div>
       </div>
 
-      <div>
-        <h3>Cuotas:</h3>
-        <div>Algun component para ver Pagos</div>
+      <div className="my-5 grid gap-2">
+        <h3 className="font-semibold text-xl">Cuotas ({new Date().getFullYear()})</h3>
+        <div>
+          <Cuotas cuotas={cuotas} />
+        </div>
       </div>
 
       <footer className="flex justify-evenly gap-1 w-full">
-        <Button>Editar</Button>
-        <Button>Desactivar</Button>
-        <Button>Pagar Cuota</Button>
-        <Button>Hacer Pedido</Button>
+        <Button className={cn("w-32")}>Editar</Button>
+        <Button className={cn("w-32")}>Desactivar</Button>
+        <Button className={cn("w-32")}>Pagar Cuota</Button>
+        <Button className={cn("w-32")}>Hacer Pedido</Button>
       </footer>
     </section >
   )
