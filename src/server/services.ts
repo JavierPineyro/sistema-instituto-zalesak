@@ -2,7 +2,7 @@ import { mockAlumn } from "~/components/alumnos/tables/data";
 import { Alumn, NewAlumn, UpdateAlumnWithNumberBeltId } from "~/lib/types";
 import { db } from "./db";
 import { count, eq } from "drizzle-orm";
-import { alumnos } from "./db/schema";
+import { alumnos, pagos } from "./db/schema";
 
 export const service = {
   alumnos: {
@@ -61,8 +61,7 @@ export const service = {
       return alumn;
     },
     update: async (alumn: UpdateAlumnWithNumberBeltId) => {
-      const { fullname, birthday, phoneNumber, tutor, idBelt, id } =
-        alumn;
+      const { fullname, birthday, phoneNumber, tutor, idBelt, id } = alumn;
       const result = await db
         .update(alumnos)
         .set({
@@ -97,6 +96,18 @@ export const service = {
   cinturones: {
     list: async () => {
       const data = await db.query.cinturones.findMany();
+      return data;
+    },
+  },
+  pagos: {
+    list: async () => {
+      const data = await db.query.pagos.findMany();
+      return data;
+    },
+    getById: async (id: number) => {
+      const data = await db.query.pagos.findFirst({
+        where: eq(pagos.id, id),
+      });
       return data;
     },
   },

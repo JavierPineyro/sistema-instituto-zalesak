@@ -1,6 +1,10 @@
+import Link from "next/link"
+import ActiveForm from "~/components/alumnos/forms/active-alumn-form"
+import EnableOrDisable from "~/components/alumnos/modals/enable-or-disable"
 import Cuotas from "~/components/cuotas"
 import GoBack from "~/components/go-back"
 import { Button } from "~/components/ui/button"
+import { Payment } from "~/lib/types"
 import { calculateAge, cn, parseToLocalDate } from "~/lib/utils"
 import { service } from "~/server/services"
 
@@ -12,42 +16,53 @@ type Props = {
 
 export default async function AlumnInfoPage({ params }: Props) {
 
-  // const alumn = await service.alumnos.getByIdWithBelt(Number(params.id))
-  const alumn = {
-    fullname: "Pedro Gonzales",
-    birthday: "2000-05-01",
-    active: true,
-    tutor: null,
-    phoneNumber: "123-456789",
-    cinturon: {
-      name: "blanco"
-    }
-  }
-  const cuotas: { id: number, month: string, date: string }[] = [
+  const alumn = await service.alumnos.getByIdWithBelt(Number(params.id))
+  // const alumn = {
+  //   id: 1,
+  //   fullname: "Pedro Gonzales",
+  //   birthday: "2000-05-01",
+  //   active: true,
+  //   tutor: null,
+  //   phoneNumber: "123-456789",
+  //   cinturon: {
+  //     name: "blanco"
+  //   }
+  // }
+  const cuotas: Payment[] = [
     {
       id: 5,
       month: "Marzo",
-      date: '2023-03-13'
+      date: '2023-03-13',
+      idAlumn: 1,
+      idRecieve: 1
     },
     {
       id: 4,
       month: "Abril",
-      date: '2023-04-20'
+      date: '2023-04-20',
+      idAlumn: 1,
+      idRecieve: 2
     },
     {
       id: 1,
       month: "Mayo",
-      date: '2023-05-10'
+      date: '2023-05-10',
+      idAlumn: 1,
+      idRecieve: 3
     },
     {
       id: 2,
       month: "Junio",
-      date: '2023-06-03'
+      date: '2023-06-03',
+      idAlumn: 1,
+      idRecieve: 4
     },
     {
       id: 3,
       month: "Julio",
-      date: '2023-07-15'
+      date: '2023-07-15',
+      idAlumn: 1,
+      idRecieve: 5
     },
   ]
 
@@ -103,11 +118,17 @@ export default async function AlumnInfoPage({ params }: Props) {
         </div>
       </div>
 
-      <footer className="flex justify-evenly gap-1 w-full">
-        <Button className={cn("w-32")}>Editar</Button>
-        <Button className={cn("w-32")}>Desactivar</Button>
-        <Button className={cn("w-32")}>Pagar Cuota</Button>
-        <Button className={cn("w-32")}>Hacer Pedido</Button>
+      <footer className="flex justify-evenly mt-10 gap-1 w-full">
+        <Button asChild className={cn("w-32 bg-blue-600 hover:bg-blue-500 transition-colors")}>
+          <Link href={`/admin/alumnos/${alumn.id}/editar`}>Editar</Link>
+        </Button>
+        <EnableOrDisable id={alumn.id} active={alumn.active} />
+        <Button asChild className={cn("w-32")}>
+          <Link href={`/admin/alumnos/${alumn.id}/pagar`}>Pagar Cuota</Link>
+        </Button>
+        <Button asChild className={cn("w-32")}>
+          <Link href={`/admin/alumnos/${alumn.id}/hacer-pedido`}>Hacer Pedido</Link>
+        </Button>
       </footer>
     </section >
   )

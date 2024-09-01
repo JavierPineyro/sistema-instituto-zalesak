@@ -1,10 +1,6 @@
+import { Payment } from "~/lib/types";
 import { cn } from "~/lib/utils";
 
-type Payment = {
-  id: number
-  month: string
-  date: string
-}
 
 const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
 enum STATUS {

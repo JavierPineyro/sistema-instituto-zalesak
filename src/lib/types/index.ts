@@ -3,6 +3,7 @@ import {
   AlumnCreateSchema,
   AlumnUpdateSchema,
 } from "~/lib/validations/alumn.schema";
+import { service } from "~/server/services";
 
 export { type Alumn } from "~/lib/validations/alumn.schema";
 
@@ -51,3 +52,17 @@ export type ResponseAction = {
   success: boolean;
   message: string;
 };
+
+export type Payment = {
+  id: number;
+  date: string;
+  month: string;
+  idAlumn: number;
+  idRecieve: number;
+};
+
+export type PaymentWithoutId = Omit<Payment, "id">;
+// export type PaymentWithAlumnAndReceive = Payment & {
+//   alumno: Alumn;
+//   recibo: Recieve;
+// };

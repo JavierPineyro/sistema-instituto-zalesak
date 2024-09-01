@@ -1,6 +1,7 @@
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import Link from "next/link";
+import { CircleDollarSign, Package, Edit } from "lucide-react"
 
 type SidebarProps = {
   id: number,
@@ -8,6 +9,7 @@ type SidebarProps = {
 }
 
 export function ProfileSidebar({ className, id }: SidebarProps) {
+
   return (
     <aside className={cn("pb-12 max-w-60", className)}>
       <div className="space-y-4">
@@ -34,33 +36,6 @@ export function ProfileSidebar({ className, id }: SidebarProps) {
                 Información Personal
               </Link>
             </Button>
-            <Button asChild variant="ghost" className="w-full justify-start">
-              <Link href={`/admin/alumnos/${id}/editar`}>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  className="mr-2 h-4 w-4"
-                >
-                  <rect width="7" height="7" x="3" y="3" rx="1" />
-                  <rect width="7" height="7" x="14" y="3" rx="1" />
-                  <rect width="7" height="7" x="14" y="14" rx="1" />
-                  <rect width="7" height="7" x="3" y="14" rx="1" />
-                </svg>
-                Editar
-              </Link>
-            </Button>
-          </div>
-        </div>
-        <div className="px-3 py-2">
-          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-            Listas del alumno
-          </h2>
-          <div className="space-y-1">
             <Button asChild variant="ghost" className="w-full justify-start">
               <Link href={`/admin/alumnos/${id}/pagos`}>
                 <svg
@@ -120,6 +95,31 @@ export function ProfileSidebar({ className, id }: SidebarProps) {
                   <path d="M19.1 4.9C23 8.8 23 15.1 19.1 19" />
                 </svg>
                 Pedidos
+              </Link>
+            </Button>
+          </div>
+        </div>
+        <div className="px-3 py-2">
+          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+            Acciones
+          </h2>
+          <div className="space-y-1">
+            <Button asChild variant="ghost" className="w-full justify-start">
+              <Link href={`/admin/alumnos/${id}/editar`}>
+                <Edit className="size-4 mr-1" />
+                Editar
+              </Link>
+            </Button>
+            <Button asChild variant="ghost" className="w-full justify-start">
+              <Link href={`/admin/alumnos/${id}/pagar`}>
+                <CircleDollarSign className="size-4 mr-1" />
+                Pagar Cuota
+              </Link>
+            </Button>
+            <Button asChild variant="ghost" className="w-full justify-start">
+              <Link href={`/admin/alumnos/${id}/hacer-pedido`}>
+                <Package className="size-4 mr-1" />
+                Hacer Pedido
               </Link>
             </Button>
           </div>
