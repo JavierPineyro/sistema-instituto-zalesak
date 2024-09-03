@@ -79,6 +79,7 @@ export const alumnos = pgTable("alumnos", {
   phoneNumber: varchar("num_tel", { length: 100 }),
   tutor: varchar("tutor", { length: 255 }),
   active: boolean("activo").notNull().default(true), // Actualizado
+  dateAdmission: date("fecha_ingreso").default(sql`CURRENT_DATE`), // Actualizado
   idBelt: integer("id_cinturon")
     .notNull()
     .references(() => cinturones.id),
@@ -113,7 +114,7 @@ export const precios = pgTable("precios", {
 });
 
 export const preciosRelation = relations(precios, ({ many }) => ({
-  producto: many(pedidos),
+  pedidos: many(pedidos), // ??????????????????
 }));
 
 export const recibos = pgTable("recibos", {
