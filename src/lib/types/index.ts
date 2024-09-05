@@ -3,7 +3,6 @@ import {
   AlumnCreateSchema,
   AlumnUpdateSchema,
 } from "~/lib/validations/alumn.schema";
-import { service } from "~/server/services";
 
 export { type Alumn } from "~/lib/validations/alumn.schema";
 
@@ -34,6 +33,12 @@ export enum ValidationMessage {
 export enum StatusActive {
   ACTIVE = "activo",
   INACTIVE = "inactivo",
+}
+
+export enum CUOTA_STATUS {
+  PAGADO = "pagado",
+  VACIO = "vacio",
+  ATRASADO = "atrasado",
 }
 
 export type Belt = {

@@ -1,24 +1,26 @@
-import { Payment } from "~/lib/types";
-import { cn } from "~/lib/utils";
+import { type Payment, CUOTA_STATUS as STATUS } from "~/lib/types";
+import { months } from "~/lib/utils";
+import Bar from "~/components/bar";
 
-
-const months = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
-enum STATUS {
-  PAGADO = "pagado",
-  VACIO = "vacio",
-  ATRASADO = "atrasado"
+type Props = {
+  cuotas: Payment[],
+  admissionDate: string
 }
 
-export default function Cuotas({ cuotas = [] }: { cuotas: Payment[] }) {
+export default function Cuotas({ cuotas = [], admissionDate }: Props) {
 
   return (
     <div className="flex gap-10 items-center">
       <div className="flex gap-[2px]">
         {
           months.map((month, index) => {
+
             const cuota = cuotas.find(cuota => cuota.month === month)
-            if (!cuota) return <Bar key={index} label={month} status={STATUS.VACIO} />
-            return <Bar key={cuota.id} label={month} status={STATUS.PAGADO} />
+            if (!cuota) {
+              return <Bar key={index} admissionDate={admissionDate} label={month} status={STATUS.VACIO} />
+            }
+
+            return <Bar key={cuota.id} admissionDate={admissionDate} label={month} status={STATUS.PAGADO} />
           })
         }
       </div>
@@ -46,36 +48,4 @@ export default function Cuotas({ cuotas = [] }: { cuotas: Payment[] }) {
       </div>
     </div>
   );
-}
-
-function Bar({ label, status }: { label: string, status: STATUS }) {
-
-  const text = label.slice(0, 3)
-  let title = ""
-
-  // if is current month add a border to highlight
-  const currentMonth = new Date().getMonth() + 1
-  const monthNumber = months.indexOf(label) + 1
-
-  const isPending = (currentMonth >= monthNumber) && status === STATUS.VACIO
-  const isPaid = status === STATUS.PAGADO
-  const isVoid = status === STATUS.VACIO
-  const isNotAvailable = label === "Enero" || label === "Febrero"
-  const isCurrentMonth = monthNumber === currentMonth
-
-  if (isPaid) title = "Pagado";
-  if (isVoid && !isNotAvailable) title = "Sin Pagar";
-  if (isPending) title = "Atrasado";
-  if (isNotAvailable) title = "No Disponible"
-
-  return <div title={title}>
-    <span className="text-sm flex justify-center">{text}</span>
-    <div className={cn("rounded-md w-8 h-24", {
-      "bg-green-500": isPaid,
-      "bg-gray-300": isVoid,
-      "border-4 border-red-600": isCurrentMonth,
-      "bg-orange-300": isPending,
-      "bg-gray-400": isNotAvailable
-    })}></div>
-  </div>
 }
