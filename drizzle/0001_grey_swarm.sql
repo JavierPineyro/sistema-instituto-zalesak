@@ -1,0 +1,1 @@
+ALTER TABLE "alumnos" ALTER COLUMN "fecha_ingreso" SET NOT NULL;

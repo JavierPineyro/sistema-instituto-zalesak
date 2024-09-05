@@ -72,14 +72,23 @@ export const authenticators = pgTable(
   }),
 );
 
+// addmissionDate por defecto en la db se va a crear con un dia más debido
+// a la diferencia horaria. esto puede hacer que en el componente cuotas
+// se vea mal los colores, si se da el caso que la inscricion del alumno
+// coincide con el ultimo dia del mes, esto hará que en la db se cree con el
+// primer dia del siguiente mes y va a marcar el mes inscripto con el color gris
+// eso se puede evitar creando la fecha de admision en la Action de crear alumno
+// agregando la fecha a mano con el new Date.
 export const alumnos = pgTable("alumnos", {
   id: serial("id").primaryKey(),
   fullname: varchar("nombre_completo", { length: 255 }).notNull(),
   birthday: date("fecha_nac").notNull(),
   phoneNumber: varchar("num_tel", { length: 100 }),
   tutor: varchar("tutor", { length: 255 }),
-  active: boolean("activo").notNull().default(true), // Actualizado
-  dateAdmission: date("fecha_ingreso").default(sql`CURRENT_DATE`), // Actualizado
+  active: boolean("activo").notNull().default(true),
+  dateAdmission: date("fecha_ingreso")
+    .notNull()
+    .default(sql`CURRENT_DATE`), // esto muestra un dia mas del dia que se creo
   idBelt: integer("id_cinturon")
     .notNull()
     .references(() => cinturones.id),
@@ -125,7 +134,7 @@ export const recibos = pgTable("recibos", {
     .notNull()
     .default(sql`CURRENT_DATE`),
   nameClient: varchar("nombre_receptor", { length: 255 }).notNull(),
-  idAlumn: integer("id_alumno").references(() => alumnos.id), // Actualizado
+  idAlumn: integer("id_alumno").references(() => alumnos.id),
   concept: varchar("concepto", { length: 255 }),
   recharge: boolean("recargo").notNull().default(false),
   total: real("total").notNull(),
@@ -139,7 +148,6 @@ export const recibosRelation = relations(recibos, ({ one }) => ({
   }),
 }));
 
-// Actualizado
 export const pedidos = pgTable("pedidos", {
   id: serial("id").primaryKey(),
   idProduct: integer("id_producto")
