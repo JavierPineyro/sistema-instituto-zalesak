@@ -1,5 +1,4 @@
 import Link from "next/link"
-import ActiveForm from "~/components/alumnos/forms/active-alumn-form"
 import EnableOrDisable from "~/components/alumnos/modals/enable-or-disable"
 import Cuotas from "~/components/cuotas"
 import GoBack from "~/components/go-back"
@@ -17,22 +16,11 @@ type Props = {
 export default async function AlumnInfoPage({ params }: Props) {
 
   const alumn = await service.alumnos.getByIdWithBelt(Number(params.id))
-  // const alumn = {
-  //   id: 1,
-  //   fullname: "Pedro Gonzales",
-  //   birthday: "2000-05-01",
-  //   active: true,
-  //   tutor: null,
-  //   phoneNumber: "123-456789",
-  //   cinturon: {
-  //     name: "blanco"
-  //   }
-  // }
   const cuotas: Payment[] = [
     {
       id: 5,
       month: "Marzo",
-      date: '2023-03-13',
+      date: '2023--3-13',
       idAlumn: 1,
       idRecieve: 1
     },
@@ -64,6 +52,14 @@ export default async function AlumnInfoPage({ params }: Props) {
       idAlumn: 1,
       idRecieve: 5
     },
+    {
+      id: 6,
+      month: "Agosto",
+      date: '2023-08-22',
+      idAlumn: 1,
+      idRecieve: 6
+    },
+
   ]
 
   if (!alumn) {
@@ -79,7 +75,7 @@ export default async function AlumnInfoPage({ params }: Props) {
         <GoBack path="/admin/alumnos" />
         <h2 className="font-bold text-center text-3xl">{alumn.fullname}</h2>
       </header>
-      <div className="text-xl flex gap-1 justify-between">
+      <div className="text-xl flex gap-20 justify-start">
         <div>
           <span className="font-semibold">Fecha Nac</span>:
           <span className="ml-1">{parseToLocalDate(alumn.birthday)}</span>
@@ -87,34 +83,40 @@ export default async function AlumnInfoPage({ params }: Props) {
         <div>
           <span className="font-semibold">Edad</span>:
           <span className="ml-1">
-            {calculateAge(alumn.birthday)} años
+            {calculateAge(alumn.birthday).toString().concat(" años")}
           </span>
-        </div>
-        <div className="flex gap-1">
-          <span className="font-semibold">Estado</span>:
-          <span className="ml-1">{alumn.active ? "Activo" : "Inactivo"}</span>
-        </div>
-      </div>
-
-      <div className="text-xl flex gap-1 justify-between">
-        <div>
-          <span className="font-semibold">Teléfono</span>:
-          <span className="ml-1">{alumn.phoneNumber ?? "No tiene"}</span>
         </div>
         <div>
           <span className="font-semibold">Tutor</span>:
           <span className="ml-1">{alumn.tutor ?? "No tiene"}</span>
         </div>
+      </div>
+
+      <div className="text-xl flex gap-20 justify-start">
+        <div>
+          <span className="font-semibold">Inscripción</span>:
+          <span className="ml-1">{parseToLocalDate(alumn.dateAdmission)}</span>
+        </div>
+        <div className="flex gap-1">
+          <span className="font-semibold">Estado</span>:
+          <span className="ml-1">{alumn.active ? "Activo" : "Inactivo"}</span>
+        </div>
+        <div>
+          <span className="font-semibold">Teléfono</span>:
+          <span className="ml-1">{alumn.phoneNumber ?? "No tiene"}</span>
+        </div>
+      </div>
+      <div className="text-xl flex gap-20 justify-start">
         <div>
           <span className="font-semibold">Cinturón</span>:
-          <span className="ml-1">{alumn.cinturon.name}</span>
+          <span className="ml-1">{alumn.cinturon.description}</span>
         </div>
       </div>
 
       <div className="my-5 grid gap-2">
         <h3 className="font-semibold text-xl">Cuotas ({new Date().getFullYear()})</h3>
         <div>
-          <Cuotas cuotas={cuotas} />
+          <Cuotas cuotas={cuotas} admissionDate={alumn.dateAdmission} />
         </div>
       </div>
 

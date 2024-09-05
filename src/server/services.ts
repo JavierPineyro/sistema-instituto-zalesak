@@ -1,5 +1,5 @@
 import { mockAlumn } from "~/components/alumnos/tables/data";
-import { Alumn, NewAlumn, UpdateAlumnWithNumberBeltId } from "~/lib/types";
+import { NewAlumn, UpdateAlumnWithNumberBeltId } from "~/lib/types";
 import { db } from "./db";
 import { count, eq } from "drizzle-orm";
 import { alumnos, pagos } from "./db/schema";
@@ -33,6 +33,7 @@ export const service = {
           cinturon: {
             columns: {
               name: true,
+              description: true,
             },
           },
         },
