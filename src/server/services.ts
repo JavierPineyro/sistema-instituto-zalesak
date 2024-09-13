@@ -1,8 +1,8 @@
 import { mockAlumn } from "~/components/alumnos/tables/data";
-import { NewAlumn, UpdateAlumnWithNumberBeltId } from "~/lib/types";
+import { NewAlumn, NewPayment, UpdateAlumnWithNumberBeltId } from "~/lib/types";
 import { db } from "./db";
 import { count, eq } from "drizzle-orm";
-import { alumnos, pagos } from "./db/schema";
+import { alumnos, pagos, recibos } from "./db/schema";
 
 export const service = {
   alumnos: {
@@ -110,6 +110,40 @@ export const service = {
         where: eq(pagos.id, id),
       });
       return data;
+    },
+    save: async (payment: NewPayment) => {
+      const { idAlumn, idRecieve, month, date } = payment;
+      await db.insert(pagos).values({ idAlumn, idRecieve, month, date });
+      return payment;
+    },
+    getByMonthAndYear: async (month: string, year: string) => {
+      // get all records of pagos based on a month, and using date  
+    }
+  },
+  recibos: {
+    list: async () => {
+      const data = await db.query.recibos.findMany();
+      return data;
+    },
+    getById: async (id: number) => {
+      const data = await db.query.recibos.findFirst({
+        where: eq(recibos.id, id),
+      });
+      return data;
+    },
+    save: async (recieve: any) => {
+      const {
+        amount,
+        writtenAmount,
+        date,
+        nameClient,
+        idAlumn,
+        concept,
+        recharge,
+        total,
+      } = recieve;
+      await db.insert(recibos).values(recieve);
+      return recieve;
     },
   },
 };

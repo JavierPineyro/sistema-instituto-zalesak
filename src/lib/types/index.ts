@@ -28,6 +28,14 @@ export enum ValidationMessage {
   BELT_UPDATED = "El cinturón se actualizó correctamente",
   BELT_DELETED = "El cinturón se eliminó correctamente",
   SUCCESSFUL_LOGOUT = "Se cerró sesión correctamente",
+  //PAYMENT
+  SUCCESFUL_PAYMENT = "El pago se realizó correctamente",
+  PAYMENT_ERROR = "Error al realizar el pago",
+  PAYMENT_NOT_FOUND = "El pago no existe",
+  //RECIEVE
+  SUCCESSFUL_RECEIVE = "El recibo se creó correctamente",
+  RECEIVE_ERROR = "Error al crear el recibo",
+  RECEIVE_NOT_FOUND = "El recibo no existe",
 }
 
 export enum StatusActive {
@@ -60,6 +68,19 @@ export type ResponseAction = {
 
 export type Payment = {
   id: number;
+  date: string;
+  month: string;
+  idAlumn: number;
+  idRecieve: number;
+};
+
+export type RawPayment = {
+  date: string;
+  month: string;
+  idAlumn: string;
+  idRecieve: string;
+};
+export type NewPayment = {
   date: string;
   month: string;
   idAlumn: number;
