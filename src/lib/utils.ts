@@ -7,6 +7,24 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export function getTotal(amount: number, recharge = percentage): number {
+  return amount * (1 + recharge / 100);
+}
+
+export function hasRecharge(month: string) {
+  const currentDate = new Date();
+  const currentMonth = months[currentDate.getMonth()]!;
+  const currentDay = currentDate.getDay();
+
+  if (months.indexOf(month) > months.indexOf(currentMonth)) {
+    return false; // mes mayor que el actual
+  } else if (month === currentMonth && currentDay <= limit_day) {
+    return false; // dia no ha pasado del dia 10
+  } else {
+    return true; // dia actual paso del 10
+  }
+}
+
 export function getIsActiveText(state: boolean): string {
   return state ? StatusActive.ACTIVE : StatusActive.INACTIVE;
 }
@@ -61,3 +79,6 @@ export const months = [
   "Noviembre",
   "Diciembre",
 ];
+
+export const percentage = 10;
+export const limit_day = 10;

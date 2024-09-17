@@ -1,8 +1,8 @@
 import { mockAlumn } from "~/components/alumnos/tables/data";
 import { NewAlumn, NewPayment, UpdateAlumnWithNumberBeltId } from "~/lib/types";
 import { db } from "./db";
-import { count, eq } from "drizzle-orm";
-import { alumnos, pagos, recibos } from "./db/schema";
+import { count, eq, between } from "drizzle-orm";
+import { alumnos, pagos, precioCuota, recibos } from "./db/schema";
 
 export const service = {
   alumnos: {
@@ -25,6 +25,25 @@ export const service = {
         where: eq(alumnos.id, id),
       });
       return alumn;
+    },
+    getAlumnAndPays: async (id: number, year: number) => {
+      const minDate = `${year}-01-01`
+      const maxDate = `${year}-12-31`
+      const alumn = await db.query.alumnos.findFirst({
+        where: eq(alumnos.id, id),
+        columns: {
+          fullname: true,
+        },
+        with: {
+          pagos: {
+            where:between(pagos.date, minDate, maxDate),
+            columns: {
+              month: true
+            }
+          }
+        }
+      });
+      return alumn
     },
     getByIdWithBelt: async (id: number) => {
       const alumn = await db.query.alumnos.findFirst({
@@ -117,14 +136,10 @@ export const service = {
       return payment;
     },
     getByMonthAndYear: async (month: string, year: string) => {
-      // get all records of pagos based on a month, and using date  
-    }
+      // get all records of pagos based on a month, and using date
+    },
   },
   recibos: {
-    list: async () => {
-      const data = await db.query.recibos.findMany();
-      return data;
-    },
     getById: async (id: number) => {
       const data = await db.query.recibos.findFirst({
         where: eq(recibos.id, id),
@@ -144,6 +159,14 @@ export const service = {
       } = recieve;
       await db.insert(recibos).values(recieve);
       return recieve;
+    },
+  },
+  precioServicio: {
+    getAmount: async () => {
+      const amount = db.query.precioCuota.findFirst({
+        where: eq(precioCuota.name, "cuota"),
+      });
+      return amount;
     },
   },
 };
