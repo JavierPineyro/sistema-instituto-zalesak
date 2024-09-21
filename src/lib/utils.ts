@@ -56,6 +56,15 @@ export function calculateAge(date: string) {
   return Math.abs(ageDate.getUTCFullYear() - 1970);
 }
 
+export function getMonthsToPay(paidMonths: { month: string }[] = []) {
+  const paid = paidMonths.map((item) => item.month);
+  const excludedMonths = ["Enero", "Febrero"];
+
+  return months.filter(
+    (month) => !paid.includes(month) && !excludedMonths.includes(month),
+  );
+}
+
 // Error CLASSES
 export class ValidationError extends Error {
   constructor(message: string) {

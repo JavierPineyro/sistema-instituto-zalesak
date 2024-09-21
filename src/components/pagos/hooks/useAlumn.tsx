@@ -9,20 +9,20 @@ type AlumnWithPays = {
 };
 
 //TODO: HACER QUE DEVUELVA LOS MESES QUE FALTA PAGAR
-export function useAlumn(id: number, year: number) {
+export function useAlumn(id: number, date: Date) {
   const [alumn, setAlumn] = useState<AlumnWithPays | undefined | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     const getAlumn = async () => {
-      return service.alumnos.getAlumnAndPays(id, year);
+      return service.alumnos.getAlumnAndPays(id, date.getFullYear());
     };
     setIsLoading(true);
     getAlumn()
       .then((res) => setAlumn(res))
       .catch((reason) => console.error(reason))
       .finally(() => setIsLoading(false));
-  }, [id, year]);
+  }, [id, date]);
 
   return { alumn, isLoading };
 }
