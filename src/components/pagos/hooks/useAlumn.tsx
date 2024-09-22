@@ -1,3 +1,4 @@
+"use client";
 import { useEffect, useState } from "react";
 import { service } from "~/server/services";
 
@@ -23,6 +24,6 @@ export function useAlumn(id: number, date: Date) {
       .catch((reason) => console.error(reason))
       .finally(() => setIsLoading(false));
   }, [id, date]);
-
+  console.log("ALUMNO", alumn);
   return { alumn, isLoading };
 }

@@ -2,17 +2,24 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldValues, useForm } from "react-hook-form";
-import { useAlumn } from "../hooks/useAlumn";
+import ErrorMessage from "~/components/error-message";
 import { getMonthsToPay, getTotal, hasRecharge } from "~/lib/utils";
 
 type Props = {
   id: number;
   amount: number | undefined;
+  alumn:
+    | {
+        fullname: string;
+        pagos: {
+          month: string;
+        }[];
+      }
+    | undefined;
 };
 
-export default function PayForm({ id, amount }: Props) {
+export default function PayForm({ id, alumn, amount = 15000 }: Props) {
   const currentDate = new Date();
-  const { alumn, isLoading } = useAlumn(id, currentDate);
   const {
     register,
     handleSubmit,
@@ -21,18 +28,17 @@ export default function PayForm({ id, amount }: Props) {
   const monthsToPay = getMonthsToPay(alumn?.pagos);
 
   function onSubmit(data: FieldValues) {
-    const nameClient = alumn ? alumn.fullname : "No se ha encontrado";
-    console.log("Formulario", data);
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     const recharge = hasRecharge(data.month);
     const percentage = recharge ? 10 : 0;
     const total = getTotal(amount!, percentage);
+
     console.log("data total", {
-      nameClient,
       recharge,
       percentage,
       total,
       amount,
+      nameClient: alumn?.fullname,
       idAlumn: id,
       date: currentDate,
       concept: data.concept,
@@ -43,22 +49,34 @@ export default function PayForm({ id, amount }: Props) {
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
-        <div>
+        <div className="flex flex-col gap-1">
           <label htmlFor="concept">Concepto del pago</label>
           <input
             type="text"
             placeholder="ej: Pago de cuota..."
             {...register("concept", {
-              required: "Concepto del pago es requerido.",
+              required: {
+                value: true,
+                message: "*Concepto del pago es requerido.",
+              },
+              minLength: {
+                value: 1,
+                message: "*Debes completar en concepto del pago.",
+              },
             })}
           />
-          {errors.fullname && <span>{String(errors.fullname.message)}</span>}
+          {errors.concept && (
+            <ErrorMessage>{String(errors.concept.message)}</ErrorMessage>
+          )}
         </div>
-        <div>
+        <div className="flex flex-col gap-1">
           <label htmlFor="month">Mes</label>
           <select
             {...register("month", {
-              required: "Mes es requerido",
+              required: {
+                value: true,
+                message: "*Mes es requerido.",
+              },
             })}
           >
             {monthsToPay.map((month, i) => (
@@ -67,26 +85,32 @@ export default function PayForm({ id, amount }: Props) {
               </option>
             ))}
           </select>
-          {errors.month && <span>{String(errors.month.message)}</span>}
+          {errors.month && (
+            <ErrorMessage>{String(errors.month.message)}</ErrorMessage>
+          )}
         </div>
-        <div>
-          <label htmlFor="writtenAmount">Mes</label>
+        <div className="flex flex-col gap-1">
+          <label htmlFor="writtenAmount">Monto escrito</label>
           <input
             type="text"
             placeholder="ej: Quince mil..."
             {...register("writtenAmount", {
               minLength: {
                 value: 1,
-                message: "Debe escribir el monto del pago",
+                message: "*Debe escribir el monto del pago",
               },
-              required: "El monto en formato escrito es requerido.",
+              required: "*El monto escrito es requerido.",
             })}
           />
           {errors.writtenAmount && (
-            <span>{String(errors.writtenAmount.message)}</span>
+            <ErrorMessage>{String(errors.writtenAmount.message)}</ErrorMessage>
           )}
         </div>
-        <input type="submit">Pagar</input>
+        <input
+          className="border-0 bg-blue-500 px-2 py-1 text-lg text-white transition-colors hover:bg-blue-400"
+          type="submit"
+          value="Pagar"
+        />
       </form>
     </>
   );
