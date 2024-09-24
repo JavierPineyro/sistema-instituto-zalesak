@@ -147,18 +147,10 @@ export const service = {
       return data;
     },
     save: async (recieve: any) => {
-      const {
-        amount,
-        writtenAmount,
-        date,
-        nameClient,
-        idAlumn,
-        concept,
-        recharge,
-        total,
-      } = recieve;
-      await db.insert(recibos).values(recieve);
-      return recieve;
+      const response = await db.insert(recibos)
+        .values(recieve)
+        .returning({ id: recibos.id });
+      return response
     },
   },
   precioServicio: {

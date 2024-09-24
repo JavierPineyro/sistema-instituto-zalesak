@@ -1,9 +1,11 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useTransition } from "react";
 import { FieldValues, useForm } from "react-hook-form";
+import { toast } from "sonner";
 import ErrorMessage from "~/components/error-message";
 import { getMonthsToPay, getTotal, hasRecharge } from "~/lib/utils";
+import payAction from "~/server/actions/pagos/pay-action";
 
 type Props = {
   id: number;
@@ -20,32 +22,48 @@ type Props = {
 
 export default function PayForm({ id, alumn, amount = 15000 }: Props) {
   const currentDate = new Date();
+  const [isPending, startTransition] = useTransition();
   const {
     register,
     handleSubmit,
     formState: { errors },
+    reset,
   } = useForm();
   const monthsToPay = getMonthsToPay(alumn?.pagos);
 
-  function onSubmit(data: FieldValues) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-    const recharge = hasRecharge(data.month);
-    const percentage = recharge ? 10 : 0;
-    const total = getTotal(amount!, percentage);
+  async function onSubmit(data: FieldValues) {
+    startTransition(async () => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      const recharge = hasRecharge(data.month);
+      const percentage = recharge ? 10 : 0;
+      const total = getTotal(amount, percentage);
+      const newPayment = {
+        recharge,
+        percentage,
+        total,
+        amount,
+        nameClient: alumn?.fullname ?? "",
+        idAlumn: id,
+        date: currentDate,
+        concept: data.concept as string,
+        writtenAmount: data.writtenAmount as string,
+        month: data.month as string,
+      };
 
-    console.log("data total", {
-      recharge,
-      percentage,
-      total,
-      amount,
-      nameClient: alumn?.fullname,
-      idAlumn: id,
-      date: currentDate,
-      concept: data.concept,
-      writtenAmount: data.writtenAmount,
-      month: data.month,
+      const response = await payAction(newPayment);
+      if (response.success) {
+        reset();
+        toast.success(response.message);
+      } else {
+        toast.error(response.message);
+      }
     });
   }
+
+  if (!alumn) {
+    return <div className="text-center">No se encontró el alumno</div>;
+  }
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -62,6 +80,10 @@ export default function PayForm({ id, alumn, amount = 15000 }: Props) {
               minLength: {
                 value: 1,
                 message: "*Debes completar en concepto del pago.",
+              },
+              maxLength: {
+                value: 254,
+                message: "*No debe superar los 254 caracteres.",
               },
             })}
           />
@@ -107,9 +129,10 @@ export default function PayForm({ id, alumn, amount = 15000 }: Props) {
           )}
         </div>
         <input
-          className="border-0 bg-blue-500 px-2 py-1 text-lg text-white transition-colors hover:bg-blue-400"
+          disabled={isPending}
+          className="border-0 bg-blue-500 px-2 py-1 text-lg text-white transition-colors hover:bg-blue-400 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:text-gray-800"
           type="submit"
-          value="Pagar"
+          value={isPending ? "Creando pago..." : "Crear pago"}
         />
       </form>
     </>

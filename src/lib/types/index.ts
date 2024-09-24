@@ -32,6 +32,7 @@ export enum ValidationMessage {
   SUCCESFUL_PAYMENT = "El pago se realizó correctamente",
   PAYMENT_ERROR = "Error al realizar el pago",
   PAYMENT_NOT_FOUND = "El pago no existe",
+  PAYMENT_MALFORMED = "Datos incorrectos o malformados del pago",
   //RECIEVE
   SUCCESSFUL_RECEIVE = "El recibo se creó correctamente",
   RECEIVE_ERROR = "Error al crear el recibo",
@@ -88,7 +89,16 @@ export type NewPayment = {
 };
 
 export type PaymentWithoutId = Omit<Payment, "id">;
-// export type PaymentWithAlumnAndReceive = Payment & {
-//   alumno: Alumn;
-//   recibo: Recieve;
-// };
+
+export type PaymentFormData = {
+  amount: number;
+  writtenAmount: string;
+  date: Date;
+  nameClient: string;
+  idAlumn: number;
+  concept: string;
+  recharge: boolean;
+  percentage: number;
+  total: number;
+  month: string;
+};
