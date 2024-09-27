@@ -13,6 +13,8 @@ type Props = {
   alumn:
     | {
         fullname: string;
+        active: boolean;
+        dateAdmission: string;
         pagos: {
           month: string;
         }[];
@@ -21,6 +23,8 @@ type Props = {
 };
 
 export default function PayForm({ id, alumn, amount }: Props) {
+  if (!alumn) throw new Error("No se encontró el alumno - Formulario Pago");
+
   const currentDate = new Date();
   const [isPending, startTransition] = useTransition();
   const {
@@ -29,7 +33,7 @@ export default function PayForm({ id, alumn, amount }: Props) {
     formState: { errors },
     reset,
   } = useForm();
-  const monthsToPay = getMonthsToPay(alumn?.pagos);
+  const monthsToPay = getMonthsToPay(alumn.pagos, alumn.dateAdmission);
 
   async function onSubmit(data: FieldValues) {
     startTransition(async () => {
@@ -62,6 +66,10 @@ export default function PayForm({ id, alumn, amount }: Props) {
 
   if (!alumn) {
     return <div className="text-center">No se encontró el alumno</div>;
+  }
+
+  if (!alumn.active) {
+    return <div className="text-center">El alumno no está activo</div>;
   }
 
   return (

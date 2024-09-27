@@ -24,7 +24,7 @@ export default function Cuotas({ cuotas = [], admissionDate }: Props) {
           })
         }
       </div>
-      <div className="flex gap-4 border border-gray-500 rounded-md px-1 text-lg">
+      <div className="flex gap-4 border border-gray-500 rounded-md px-1 text-sm">
         <div className="flex items-center gap-1">
           <div className="rounded-full size-3 bg-green-500"></div>
           <span>Pagado</span>

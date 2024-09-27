@@ -27,23 +27,25 @@ export const service = {
       return alumn;
     },
     getAlumnAndPays: async (id: number, year: number) => {
-      const minDate = `${year}-01-01`
-      const maxDate = `${year}-12-31`
+      const minDate = `${year}-01-01`;
+      const maxDate = `${year}-12-31`;
       const alumn = await db.query.alumnos.findFirst({
         where: eq(alumnos.id, id),
         columns: {
           fullname: true,
+          dateAdmission: true,
+          active: true,
         },
         with: {
           pagos: {
-            where:between(pagos.date, minDate, maxDate),
+            where: between(pagos.date, minDate, maxDate),
             columns: {
-              month: true
-            }
-          }
-        }
+              month: true,
+            },
+          },
+        },
       });
-      return alumn
+      return alumn;
     },
     getByIdWithBelt: async (id: number) => {
       const alumn = await db.query.alumnos.findFirst({
@@ -53,6 +55,32 @@ export const service = {
             columns: {
               name: true,
               description: true,
+            },
+          },
+        },
+      });
+      return alumn;
+    },
+    getAlumnWithBeltAndPayments: async (id: number, year: number) => {
+      const minDate = `${year}-01-01`;
+      const maxDate = `${year}-12-31`;
+      const alumn = await db.query.alumnos.findFirst({
+        where: eq(alumnos.id, id),
+        with: {
+          cinturon: {
+            columns: {
+              name: true,
+              description: true,
+            },
+          },
+          pagos: {
+            where: between(pagos.date, minDate, maxDate),
+            columns: {
+              month: true,
+              date: true,
+              id: true,
+              idAlumn: true,
+              idRecieve: true,
             },
           },
         },
@@ -135,9 +163,6 @@ export const service = {
       await db.insert(pagos).values({ idAlumn, idRecieve, month, date });
       return payment;
     },
-    getByMonthAndYear: async (month: string, year: string) => {
-      // get all records of pagos based on a month, and using date
-    },
   },
   recibos: {
     getById: async (id: number) => {
@@ -147,10 +172,11 @@ export const service = {
       return data;
     },
     save: async (recieve: any) => {
-      const response = await db.insert(recibos)
+      const response = await db
+        .insert(recibos)
         .values(recieve)
         .returning({ id: recibos.id });
-      return response
+      return response;
     },
   },
   precioServicio: {

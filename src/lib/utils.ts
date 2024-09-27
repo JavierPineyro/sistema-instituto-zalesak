@@ -63,13 +63,40 @@ export function formatDateForDB(date: Date) {
   return `${year}-${month}-${day}`;
 }
 
-export function getMonthsToPay(paidMonths: { month: string }[] = []) {
-  const paid = paidMonths.map((item) => item.month);
+type PaidMonth = {
+  month: string;
+};
+export function getMonthsToPay(
+  paidMonths: PaidMonth[] = [],
+  dateAdmission: string,
+) {
+  const currentDate = new Date();
+  const dateOfAdminsion = new Date(dateAdmission);
+  const monthOfAdmission = dateOfAdminsion.getMonth();
   const excludedMonths = ["Enero", "Febrero"];
+  const paid = paidMonths.map((item) => item.month);
+  console.log("Pagados desde db", paid);
 
-  return months.filter(
+  if (currentDate.getFullYear() === dateOfAdminsion.getFullYear()) {
+    const monthsAvailable = months.filter(
+      (_, index) => index >= monthOfAdmission,
+    );
+    const monthsBiggerResult = monthsAvailable.filter(
+      (month) => !paid.includes(month) && !excludedMonths.includes(month),
+    );
+    console.log(
+      "Meses disponibles (Admision es de este año)",
+      monthsBiggerResult,
+    );
+    return monthsBiggerResult;
+  }
+
+  const paidMonthsResult = months.filter(
     (month) => !paid.includes(month) && !excludedMonths.includes(month),
   );
+
+  console.log("Meses disponibles (Admision no es de este año)", paidMonthsResult);
+  return paidMonthsResult;
 }
 
 // Error CLASSES
