@@ -9,13 +9,21 @@ type Props = {
 
 export default async function PayPage({ params }: Props) {
   const amount = await service.precioServicio.getAmount();
+  if (!amount) {
+    throw new Error("No se encontró el precio de la cuota en PayPage");
+  }
+
   const { id } = params;
   const currentDate = new Date();
   const alumn = await service.alumnos.getAlumnAndPays(
     Number(id),
     currentDate.getFullYear(),
   );
-  console.log("ALUMN SERVER", alumn);
+
+  if (!alumn) {
+    throw new Error("No se encontró el alumno de la cuota en PayPage");
+  }
+
   const date = new Intl.DateTimeFormat("es-AR", {
     dateStyle: "full",
   }).format(currentDate);
@@ -27,7 +35,7 @@ export default async function PayPage({ params }: Props) {
         <h4 className="text-pretty text-lg">{date}</h4>
       </header>
       <div>
-        <PayForm id={Number(id)} alumn={alumn} amount={amount?.price} />
+        <PayForm id={Number(id)} alumn={alumn} amount={amount.price} />
       </div>
     </section>
   );

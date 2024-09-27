@@ -1,3 +1,4 @@
+import { revalidatePath } from "next/cache";
 import {
   PaymentFormData,
   ResponseAction,
@@ -43,6 +44,7 @@ export default async function payAction(payment: PaymentFormData) {
     };
 
     await service.pagos.save(newPayment);
+    revalidatePath(`"/admin/alumnos/${data.idAlumn}/pagar"`);
     Response.success = true;
     Response.message = ValidationMessage.SUCCESFUL_PAYMENT;
   } catch (error) {
@@ -54,8 +56,8 @@ export default async function payAction(payment: PaymentFormData) {
     }
   }
 
-  /* if (Response.success) {
-    revalidatePath("/admin/alumnos");
+  /*if (Response.success) {
+    revalidatePath(`"/admin/alumnos/${parsedIdAlumn}/pagar"`);
     }*/
   return Response;
 }

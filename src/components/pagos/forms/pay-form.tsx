@@ -9,7 +9,7 @@ import payAction from "~/server/actions/pagos/pay-action";
 
 type Props = {
   id: number;
-  amount: number | undefined;
+  amount: number;
   alumn:
     | {
         fullname: string;
@@ -20,7 +20,7 @@ type Props = {
     | undefined;
 };
 
-export default function PayForm({ id, alumn, amount = 15000 }: Props) {
+export default function PayForm({ id, alumn, amount }: Props) {
   const currentDate = new Date();
   const [isPending, startTransition] = useTransition();
   const {
