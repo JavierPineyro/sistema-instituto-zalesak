@@ -75,7 +75,6 @@ export function getMonthsToPay(
   const monthOfAdmission = dateOfAdminsion.getMonth();
   const excludedMonths = ["Enero", "Febrero"];
   const paid = paidMonths.map((item) => item.month);
-  console.log("Pagados desde db", paid);
 
   if (currentDate.getFullYear() === dateOfAdminsion.getFullYear()) {
     const monthsAvailable = months.filter(
@@ -84,10 +83,7 @@ export function getMonthsToPay(
     const monthsBiggerResult = monthsAvailable.filter(
       (month) => !paid.includes(month) && !excludedMonths.includes(month),
     );
-    console.log(
-      "Meses disponibles (Admision es de este año)",
-      monthsBiggerResult,
-    );
+
     return monthsBiggerResult;
   }
 
@@ -95,7 +91,6 @@ export function getMonthsToPay(
     (month) => !paid.includes(month) && !excludedMonths.includes(month),
   );
 
-  console.log("Meses disponibles (Admision no es de este año)", paidMonthsResult);
   return paidMonthsResult;
 }
 

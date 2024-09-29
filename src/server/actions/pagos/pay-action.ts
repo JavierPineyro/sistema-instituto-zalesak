@@ -1,3 +1,5 @@
+ "use server"
+
 import { revalidatePath } from "next/cache";
 import {
   PaymentFormData,
@@ -54,6 +56,7 @@ export default async function payAction(payment: PaymentFormData) {
     } else {
       Response.message = ValidationMessage.PAYMENT_ERROR;
     }
+    console.log("Error al pagar", error);
   }
 
   /*if (Response.success) {

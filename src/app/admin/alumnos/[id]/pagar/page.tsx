@@ -34,7 +34,7 @@ export default async function PayPage({ params }: Props) {
         <h2 className="text-pretty text-xl font-semibold">Pagar cuota</h2>
         <h4 className="text-pretty text-lg">{date}</h4>
       </header>
-      <div>
+      <div className="mx-auto flex items-center justify-center">
         <PayForm id={Number(id)} alumn={alumn} amount={amount.price} />
       </div>
     </section>

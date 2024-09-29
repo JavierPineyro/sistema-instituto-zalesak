@@ -59,6 +59,7 @@ export default function PayForm({ id, alumn, amount }: Props) {
         reset();
         toast.success(response.message);
       } else {
+        console.log(response);
         toast.error(response.message);
       }
     });
@@ -74,11 +75,16 @@ export default function PayForm({ id, alumn, amount }: Props) {
 
   return (
     <>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form
+        className="item-center flex w-[500px] flex-col justify-center gap-4"
+        onSubmit={handleSubmit(onSubmit)}
+      >
         <div className="flex flex-col gap-1">
           <label htmlFor="concept">Concepto del pago</label>
           <input
+            id="concept"
             type="text"
+            className="w-full rounded-md border-2 border-gray-400 px-3 py-2"
             placeholder="ej: Pago de cuota..."
             {...register("concept", {
               required: {
@@ -102,6 +108,7 @@ export default function PayForm({ id, alumn, amount }: Props) {
         <div className="flex flex-col gap-1">
           <label htmlFor="month">Mes</label>
           <select
+            id="month"
             {...register("month", {
               required: {
                 value: true,
@@ -122,8 +129,10 @@ export default function PayForm({ id, alumn, amount }: Props) {
         <div className="flex flex-col gap-1">
           <label htmlFor="writtenAmount">Monto escrito</label>
           <input
+            id="writtenAmount"
             type="text"
             placeholder="ej: Quince mil..."
+            className="w-full rounded-md border-2 border-gray-400 px-3 py-2"
             {...register("writtenAmount", {
               minLength: {
                 value: 1,
@@ -138,7 +147,7 @@ export default function PayForm({ id, alumn, amount }: Props) {
         </div>
         <input
           disabled={isPending}
-          className="border-0 bg-blue-500 px-2 py-1 text-lg text-white transition-colors hover:bg-blue-400 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:text-gray-800"
+          className="rounded-md border-0 bg-blue-500 px-2 py-1 text-lg text-white transition-colors hover:bg-blue-400 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:text-gray-800"
           type="submit"
           value={isPending ? "Creando pago..." : "Crear pago"}
         />
