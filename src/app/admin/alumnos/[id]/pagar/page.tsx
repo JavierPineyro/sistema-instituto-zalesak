@@ -30,11 +30,11 @@ export default async function PayPage({ params }: Props) {
 
   return (
     <section className="px-5">
-      <header className="flex justify-between">
+      <header className="mb-5 flex justify-between">
         <h2 className="text-pretty text-xl font-semibold">Pagar cuota</h2>
         <h4 className="text-pretty text-lg">{date}</h4>
       </header>
-      <div className="mx-auto flex items-center justify-center">
+      <div>
         <PayForm id={Number(id)} alumn={alumn} amount={amount.price} />
       </div>
     </section>

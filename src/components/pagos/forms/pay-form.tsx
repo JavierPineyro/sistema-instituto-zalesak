@@ -74,13 +74,15 @@ export default function PayForm({ id, alumn, amount }: Props) {
   }
 
   return (
-    <>
+    <div className="item-center flex justify-between">
       <form
-        className="item-center flex w-[500px] flex-col justify-center gap-4"
+        className="item-center flex w-[500px] flex-col justify-between gap-4"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="flex flex-col gap-1">
-          <label htmlFor="concept">Concepto del pago</label>
+          <label className="text-black/80 " htmlFor="concept">
+            Concepto del pago
+          </label>
           <input
             id="concept"
             type="text"
@@ -106,7 +108,9 @@ export default function PayForm({ id, alumn, amount }: Props) {
           )}
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="month">Mes</label>
+          <label className="text-black/80 " htmlFor="month">
+            Mes
+          </label>
           <select
             id="month"
             {...register("month", {
@@ -127,7 +131,9 @@ export default function PayForm({ id, alumn, amount }: Props) {
           )}
         </div>
         <div className="flex flex-col gap-1">
-          <label htmlFor="writtenAmount">Monto escrito</label>
+          <label className="text-black/80 " htmlFor="writtenAmount">
+            Monto escrito
+          </label>
           <input
             id="writtenAmount"
             type="text"
@@ -152,7 +158,21 @@ export default function PayForm({ id, alumn, amount }: Props) {
           value={isPending ? "Creando pago..." : "Crear pago"}
         />
       </form>
-    </>
+      <div className="mt-2 flex flex-col justify-start gap-2 rounded-md bg-gray-200 p-2 text-black/90">
+        <h4 className="text-center underline">Información</h4>
+        <p>
+          Alumno: <span className="font-bold">{alumn.fullname}</span>
+        </p>
+        <p>
+          Precio Cuota: <span className="font-bold">${amount}</span>
+        </p>
+        <p>Recargo: 10% en caso de retraso en el pago</p>
+        <p>
+          Con recargo es:
+          <span className="font-bold">${Math.floor(getTotal(amount, 10))}</span>
+        </p>
+      </div>
+    </div>
   );
 }
 
