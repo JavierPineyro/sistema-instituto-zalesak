@@ -11,6 +11,13 @@ export function getTotal(amount: number, recharge = percentage): number {
   return amount * (1 + recharge / 100);
 }
 
+export function parseTotalToLocale(total: number) {
+  return total.toLocaleString("es-AR", {
+    style: "currency",
+    currency: "ARS",
+  });
+}
+
 export function hasRecharge(month: string) {
   const currentDate = new Date();
   const currentMonth = months[currentDate.getMonth()]!;

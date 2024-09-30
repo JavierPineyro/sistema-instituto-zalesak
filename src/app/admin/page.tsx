@@ -12,6 +12,7 @@ import { service } from "~/server/services";
 
 export default async function AdminPage() {
   const alumns = await service.alumnos.count();
+
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
@@ -65,7 +66,7 @@ export default async function AdminPage() {
             </svg>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{alumns[0]?.count ?? 999}</div>
+            <div className="text-2xl font-bold">{alumns[0]?.count ?? 0}</div>
             <p className="text-muted-foreground text-xs">alumnos en total.</p>
           </CardContent>
         </Card>
@@ -104,7 +105,7 @@ export default async function AdminPage() {
         <Card className="col-span-3">
           <CardHeader>
             <CardTitle>Últimos pagos</CardTitle>
-            <CardDescription>Se recibió 49 pagos este mes.</CardDescription>
+            {/*<CardDescription>Se recibió 49 pagos este mes.</CardDescription>*/}
           </CardHeader>
           <CardContent>
             <RecentSales />
