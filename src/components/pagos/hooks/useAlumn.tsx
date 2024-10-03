@@ -9,7 +9,7 @@ type AlumnWithPays = {
   }>;
 };
 
-//TODO: HACER QUE DEVUELVA LOS MESES QUE FALTA PAGAR
+// NO SE USA EL HOOK (Borrar)
 export function useAlumn(id: number, date: Date) {
   const [alumn, setAlumn] = useState<AlumnWithPays | undefined | null>(null);
   const [isLoading, setIsLoading] = useState(false);

@@ -102,3 +102,16 @@ export type PaymentFormData = {
   total: number;
   month: string;
 };
+
+export type PaymentTable = {
+  id: number;
+  date: string;
+  month: string;
+  idAlumn: number;
+  idRecieve: number;
+  recibo: {
+    nameClient: string;
+    concept: string | null;
+    total: number;
+  };
+};
