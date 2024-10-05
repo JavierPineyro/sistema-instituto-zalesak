@@ -1,24 +1,27 @@
 import { cn } from "~/lib/utils";
 import { Button } from "~/components/ui/button";
 import Link from "next/link";
-import { CircleDollarSign, Package, Edit } from "lucide-react"
+import { CircleDollarSign, Package, Edit } from "lucide-react";
 
 type SidebarProps = {
-  id: number,
-  className?: string,
-}
+  id: number;
+  className?: string;
+};
 
 export function ProfileSidebar({ className, id }: SidebarProps) {
-
   return (
-    <aside className={cn("pb-12 max-w-60", className)}>
+    <aside className={cn("max-w-60 pb-12", className)}>
       <div className="space-y-4">
         <div className="px-3 py-2">
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
             Perfil
           </h2>
           <div className="space-y-1">
-            <Button asChild variant="secondary" className="w-full justify-start">
+            <Button
+              asChild
+              variant="secondary"
+              className="w-full justify-start"
+            >
               <Link href={`/admin/alumnos/${id}`}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -37,7 +40,7 @@ export function ProfileSidebar({ className, id }: SidebarProps) {
               </Link>
             </Button>
             <Button asChild variant="ghost" className="w-full justify-start">
-              <Link href={`/admin/alumnos/${id}/pagos`}>
+              <Link href={`/admin/alumnos/${id}/cuotas`}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
@@ -53,7 +56,7 @@ export function ProfileSidebar({ className, id }: SidebarProps) {
                   <rect width="7" height="7" x="14" y="14" rx="1" />
                   <rect width="7" height="7" x="3" y="14" rx="1" />
                 </svg>
-                Pagos
+                Cuotas
               </Link>
             </Button>
             <Button asChild variant="ghost" className="w-full justify-start">
@@ -106,19 +109,19 @@ export function ProfileSidebar({ className, id }: SidebarProps) {
           <div className="space-y-1">
             <Button asChild variant="ghost" className="w-full justify-start">
               <Link href={`/admin/alumnos/${id}/editar`}>
-                <Edit className="size-4 mr-1" />
+                <Edit className="mr-1 size-4" />
                 Editar
               </Link>
             </Button>
             <Button asChild variant="ghost" className="w-full justify-start">
               <Link href={`/admin/alumnos/${id}/pagar`}>
-                <CircleDollarSign className="size-4 mr-1" />
+                <CircleDollarSign className="mr-1 size-4" />
                 Pagar Cuota
               </Link>
             </Button>
             <Button asChild variant="ghost" className="w-full justify-start">
               <Link href={`/admin/alumnos/${id}/hacer-pedido`}>
-                <Package className="size-4 mr-1" />
+                <Package className="mr-1 size-4" />
                 Hacer Pedido
               </Link>
             </Button>
@@ -126,5 +129,5 @@ export function ProfileSidebar({ className, id }: SidebarProps) {
         </div>
       </div>
     </aside>
-  )
+  );
 }

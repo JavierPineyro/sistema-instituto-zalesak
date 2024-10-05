@@ -115,3 +115,15 @@ export type PaymentTable = {
     total: number;
   };
 };
+
+export type Recieve = {
+  id: number;
+  date: string;
+  idAlumn: number | null;
+  amount: number;
+  writtenAmount: string | null;
+  nameClient: string;
+  concept: string | null;
+  recharge: boolean;
+  total: number;
+};

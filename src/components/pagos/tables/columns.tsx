@@ -97,11 +97,12 @@ export const columns: ColumnDef<PaymentTable>[] = [
     ),
     cell: ({ row }) => {
       const idRecieve = row.getValue("idRecieve") as number;
+      const idAlumn = row.original.idAlumn
       return (
         <div className="flex space-x-2">
           <Link
             className="text-blue-400 transition-colors hover:text-blue-500 hover:underline"
-            href={`PONER LINK con ID DE ALUMNO y RECIBO`}
+            href={`/admin/alumnos/${idAlumn}/recibos/${idRecieve}`}
           >
             ver más
           </Link>

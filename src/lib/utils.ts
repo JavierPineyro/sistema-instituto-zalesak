@@ -127,3 +127,42 @@ export const months = [
 
 export const percentage = 10;
 export const limit_day = 10;
+
+export const paymentMock = [
+  {
+    id: 1,
+    idAlumn: 1,
+    idRecieve: 1,
+    date: "2024-09-04",
+    month: "Septiembre",
+    recibo: {
+      nameClient: "Juan Perez",
+      concept: "Pago de cuota del mes de Septiembre",
+      total: 12000,
+    },
+  },
+  {
+    id: 2,
+    idAlumn: 1,
+    idRecieve: 2,
+    date: "2024-10-08",
+    month: "Octubre",
+    recibo: {
+      nameClient: "Juan Perez",
+      concept: "Pago de cuota del mes de Octubre",
+      total: 12000,
+    },
+  },
+  {
+    id: 3,
+    idAlumn: 1,
+    idRecieve: 3,
+    date: "2024-10-08",
+    month: "Noviembre",
+    recibo: {
+      nameClient: "Juan Perez",
+      concept: "Pago de cuota del mes de Noviembre",
+      total: 12000,
+    },
+  },
+];
