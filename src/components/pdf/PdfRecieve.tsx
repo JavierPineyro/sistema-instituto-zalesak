@@ -16,7 +16,7 @@ type Props = {
 };
 export default function PdfRecieve({ recieve }: Props) {
   return (
-    <PDFViewer width={768} height={1024} showToolbar={true}>
+    <PDFViewer width={768} height={800} showToolbar={true}>
       <PDF recieve={recieve} />
     </PDFViewer>
   );
