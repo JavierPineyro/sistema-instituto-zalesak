@@ -1,4 +1,4 @@
-import { type Metadata } from "next"
+import { type Metadata } from "next";
 import "~/styles/globals.css";
 
 import { GeistSans } from "geist/font/sans";
@@ -12,16 +12,19 @@ export const metadata: Metadata = {
   description: "Panel de Gestión de Alumnos - Instituto Zalesak",
   icons: [{ rel: "icon", url: "/favicon.ico" }],
 };
-export const dynamic = "force-dynamic"
+export const dynamic = "force-dynamic";
 
 export default async function AlumnsPage() {
-  const data = await service.alumnos.list()
+  const data = await service.alumnos.list();
   return (
-    <main className={`${GeistSans.variable} h-full flex-1 flex-col space-y-8 p-8 md:flex`}>
+    <main
+      className={`${GeistSans.variable} h-full flex-1 flex-col space-y-8 p-8 md:flex`}
+    >
       <div className="space-y-2">
-        <HeaderAlumno />
+        <HeaderAlumno /> {/* Headder de productors */}
         <DataTable data={data} columns={columns} />
+        {/* Tabla de productors */}
       </div>
     </main>
-  )
+  );
 }

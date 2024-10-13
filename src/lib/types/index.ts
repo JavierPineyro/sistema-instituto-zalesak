@@ -127,3 +127,11 @@ export type Recieve = {
   recharge: boolean;
   total: number;
 };
+
+export type Product = {
+  id: number;
+  name: string;
+  publicPrice: number;
+  teacherPrice: number;
+  active: boolean;
+};

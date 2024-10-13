@@ -2,7 +2,14 @@ import { mockAlumn } from "~/components/alumnos/tables/data";
 import { NewAlumn, NewPayment, UpdateAlumnWithNumberBeltId } from "~/lib/types";
 import { db } from "./db";
 import { count, eq, between, desc } from "drizzle-orm";
-import { alumnos, pagos, precioCuota, recibos } from "./db/schema";
+import {
+  alumnos,
+  pagos,
+  pedidos,
+  precioCuota,
+  precios,
+  recibos,
+} from "./db/schema";
 
 export const service = {
   alumnos: {
@@ -220,6 +227,46 @@ export const service = {
         where: eq(precioCuota.name, "cuota"),
       });
       return amount;
+    },
+  },
+  pedidos: {
+    list: async () => {
+      const data = await db.query.pedidos.findMany();
+      return data;
+    },
+    getById: async (id: number) => {
+      const data = await db.query.pedidos.findFirst({
+        where: eq(pedidos.id, id),
+      });
+      return data;
+    },
+    save: async (pedido: any) => {
+      const response = await db
+        .insert(pedidos)
+        .values(pedido)
+        .returning({ id: pedidos.id });
+      return response;
+    },
+  },
+  precios: {
+    list: async () => {
+      const data = await db.query.precios.findMany({
+        orderBy: [desc(precios.active)],
+      });
+      return data;
+    },
+    getById: async (id: number) => {
+      const data = await db.query.precios.findFirst({
+        where: eq(precios.id, id),
+      });
+      return data;
+    },
+    save: async (precio: any) => {
+      const response = await db
+        .insert(precios)
+        .values(precio)
+        .returning({ id: precios.id });
+      return response;
     },
   },
 };

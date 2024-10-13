@@ -4,7 +4,7 @@ import { Button } from "~/components/ui/button";
 
 export default function ErrorPage() {
   return (
-    <section className="flex min-h-screen w-full flex-col items-center justify-center bg-gray-800 text-yellow-50">
+    <section className="flex min-h-96 w-full flex-col items-center justify-center bg-gray-800 text-yellow-50">
       <h1 className="text-2xl">Ocurrió un error!</h1>
       <div className="mx-2">
         <p className="text-center">
