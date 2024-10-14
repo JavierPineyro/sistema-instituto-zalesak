@@ -7,8 +7,8 @@ import {
 } from "~/components/ui/card";
 
 import { Package, BookOpenCheck } from "lucide-react";
-import RecentSales from "~/components/recent-sales";
 import { service } from "~/server/services";
+import RecentPayments from "~/components/recent-payments";
 
 export default async function AdminPage() {
   const alumns = await service.alumnos.count();
@@ -108,7 +108,7 @@ export default async function AdminPage() {
             {/*<CardDescription>Se recibió 49 pagos este mes.</CardDescription>*/}
           </CardHeader>
           <CardContent>
-            <RecentSales />
+            <RecentPayments />
           </CardContent>
         </Card>
       </div>

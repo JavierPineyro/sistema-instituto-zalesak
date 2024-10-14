@@ -1,7 +1,7 @@
 import Link from "next/link";
 import MainNav from "~/components/ui/main-nav";
 import UserNav from "~/components/ui/user-nav";
-import { Toaster } from "~/components/ui/sonner"
+import { Toaster } from "~/components/ui/sonner";
 import { auth } from "auth";
 import { redirect } from "next/navigation";
 
@@ -10,8 +10,7 @@ export default async function LayoutAdmin({
 }: {
   children: React.ReactNode;
 }) {
-
-  const session = await auth()
+  const session = await auth();
   if (!session || !session?.user) {
     redirect("/login");
   }
@@ -32,7 +31,7 @@ export default async function LayoutAdmin({
         </div>
       </div>
       {children}
-      <Toaster richColors position="top-center" />
+      <Toaster closeButton={true} richColors position="bottom-right" />
     </main>
-  )
+  );
 }
