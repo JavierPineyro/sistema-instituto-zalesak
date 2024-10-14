@@ -29,10 +29,10 @@ export default function MainNav({
         Equipamiento
       </Link>
       <Link
-        href="/admin/precios"
+        href="/admin/productos"
         className="text-muted-foreground hover:text-primary rounded-md px-2 py-1 text-sm font-medium transition-colors hover:bg-slate-400/25"
       >
-        Lista de Precios
+        Productos
       </Link>
       <Link
         href="/admin/ajustes"

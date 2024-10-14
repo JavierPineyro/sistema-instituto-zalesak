@@ -253,7 +253,11 @@ export const service = {
       const data = await db.query.precios.findMany({
         orderBy: [desc(precios.active)],
       });
-      return data;
+      // order data by active
+      const sortedData = data.sort(
+        (a, b) => Number(b.active) - Number(a.active),
+      );
+      return sortedData;
     },
     getById: async (id: number) => {
       const data = await db.query.precios.findFirst({
