@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import { ColumnDef } from "@tanstack/react-table"
+import { ColumnDef } from "@tanstack/react-table";
 
-import { DataTableRowActions } from "./data-table-row-actions"
-import { Alumn, Belt } from "~/lib/types"
-import { Checkbox } from "~/components/ui/checkbox"
-import { statuses } from "./data"
-import { getIsActiveText, parseToLocalDate } from "~/lib/utils"
-import { DataTableColumnHeader } from "~/components/tables/data-table-column-header"
+import { DataTableRowActions } from "./data-table-row-actions";
+import { Alumn, Belt } from "~/lib/types";
+import { Checkbox } from "~/components/ui/checkbox";
+import { statuses } from "./data";
+import { cn, getIsActiveText, parseToLocalDate } from "~/lib/utils";
+import { DataTableColumnHeader } from "~/components/tables/data-table-column-header";
 
 export const columns: ColumnDef<Alumn>[] = [
   {
@@ -55,7 +55,7 @@ export const columns: ColumnDef<Alumn>[] = [
             {row.getValue("fullname")}
           </span>
         </div>
-      )
+      );
     },
     enableHiding: false,
   },
@@ -67,15 +67,13 @@ export const columns: ColumnDef<Alumn>[] = [
     cell: ({ row }) => {
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[500px] text-center truncate font-medium">
-            {
-              row.getValue("phoneNumber") !== ""
-                ? row.getValue("phoneNumber")
-                : "---"
-            }
+          <span className="max-w-[500px] truncate text-center font-medium">
+            {row.getValue("phoneNumber") !== ""
+              ? row.getValue("phoneNumber")
+              : "---"}
           </span>
         </div>
-      )
+      );
     },
     enableSorting: false,
   },
@@ -85,14 +83,12 @@ export const columns: ColumnDef<Alumn>[] = [
       <DataTableColumnHeader column={column} title="Fecha de nac." />
     ),
     cell: ({ row }) => {
-      const birthday = parseToLocalDate(row.getValue("birthday"))
+      const birthday = parseToLocalDate(row.getValue("birthday"));
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">
-            {birthday}
-          </span>
+          <span className="max-w-[500px] truncate font-medium">{birthday}</span>
         </div>
-      )
+      );
     },
     enableSorting: true,
   },
@@ -103,14 +99,14 @@ export const columns: ColumnDef<Alumn>[] = [
     ),
     cell: ({ row }) => {
       // en el original aparece idBelt y cinturon
-      const cinturon = row.getValue("cinturon") as Belt
+      const cinturon = row.getValue("cinturon") as Belt;
       return (
         <div className="flex space-x-2">
           <span className="max-w-[500px] truncate font-medium">
             {cinturon.name ?? "-"}
           </span>
         </div>
-      )
+      );
     },
     enableSorting: true,
     enableHiding: false,
@@ -127,7 +123,7 @@ export const columns: ColumnDef<Alumn>[] = [
             {row.getValue("tutor") ?? "---"}
           </span>
         </div>
-      )
+      );
     },
     enableSorting: true,
     enableColumnFilter: false,
@@ -138,31 +134,35 @@ export const columns: ColumnDef<Alumn>[] = [
       <DataTableColumnHeader column={column} title="Estado" />
     ),
     cell: ({ row }) => {
-      const textIsActive = getIsActiveText(row.getValue("active") as boolean)
-      const state = statuses.find(
-        (status) => status.value === textIsActive
-      )
+      const isActive = row.getValue("active") as boolean;
+      const textIsActive = getIsActiveText(isActive);
+      const state = statuses.find((status) => status.value === textIsActive);
 
       if (!state) {
-        return null
+        return null;
       }
 
       return (
-        <div className="flex items-center">
+        <div
+          className={cn("flex items-center", {
+            "text-red-500": !isActive,
+            "text-green-500": isActive,
+          })}
+        >
           {state.icon && (
-            <state.icon className="mr-2 h-4 w-4 text-muted-foreground" />
+            <state.icon className="text-muted-foreground mr-2 h-4 w-4" />
           )}
           <span>{state.label}</span>
         </div>
-      )
+      );
     },
     filterFn: (row, id, value) => {
-      const rowValue = getIsActiveText(row.getValue(id) as boolean)
-      return value.includes(rowValue)
+      const rowValue = getIsActiveText(row.getValue(id) as boolean);
+      return value.includes(rowValue);
     },
   },
   {
     id: "actions",
     cell: ({ row }) => <DataTableRowActions row={row} />,
   },
-]
+];
