@@ -45,6 +45,8 @@ export enum ValidationMessage {
   PRODUCT_CREATE_ERROR = "Error al crear el producto",
   PRODUCT_UPDATED = "El producto se actualizó correctamente",
   PRODUCT_UPDATE_ERROR = "Error al actualizar el producto",
+  PRODUCT_DELETED = "El producto se eliminó correctamente",
+  PRODUCT_NOT_DELETED = "El producto no se pudo eliminar",
   WRONG_PRODUCT_DATA = "Datos incorrectos o malformados del producto",
   PRODUCT_ERROR = "Error inesperado al realizar esta acción",
 }
