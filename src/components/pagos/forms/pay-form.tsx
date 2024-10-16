@@ -158,7 +158,7 @@ export default function PayForm({ id, alumn, amount }: Props) {
           value={isPending ? "Creando pago..." : "Crear pago"}
         />
       </form>
-      <div className="mt-2 flex flex-col justify-start gap-2 rounded-md bg-gray-200 p-2 text-black/90">
+      <div className="mt-2 flex flex-col justify-start gap-2 rounded-md bg-gray-100 p-2 text-black/90">
         <h4 className="text-center underline">Información</h4>
         <p>
           Alumno: <span className="font-bold">{alumn.fullname}</span>
@@ -166,7 +166,7 @@ export default function PayForm({ id, alumn, amount }: Props) {
         <p>
           Precio Cuota: <span className="font-bold">${amount}</span>
         </p>
-        <p>Recargo: 10% en caso de retraso en el pago</p>
+        <p>Recargo de 10% en caso de retraso en el pago</p>
         <p>
           Con recargo es:
           <span className="font-bold">${Math.floor(getTotal(amount, 10))}</span>

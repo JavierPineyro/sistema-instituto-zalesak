@@ -1,5 +1,10 @@
 import { mockAlumn } from "~/components/alumnos/tables/data";
-import { NewAlumn, NewPayment, UpdateAlumnWithNumberBeltId } from "~/lib/types";
+import {
+  NewAlumn,
+  NewPayment,
+  ProductAction,
+  UpdateAlumnWithNumberBeltId,
+} from "~/lib/types";
 import { db } from "./db";
 import { count, eq, between, desc } from "drizzle-orm";
 import {
@@ -265,11 +270,19 @@ export const service = {
       });
       return data;
     },
-    save: async (precio: any) => {
+    save: async (precio: ProductAction) => {
       const response = await db
         .insert(precios)
         .values(precio)
         .returning({ id: precios.id });
+      return response;
+    },
+    delete: async (id: number) => {
+      const response = await db
+        .delete(precios)
+        .where(eq(precios.id, id))
+        .returning({id: precios.id});
+
       return response;
     },
   },

@@ -11,11 +11,14 @@ export enum ServiceProvider {
 }
 
 export enum ValidationMessage {
+  // AUTH
   WRONG_EMAIL_OR_PASSWORD = "Email o contraseña incorrecta",
   UNEXPECTED_ERROR = "Ocurrió un error inesperado",
   SUCCESSFUL_LOGIN = "Se inició sesión correctamente",
+  SUCCESSFUL_LOGOUT = "Se cerró sesión correctamente",
   BAD_CREDENTIALS = "Credenciales no válidas",
   SUCCESSFUL_REGISTER = "Se registró correctamente",
+  // ALUMNS
   ALUMN_CREATED_SUCCESSFULLY = "El alumno se registró correctamente",
   ALUMN_ALREADY_EXISTS = "El alumno ya existe",
   ALUMN_NOT_FOUND = "El alumno no existe",
@@ -23,11 +26,11 @@ export enum ValidationMessage {
   ALUMN_UPDATE_ERROR = "Error al actualizar el alumno",
   ALUMN_CREATE_ERROR = "Error al crear el alumno",
   WRONG_ALUMN_DATA = "Datos incorrectos o malformados del alumno",
+  // BELTS
   BELT_NOT_FOUND = "El cinturón no existe",
   BELT_ALREADY_EXISTS = "El cinturón ya existe",
   BELT_UPDATED = "El cinturón se actualizó correctamente",
   BELT_DELETED = "El cinturón se eliminó correctamente",
-  SUCCESSFUL_LOGOUT = "Se cerró sesión correctamente",
   //PAYMENT
   SUCCESFUL_PAYMENT = "El pago se realizó correctamente",
   PAYMENT_ERROR = "Error al realizar el pago",
@@ -37,6 +40,13 @@ export enum ValidationMessage {
   SUCCESSFUL_RECEIVE = "El recibo se creó correctamente",
   RECEIVE_ERROR = "Error al crear el recibo",
   RECEIVE_NOT_FOUND = "El recibo no existe",
+  // PRODUCTS
+  PRODUCT_CREATED_SUCCESSFULLY = "El producto se creó correctamente",
+  PRODUCT_CREATE_ERROR = "Error al crear el producto",
+  PRODUCT_UPDATED = "El producto se actualizó correctamente",
+  PRODUCT_UPDATE_ERROR = "Error al actualizar el producto",
+  WRONG_PRODUCT_DATA = "Datos incorrectos o malformados del producto",
+  PRODUCT_ERROR = "Error inesperado al realizar esta acción",
 }
 
 export enum StatusActive {
@@ -128,10 +138,16 @@ export type Recieve = {
   total: number;
 };
 
+//Products
 export type Product = {
   id: number;
   name: string;
   publicPrice: number;
   teacherPrice: number;
   active: boolean;
+};
+export type ProductAction = {
+  name: string;
+  publicPrice: number;
+  teacherPrice: number;
 };

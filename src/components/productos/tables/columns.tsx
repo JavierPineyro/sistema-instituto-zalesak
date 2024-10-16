@@ -7,6 +7,7 @@ import { DataTableColumnHeader } from "~/components/tables/data-table-column-hea
 import { Product } from "~/lib/types";
 import { cn, parseTotalToLocale } from "~/lib/utils";
 import { getIsAvailableText, statuses } from "./data";
+import DeleteProductModal from "../modals/delete-product";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -104,6 +105,18 @@ export const columns: ColumnDef<Product>[] = [
       return value.includes(stateText);
     },
     enableSorting: true,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "delete",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Eliminar" />
+    ),
+    cell: ({ row }) => {
+      const id = row.getValue("id") as number;
+      return <DeleteProductModal id={id} />;
+    },
+    enableSorting: false,
     enableHiding: false,
   },
 ];
