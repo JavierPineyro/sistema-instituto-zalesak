@@ -110,7 +110,7 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "delete",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Eliminar" />
+      <DataTableColumnHeader column={column} title="Acciones" />
     ),
     cell: ({ row }) => {
       const id = row.getValue("id") as number;

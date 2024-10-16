@@ -1,5 +1,3 @@
-"use client";
-
 import { useTransition } from "react";
 import { toast } from "sonner";
 import {
@@ -12,25 +10,27 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
-import { service } from "~/server/services";
+import deleteAction from "~/server/actions/productos/delete-action";
 
 export default function DeleteProductModal({ id }: { id: number }) {
   const [isPending, startTransition] = useTransition();
   const handleDelete = (id: number) => () => {
     startTransition(async () => {
-      const [result] = await service.precios.delete(id);
+      const response = await deleteAction(id);
 
-      if (result && result.id) {
-        toast.success("Producto eliminado correctamente");
+      if (response && response.success) {
+        toast.success(response.message);
       } else {
-        toast.error("No se pudo eliminar el producto");
+        toast.error(response.message);
       }
     });
   };
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger>Eliminar</AlertDialogTrigger>
+      <AlertDialogTrigger className="rounded-md bg-red-100 px-2 py-1 text-red-600">
+        Eliminar
+      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
@@ -41,7 +41,7 @@ export default function DeleteProductModal({ id }: { id: number }) {
         <AlertDialogFooter>
           <AlertDialogCancel disabled={isPending}>Cancelar</AlertDialogCancel>
           <AlertDialogAction disabled={isPending} onClick={handleDelete(id)}>
-            Eliminar
+            Sí, eliminar
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
