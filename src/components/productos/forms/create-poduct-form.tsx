@@ -19,8 +19,8 @@ export default function CreateProductForm() {
     startTransition(async () => {
       const newProduct = {
         name: data.name as string,
-        publicPrice: data.publicPrice as number,
-        teacherPrice: data.teacherPrice as number,
+        publicPrice: Number(data.publicPrice),
+        teacherPrice: Number(data.teacherPrice),
       };
       const response = await createProductAction(newProduct);
       if (response.success) {
@@ -36,7 +36,7 @@ export default function CreateProductForm() {
   return (
     <>
       <form
-        className="item-center flex w-[500px] flex-col justify-between gap-4"
+        className="item-center flex w-full flex-col justify-between gap-4"
         onSubmit={handleSubmit(onSubmit)}
       >
         <div className="flex flex-col gap-1">
@@ -115,7 +115,7 @@ export default function CreateProductForm() {
         </div>
         <input
           disabled={isPending}
-          className="rounded-md border-0 bg-blue-500 px-2 py-1 text-lg text-white transition-colors hover:bg-blue-400 disabled:cursor-not-allowed disabled:bg-gray-400 disabled:text-gray-800"
+          className="rounded-md border-0 bg-black px-2 py-1 text-lg text-white transition-colors hover:bg-gray-800 disabled:cursor-not-allowed disabled:bg-gray-700 disabled:text-gray-800"
           type="submit"
           value={isPending ? "Cargando producto..." : "Agregar producto"}
         />
