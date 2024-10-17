@@ -13,16 +13,18 @@ export default async function ProductEditPage({ params }: Props) {
   if (!product) {
     return (
       <div>
-        <GoBack path="/productos" />
+        <GoBack path="/admin/productos" />
         <h1 className="text-center">Producto no encontrado</h1>;
       </div>
     );
   }
   return (
-    <section className="container mx-auto flex flex-col gap-4">
-      <div className="flex flex-col items-center gap-2">
-        <GoBack path="/productos" />
-        <h1 className="text-2xl font-bold tracking-tight">Editar Produto</h1>
+    <section className="mx-auto flex max-w-[500px] flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <GoBack path="/admin/productos" />
+        <h1 className="text-center text-2xl font-bold tracking-tight">
+          Editar Produto
+        </h1>
       </div>
       <EditProductForm product={product} />
     </section>
