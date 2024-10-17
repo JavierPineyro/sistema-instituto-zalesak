@@ -70,7 +70,7 @@ export default function UpdateAlumnForm({ belts, alumn }: Props) {
       idBelt: data.idBelt,
     };
     startTransition(async () => {
-      const response = await updateAlumnAction(data);
+      const response = await updateAlumnAction(updateAlumn);
       if (response.success) {
         router.push(`/admin/alumnos/${alumn.id}`);
       } else {
