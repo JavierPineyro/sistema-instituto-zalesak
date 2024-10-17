@@ -14,6 +14,7 @@ import {
 } from "~/components/ui/alert-dialog";
 import deleteAction from "~/server/actions/productos/delete-action";
 import { useRouter } from "next/navigation";
+import { TrashIcon } from "lucide-react";
 
 export default function DeleteProductModal({ id }: { id: number }) {
   const [isPending, startTransition] = useTransition();
@@ -33,8 +34,9 @@ export default function DeleteProductModal({ id }: { id: number }) {
 
   return (
     <AlertDialog>
-      <AlertDialogTrigger className="rounded-md bg-red-100 px-2 py-1 text-red-600">
+      <AlertDialogTrigger className="flex items-center rounded-md bg-red-100 px-2 py-1 text-red-600">
         Eliminar
+        <TrashIcon className="ml-2 inline size-4 text-current" />
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>

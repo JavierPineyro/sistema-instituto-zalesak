@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { CheckCircleIcon, XCircle } from "lucide-react";
+import { CheckCircleIcon, EditIcon, XCircle } from "lucide-react";
 import Link from "next/link";
 import { DataTableColumnHeader } from "~/components/tables/data-table-column-header";
 import { Product } from "~/lib/types";
@@ -109,16 +109,15 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: "edit",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Editar" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="-" />,
     cell: ({ row }) => {
       const id = row.getValue("id") as number;
       return (
         <Link
           href={`/admin/productos/editar/${id}`}
-          className="text-blue-500 hover:text-blue-700"
+          className="flex items-center text-blue-500 hover:text-blue-700"
         >
+          <EditIcon className="mr-2 inline size-4 text-current" />
           Editar
         </Link>
       );
@@ -128,9 +127,7 @@ export const columns: ColumnDef<Product>[] = [
   },
   {
     accessorKey: "delete",
-    header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Eliminar" />
-    ),
+    header: ({ column }) => <DataTableColumnHeader column={column} title="-" />,
     cell: ({ row }) => {
       const id = row.getValue("id") as number;
       return <DeleteProductModal id={id} />;

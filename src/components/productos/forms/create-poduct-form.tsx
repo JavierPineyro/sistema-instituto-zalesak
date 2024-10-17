@@ -84,7 +84,7 @@ export default function CreateProductForm() {
             {...register("publicPrice", {
               min: {
                 value: 1,
-                message: "*El precio debe ser mayor a cero.",
+                message: "*El precio debe ser mayor a 1.",
               },
               required: "*El precio es requerido.",
             })}

@@ -1,30 +1,29 @@
-"use client"
+"use client";
 
-import { MoreHorizontal } from "lucide-react"
-import { Row } from "@tanstack/react-table"
+import { MoreHorizontal, EditIcon } from "lucide-react";
+import { Row } from "@tanstack/react-table";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger
-} from "~/components/ui/dropdown-menu"
-import { Button } from "~/components/ui/button"
-import Link from "next/link"
-import { Belt, UpdateAlumn } from "~/lib/types"
-import ActiveForm from "~/components/alumnos/forms/active-alumn-form"
-
+  DropdownMenuTrigger,
+} from "~/components/ui/dropdown-menu";
+import { Button } from "~/components/ui/button";
+import Link from "next/link";
+import { Belt, UpdateAlumn } from "~/lib/types";
+import ActiveForm from "~/components/alumnos/forms/active-alumn-form";
+import { cn } from "~/lib/utils";
 
 interface DataTableRowActionsProps<TData> {
-  row: Row<TData>
+  row: Row<TData>;
 }
 
 export function DataTableRowActions<TData>({
   row,
 }: DataTableRowActionsProps<TData>) {
-
-  const id = row.getValue("id") as number
-  const belt = row.getValue("cinturon") as Belt
+  const id = row.getValue("id") as number;
+  const belt = row.getValue("cinturon") as Belt;
 
   const alumn = {
     id,
@@ -34,25 +33,36 @@ export function DataTableRowActions<TData>({
     birthday: row.getValue("birthday"),
     phoneNumber: row.getValue("phoneNumber"),
     active: row.getValue("active") as boolean,
-  }
+  };
 
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           variant="ghost"
-          className="flex h-8 w-8 p-0 data-[state=open]:bg-muted"
+          className="data-[state=open]:bg-muted flex h-8 w-8 p-0"
         >
           <MoreHorizontal className="h-4 w-4" />
           <span className="sr-only">Ver opciones</span>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-[160px]">
-        <DropdownMenuItem>
-          <Link href={`/admin/alumnos/${id}`}>Ver más</Link>
+        <DropdownMenuItem className={cn("p-0")}>
+          <Link
+            className="h-auto w-full px-2 py-1.5 transition-colors hover:bg-gray-300"
+            href={`/admin/alumnos/${id}`}
+          >
+            Ver más
+          </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <Link href={`/admin/alumnos/${id}/editar`}>Editar</Link>
+        <DropdownMenuItem className={cn("p-0")}>
+          <Link
+            className="flex h-auto w-full items-center px-2 py-1.5 transition-colors hover:bg-gray-300"
+            href={`/admin/alumnos/${id}/editar`}
+          >
+            Editar
+            <EditIcon className="ml-2 inline size-4" />
+          </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
@@ -60,5 +70,5 @@ export function DataTableRowActions<TData>({
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
-  )
+  );
 }
