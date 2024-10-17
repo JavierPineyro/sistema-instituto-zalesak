@@ -22,7 +22,7 @@ export default function EditProductForm({ product }: Props) {
 
   async function onSubmit(data: FieldValues) {
     const updatedProduct = {
-      id: Number(data.id),
+      id: Number(product.id),
       name: data.name.trim(),
       publicPrice: Number(data.publicPrice),
       teacherPrice: Number(data.teacherPrice),
@@ -42,7 +42,6 @@ export default function EditProductForm({ product }: Props) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <input type="hidden" name="id" value={product.id} />
       <div className="flex flex-col gap-1">
         <label htmlFor="name">Nombre</label>
         <input
@@ -123,8 +122,9 @@ export default function EditProductForm({ product }: Props) {
         className="rounded-md border-0 bg-black px-2 py-1 text-lg text-white transition-colors hover:bg-gray-800 disabled:cursor-not-allowed disabled:bg-gray-700 disabled:text-gray-800"
         disabled={isPending}
         type="submit"
-        value={isPending ? "Cargando producto..." : "Actualizar"}
-      />
+      >
+        {isPending ? "Cargando producto..." : "Actualizar"}
+      </button>
     </form>
   );
 }

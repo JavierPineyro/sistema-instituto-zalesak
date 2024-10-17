@@ -108,9 +108,28 @@ export const columns: ColumnDef<Product>[] = [
     enableHiding: false,
   },
   {
+    accessorKey: "edit",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Editar" />
+    ),
+    cell: ({ row }) => {
+      const id = row.getValue("id") as number;
+      return (
+        <Link
+          href={`/admin/productos/editar/${id}`}
+          className="text-blue-500 hover:text-blue-700"
+        >
+          Editar
+        </Link>
+      );
+    },
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
     accessorKey: "delete",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Acciones" />
+      <DataTableColumnHeader column={column} title="Eliminar" />
     ),
     cell: ({ row }) => {
       const id = row.getValue("id") as number;
