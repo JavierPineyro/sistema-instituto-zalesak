@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { Product, ResponseAction, ValidationMessage } from "~/lib/types";
 import { ValidationError } from "~/lib/utils";
+import { ProductUpdateSchema } from "~/lib/validations/product.schema";
 import { service } from "~/server/services";
 
 export default async function editProductAction(product: Product) {
