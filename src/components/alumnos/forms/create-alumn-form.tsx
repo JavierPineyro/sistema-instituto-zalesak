@@ -49,7 +49,14 @@ export default function CreateAlumnForm({ belts }: Props) {
   async function onSubmit(values: z.infer<typeof AlumnCreateSchema>) {
     setError(null);
     startTransition(async () => {
-      const response = await createAlumnAction(values);
+      const newAlumn = {
+        fullname: values.fullname.trim(),
+        birthday: values.birthday,
+        phoneNumber: values?.phoneNumber?.trim(),
+        tutor: values?.tutor?.trim(),
+        idBelt: values.idBelt,
+      };
+      const response = await createAlumnAction(newAlumn);
       if (response.success) {
         setError(null);
         window.location.reload();

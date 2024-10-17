@@ -16,11 +16,14 @@ export default function CreateProductForm() {
   } = useForm();
 
   async function onSubmit(data: FieldValues) {
+    const nameField = data.name.trim();
+    const publicPriceField = Number(data.publicPrice);
+    const teacherPriceField = Number(data.teacherPrice);
     startTransition(async () => {
       const newProduct = {
-        name: data.name as string,
-        publicPrice: Number(data.publicPrice),
-        teacherPrice: Number(data.teacherPrice),
+        name: nameField,
+        publicPrice: publicPriceField,
+        teacherPrice: teacherPriceField,
       };
       const response = await createProductAction(newProduct);
       if (response.success) {
