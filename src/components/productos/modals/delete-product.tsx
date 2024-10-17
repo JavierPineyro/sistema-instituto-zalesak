@@ -1,3 +1,5 @@
+"use client";
+
 import { useTransition } from "react";
 import { toast } from "sonner";
 import {
@@ -11,15 +13,18 @@ import {
   AlertDialogTrigger,
 } from "~/components/ui/alert-dialog";
 import deleteAction from "~/server/actions/productos/delete-action";
+import { useRouter } from "next/navigation";
 
 export default function DeleteProductModal({ id }: { id: number }) {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
   const handleDelete = (id: number) => () => {
     startTransition(async () => {
       const response = await deleteAction(id);
 
       if (response && response.success) {
         toast.success(response.message);
+        router.refresh();
       } else {
         toast.error(response.message);
       }
