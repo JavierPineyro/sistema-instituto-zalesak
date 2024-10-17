@@ -2,6 +2,7 @@ import { mockAlumn } from "~/components/alumnos/tables/data";
 import {
   NewAlumn,
   NewPayment,
+  Product,
   ProductAction,
   UpdateAlumnWithNumberBeltId,
 } from "~/lib/types";
@@ -281,8 +282,21 @@ export const service = {
       const response = await db
         .delete(precios)
         .where(eq(precios.id, id))
-        .returning({id: precios.id});
+        .returning({ id: precios.id });
 
+      return response;
+    },
+    update: async (product: Product) => {
+      const response = await db
+        .update(precios)
+        .set({
+          name: product.name,
+          publicPrice: product.publicPrice,
+          teacherPrice: product.teacherPrice,
+          active: product.active,
+        })
+        .where(eq(precios.id, product.id))
+        .returning({ id: precios.id });
       return response;
     },
   },
