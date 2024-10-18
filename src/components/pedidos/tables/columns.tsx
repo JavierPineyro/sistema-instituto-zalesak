@@ -6,8 +6,8 @@ import Link from "next/link";
 import { DataTableColumnHeader } from "~/components/tables/data-table-column-header";
 import { Product } from "~/lib/types";
 import { cn, parseTotalToLocale } from "~/lib/utils";
-import { getIsAvailableText, statuses } from "./data";
-import DeleteProductModal from "../modals/delete-product";
+//import { getIsAvailableText, statuses } from "./data";
+//import DeleteProductModal from "../modals/delete-product";
 
 export const columns: ColumnDef<Product>[] = [
   {
@@ -79,8 +79,8 @@ export const columns: ColumnDef<Product>[] = [
     ),
     cell: ({ row }) => {
       const state = row.getValue("active") as boolean;
-      const stateText = getIsAvailableText(state);
-      const status = statuses.find((status) => status.value === stateText);
+      //const stateText = getIsAvailableText(state);
+      //const status = statuses.find((status) => status.value === stateText);
       if (!status) {
         return null;
       }
@@ -92,17 +92,18 @@ export const columns: ColumnDef<Product>[] = [
             "text-green-500": state,
           })}
         >
-          {status.icon && (
+          {/* status?.icon && (
             <status.icon className="text-muted-foreground mr-2 h-4 w-4" />
-          )}
-          <span>{status.label}</span>
+          )*/}
+          <span>{/*status.label*/}</span>
         </div>
       );
     },
     filterFn: (row, id, value) => {
       const rowValue = row.getValue(id) as boolean;
-      const stateText = getIsAvailableText(rowValue);
-      return value.includes(stateText);
+      //const stateText = getIsAvailableText(rowValue);
+      //return value.includes(stateText);
+      return true;
     },
     enableSorting: true,
     enableHiding: false,
@@ -130,7 +131,7 @@ export const columns: ColumnDef<Product>[] = [
     header: ({ column }) => <DataTableColumnHeader column={column} title="-" />,
     cell: ({ row }) => {
       const id = row.getValue("id") as number;
-      return <DeleteProductModal id={id} />;
+      //return <DeleteProductModal id={id} />;
     },
     enableSorting: false,
     enableHiding: false,

@@ -12,7 +12,7 @@ export default function HeaderPedidos() {
         </p>
       </div>
       <div className="flex items-center">
-        <CreatePedidoModal>Nuevo Pedido</CreatePedidoModal>
+        {/*<CreatePedidoModal>Nuevo Pedido</CreatePedidoModal> */}
       </div>
     </div>
   );
