@@ -1,6 +1,6 @@
 import CreateProductoModal from "./modals/create-product";
 
-export default function HeaderPedidos() {
+export default function HeaderProductos() {
   return (
     <div className="flex items-center justify-between space-y-2">
       <div>

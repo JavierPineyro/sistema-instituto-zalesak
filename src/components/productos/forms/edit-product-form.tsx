@@ -6,6 +6,8 @@ import { useForm, FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 import ErrorMessage from "~/components/error-message";
 import { Product } from "~/lib/types";
+import editProductAction from "~/server/actions/productos/edit-action";
+
 type Props = {
   product: Product;
 };
@@ -34,14 +36,14 @@ export default function EditProductForm({ product }: Props) {
       teacherPrice: Number(data.teacherPrice),
       active: data.active,
     };
-    /* startTransition(async () => {
-      const response = await updateProductAction(updateAlumn);
+    startTransition(async () => {
+      const response = await editProductAction(updatedProduct);
       if (response.success) {
         router.push(`/admin/productos`);
       } else {
         toast.error(response.message);
       }
-      });*/
+    });
   }
 
   return (

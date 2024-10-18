@@ -237,7 +237,22 @@ export const service = {
   },
   pedidos: {
     list: async () => {
-      const data = await db.query.pedidos.findMany();
+      const data = await db.query.pedidos.findMany({
+        orderBy: [desc(pedidos.id)],
+        with: {
+          alumno: {
+            columns: {
+              fullname: true,
+            },
+          },
+          producto: {
+            columns: {
+              name: true,
+              publicPrice: true,
+            },
+          },
+        },
+      });
       return data;
     },
     getById: async (id: number) => {

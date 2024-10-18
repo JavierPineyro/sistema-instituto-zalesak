@@ -23,7 +23,7 @@ export default async function ProductEditPage({ params }: Props) {
       <div className="flex flex-col gap-2">
         <GoBack path="/admin/productos" />
         <h1 className="text-center text-2xl font-bold tracking-tight">
-          Editar Produto
+          Editar Producto
         </h1>
       </div>
       <EditProductForm product={product} />

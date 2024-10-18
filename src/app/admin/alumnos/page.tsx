@@ -21,9 +21,8 @@ export default async function AlumnsPage() {
       className={`${GeistSans.variable} h-full flex-1 flex-col space-y-8 p-8 md:flex`}
     >
       <div className="space-y-2">
-        <HeaderAlumno /> {/* Headder de productors */}
+        <HeaderAlumno />
         <DataTable data={data} columns={columns} />
-        {/* Tabla de productors */}
       </div>
     </main>
   );

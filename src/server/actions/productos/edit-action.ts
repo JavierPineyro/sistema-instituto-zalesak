@@ -9,7 +9,7 @@ import { service } from "~/server/services";
 export default async function editProductAction(product: Product) {
   const Response: ResponseAction = {
     success: true,
-    message: "Producto eliminado correctamente",
+    message: ValidationMessage.PRODUCT_UPDATED,
   };
 
   try {
