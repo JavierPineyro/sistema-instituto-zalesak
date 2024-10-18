@@ -49,8 +49,8 @@ export default function PayForm({ id, alumn, amount }: Props) {
         nameClient: alumn?.fullname ?? "",
         idAlumn: id,
         date: currentDate,
-        concept: data.concept as string,
-        writtenAmount: data.writtenAmount as string,
+        concept: data.concept?.trim() as string,
+        writtenAmount: data.writtenAmount?.trim() as string,
         month: data.month as string,
       };
 
