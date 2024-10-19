@@ -1,3 +1,9 @@
+import Spinner from "~/components/spinner";
+
 export default function LoadingPage() {
-  return <section>CARGANDO ... POner un skeleton</section>;
+  return (
+    <main>
+      <Spinner />
+    </main>
+  );
 }

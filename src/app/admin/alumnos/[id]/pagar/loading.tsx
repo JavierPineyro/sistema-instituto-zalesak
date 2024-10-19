@@ -1,3 +1,9 @@
-export default function Loading() {
-  return <div>Cargando...</div>; // Replace with your loading component
+import Spinner from "~/components/spinner";
+
+export default function LoadingPage() {
+  return (
+    <main>
+      <Spinner />
+    </main>
+  );
 }
