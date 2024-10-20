@@ -1,15 +1,13 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { CheckCircleIcon, EditIcon, XCircle } from "lucide-react";
+import { EditIcon } from "lucide-react";
 import Link from "next/link";
 import { DataTableColumnHeader } from "~/components/tables/data-table-column-header";
-import { Product } from "~/lib/types";
-import { cn, parseTotalToLocale } from "~/lib/utils";
-//import { getIsAvailableText, statuses } from "./data";
-//import DeleteProductModal from "../modals/delete-product";
+import { OrderTable, State } from "~/lib/types";
+import { cn, getOrderState, parseTotalToLocale } from "~/lib/utils";
 
-export const columns: ColumnDef<Product>[] = [
+export const columns: ColumnDef<OrderTable>[] = [
   {
     accessorKey: "id",
     header: ({ column }) => (
@@ -25,10 +23,11 @@ export const columns: ColumnDef<Product>[] = [
       <DataTableColumnHeader column={column} title="Nombre" />
     ),
     cell: ({ row }) => {
+      const name = row.getValue("name") as string;
       return (
         <div className="flex space-x-2">
           <span className="max-w-[500px] truncate font-medium">
-            {row.getValue("name") ?? "---"}
+            {name ?? "---"}
           </span>
         </div>
       );
@@ -39,10 +38,10 @@ export const columns: ColumnDef<Product>[] = [
   {
     accessorKey: "publicPrice",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Precio Público" />
+      <DataTableColumnHeader column={column} title="Precio" />
     ),
     cell: ({ row }) => {
-      const publicPrice = (row.getValue("publicPrice") as number) ?? 0;
+      const publicPrice = row.getValue("publicPrice") as number;
       return (
         <div className="flex space-x-2">
           <span className="max-w-[500px] truncate text-center font-medium">
@@ -52,58 +51,88 @@ export const columns: ColumnDef<Product>[] = [
       );
     },
     enableSorting: true,
-    enableHiding: true,
+    enableHiding: false,
   },
   {
-    accessorKey: "teacherPrice",
+    accessorKey: "quantity",
     header: ({ column }) => (
-      <DataTableColumnHeader column={column} title="Precio Instructor" />
+      <DataTableColumnHeader column={column} title="Cantidad" />
     ),
     cell: ({ row }) => {
-      const teacherPrice = (row.getValue("teacherPrice") as number) ?? 0;
+      const quantity = row.getValue("quantity") as number;
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">{quantity}</span>
+        </div>
+      );
+    },
+    enableSorting: false,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "total",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Total" />
+    ),
+    cell: ({ row }) => {
+      const total = row.getValue("total") as number;
       return (
         <div className="flex space-x-2">
           <span className="max-w-[500px] truncate font-medium">
-            {parseTotalToLocale(teacherPrice)}
+            {parseTotalToLocale(total)}
           </span>
         </div>
       );
     },
     enableSorting: true,
-    enableHiding: true,
+    enableHiding: false,
   },
   {
-    accessorKey: "active",
+    accessorKey: "fullname",
+    header: ({ column }) => (
+      <DataTableColumnHeader column={column} title="Pedido por" />
+    ),
+    cell: ({ row }) => {
+      const alumno = row.getValue("fullname") as string;
+      return (
+        <div className="flex space-x-2">
+          <span className="max-w-[500px] truncate font-medium">
+            {alumno ?? "---"}
+          </span>
+        </div>
+      );
+    },
+    enableSorting: true,
+    enableHiding: false,
+  },
+  {
+    accessorKey: "state",
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="Estado" />
     ),
     cell: ({ row }) => {
-      const state = row.getValue("active") as boolean;
-      //const stateText = getIsAvailableText(state);
-      //const status = statuses.find((status) => status.value === stateText);
-      if (!status) {
-        return null;
-      }
+      const state = row.getValue("state") as State;
+      const { status, wasDelivered, isPending, isCanceled } =
+        getOrderState(state);
 
       return (
         <div
           className={cn("flex items-center", {
-            "text-red-500": !state,
-            "text-green-500": state,
+            "text-red-500": isCanceled,
+            "text-orange-500": isPending,
+            "text-green-500": wasDelivered,
           })}
         >
-          {/* status?.icon && (
+          {status?.icon && (
             <status.icon className="text-muted-foreground mr-2 h-4 w-4" />
-          )*/}
-          <span>{/*status.label*/}</span>
+          )}
+          <span>{status?.label}</span>
         </div>
       );
     },
-    filterFn: (row, id, value) => {
-      const rowValue = row.getValue(id) as boolean;
-      //const stateText = getIsAvailableText(rowValue);
-      //return value.includes(stateText);
-      return true;
+    filterFn: (row, id, filterValue) => {
+      const state = row.getValue("state");
+      return filterValue.includes(state);
     },
     enableSorting: true,
     enableHiding: false,
@@ -115,7 +144,7 @@ export const columns: ColumnDef<Product>[] = [
       const id = row.getValue("id") as number;
       return (
         <Link
-          href={`/admin/productos/editar/${id}`}
+          href={`/admin/pedidos/editar/${id}`}
           className="flex items-center text-blue-500 hover:text-blue-700"
         >
           <EditIcon className="mr-2 inline size-4 text-current" />
@@ -126,14 +155,14 @@ export const columns: ColumnDef<Product>[] = [
     enableSorting: false,
     enableHiding: false,
   },
-  {
+  /*{
     accessorKey: "delete",
     header: ({ column }) => <DataTableColumnHeader column={column} title="-" />,
     cell: ({ row }) => {
       const id = row.getValue("id") as number;
-      //return <DeleteProductModal id={id} />;
+      return <DeleteProductModal id={id} />;
     },
     enableSorting: false,
     enableHiding: false,
-  },
+  },*/
 ];

@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { StatusActive } from "./types";
+import { OrderResponse, State, StatusActive } from "./types";
+import { statuses as orderStatuses } from "~/components/pedidos/tables/data";
 
 // UTILITIES FUNCTIONS
 export function cn(...inputs: ClassValue[]) {
@@ -32,8 +33,28 @@ export function hasRecharge(month: string) {
   }
 }
 
+export function formatPedidosResponse(response: OrderResponse[]) {
+  return response.map((item) => {
+    let fullname = "";
+    const { alumno, producto, ...rest } = item;
+    const { name, publicPrice } = producto;
+    if (alumno && alumno.fullname) fullname = alumno.fullname;
+    return { ...rest, fullname, name, publicPrice };
+  });
+}
+
 export function getIsActiveText(state: boolean): string {
   return state ? StatusActive.ACTIVE : StatusActive.INACTIVE;
+}
+
+export function getOrderState(state: State) {
+  const status = orderStatuses.find((status) => status.value === state);
+
+  const wasDelivered = state === "entregado";
+  const isPending = state === "pendiente";
+  const isCanceled = state === "cancelado";
+
+  return { status, wasDelivered, isPending, isCanceled };
 }
 
 export function parseToLocalDate(date: string) {

@@ -153,3 +153,43 @@ export type ProductAction = {
   publicPrice: number;
   teacherPrice: number;
 };
+
+// Orders
+export type State = "entregado" | "pendiente" | "cancelado";
+
+export type Order = {
+  id: number;
+  idProduct: number;
+  quantity: number;
+  idAlumn: number;
+  total: number;
+  state: State;
+};
+
+export type OrderResponse = {
+  id: number;
+  idProduct: number;
+  producto: {
+    name: string;
+    publicPrice: number;
+  };
+  quantity: number;
+  idAlumn: number | null;
+  alumno: {
+    fullname: string;
+  } | null;
+  total: number;
+  state: string;
+};
+
+export type OrderTable = {
+  fullname: string;
+  name: string;
+  publicPrice: number;
+  id: number;
+  idProduct: number;
+  quantity: number;
+  idAlumn: number | null;
+  total: number;
+  state: string;
+};
