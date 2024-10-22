@@ -16,6 +16,7 @@ import {
   precios,
   recibos,
 } from "./db/schema";
+import { formatPedidoResponse, formatPedidosResponse } from "~/lib/utils";
 
 export const service = {
   alumnos: {
@@ -237,7 +238,7 @@ export const service = {
   },
   pedidos: {
     list: async () => {
-      const data = await db.query.pedidos.findMany({
+      const response = await db.query.pedidos.findMany({
         orderBy: [desc(pedidos.id)],
         with: {
           alumno: {
@@ -253,13 +254,30 @@ export const service = {
           },
         },
       });
+      const data = formatPedidosResponse(response);
       return data;
     },
     getById: async (id: number) => {
-      const data = await db.query.pedidos.findFirst({
+      const response = await db.query.pedidos.findFirst({
         where: eq(pedidos.id, id),
+        orderBy: [desc(pedidos.id)],
+        with: {
+          alumno: {
+            columns: {
+              fullname: true,
+            },
+          },
+          producto: {
+            columns: {
+              name: true,
+              publicPrice: true,
+            },
+          },
+        },
       });
-      return data;
+
+      if(response) return formatPedidoResponse(response);
+      else return undefined;
     },
     save: async (pedido: any) => {
       const response = await db
