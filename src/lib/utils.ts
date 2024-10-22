@@ -34,13 +34,19 @@ export function hasRecharge(month: string) {
 }
 
 export function formatPedidosResponse(response: OrderResponse[]) {
-  return response.map((item) => {
-    let fullname = "";
-    const { alumno, producto, ...rest } = item;
-    const { name, publicPrice } = producto;
-    if (alumno && alumno.fullname) fullname = alumno.fullname;
-    return { ...rest, fullname, name, publicPrice };
-  });
+  return response.map((item) => reestructurePedido(item));
+}
+
+export function formatPedidoResponse(response: OrderResponse) {
+  return reestructurePedido(response);
+}
+
+function reestructurePedido(item: OrderResponse) {
+  let fullname = "";
+  const { alumno, producto, ...rest } = item;
+  const { name, publicPrice } = producto;
+  if (alumno && alumno.fullname) fullname = alumno.fullname;
+  return { ...rest, fullname, name, publicPrice };
 }
 
 export function getIsActiveText(state: boolean): string {
