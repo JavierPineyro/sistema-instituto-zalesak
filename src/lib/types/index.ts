@@ -49,6 +49,14 @@ export enum ValidationMessage {
   PRODUCT_NOT_DELETED = "El producto no se pudo eliminar",
   WRONG_PRODUCT_DATA = "Datos incorrectos o malformados del producto",
   PRODUCT_ERROR = "Error inesperado al realizar esta acción",
+  // ORDERS
+  ORDER_CREATED_SUCCESSFULLY = "El pedido se creó correctamente",
+  ORDER_CREATE_ERROR = "Error al crear el pedido",
+  ORDER_UPDATED = "El pedido se actualizó correctamente",
+  ORDER_UPDATE_ERROR = "Error al actualizar el pedido",
+  ORDER_DELETED = "El pedido se eliminó correctamente",
+  ORDER_NOT_DELETED = "El pedido no se pudo eliminar",
+  WRONG_ORDER_DATA = "Datos incorrectos o malformados del pedido",
 }
 
 export enum StatusActive {

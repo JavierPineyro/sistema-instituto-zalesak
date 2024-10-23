@@ -2,12 +2,13 @@ import { mockAlumn } from "~/components/alumnos/tables/data";
 import {
   NewAlumn,
   NewPayment,
+  Order,
   Product,
   ProductAction,
   UpdateAlumnWithNumberBeltId,
 } from "~/lib/types";
 import { db } from "./db";
-import { count, eq, between, desc } from "drizzle-orm";
+import { count, eq, between, desc, asc } from "drizzle-orm";
 import {
   alumnos,
   pagos,
@@ -31,6 +32,16 @@ export const service = {
           },
         },
         // orderBy: (alumnos, { asc }) => [asc(alumnos.active)],
+      });
+      return data;
+    },
+    listFullnames: async () => {
+      const data = await db.query.alumnos.findMany({
+        columns: {
+          fullname: true,
+          id: true,
+        },
+        orderBy: [asc(alumnos.fullname)],
       });
       return data;
     },
@@ -276,13 +287,27 @@ export const service = {
         },
       });
 
-      if(response) return formatPedidoResponse(response);
+      if (response) return formatPedidoResponse(response);
       else return undefined;
     },
     save: async (pedido: any) => {
       const response = await db
         .insert(pedidos)
         .values(pedido)
+        .returning({ id: pedidos.id });
+      return response;
+    },
+    update: async (order: Order) => {
+      const response = await db
+        .update(pedidos)
+        .set({
+          idProduct: order.idProduct,
+          quantity: order.quantity,
+          idAlumn: order.idAlumn,
+          state: order.state,
+          total: order.total,
+        })
+        .where(eq(pedidos.id, order.id))
         .returning({ id: pedidos.id });
       return response;
     },
@@ -297,6 +322,17 @@ export const service = {
         (a, b) => Number(b.active) - Number(a.active),
       );
       return sortedData;
+    },
+    listWithPublicPriceAndName: async () => {
+      const data = await db.query.precios.findMany({
+        columns: {
+          id: true,
+          name: true,
+          publicPrice: true,
+        },
+        orderBy: [asc(precios.name)],
+      });
+      return data;
     },
     getById: async (id: number) => {
       const data = await db.query.precios.findFirst({
