@@ -59,7 +59,6 @@ export default function PayForm({ id, alumn, amount }: Props) {
         reset();
         toast.success(response.message);
       } else {
-        console.log(response);
         toast.error(response.message);
       }
     });

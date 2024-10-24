@@ -1,6 +1,7 @@
 import { mockAlumn } from "~/components/alumnos/tables/data";
 import {
   NewAlumn,
+  NewOrder,
   NewPayment,
   Order,
   Product,
@@ -48,6 +49,16 @@ export const service = {
     getById: async (id: number) => {
       const alumn = await db.query.alumnos.findFirst({
         where: eq(alumnos.id, id),
+      });
+      return alumn;
+    },
+    getFullnameById: async (id: number) => {
+      const alumn = await db.query.alumnos.findFirst({
+        where: eq(alumnos.id, id),
+        columns: {
+          id: true,
+          fullname: true,
+        },
       });
       return alumn;
     },
@@ -290,7 +301,7 @@ export const service = {
       if (response) return formatPedidoResponse(response);
       else return undefined;
     },
-    save: async (pedido: any) => {
+    save: async (pedido: NewOrder) => {
       const response = await db
         .insert(pedidos)
         .values(pedido)

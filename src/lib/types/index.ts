@@ -3,6 +3,7 @@ import {
   AlumnCreateSchema,
   AlumnUpdateSchema,
 } from "~/lib/validations/alumn.schema";
+import { OrderCreateSchema } from "../validations/order.schema";
 
 export { type Alumn } from "~/lib/validations/alumn.schema";
 
@@ -172,6 +173,14 @@ export type Order = {
   idAlumn: number;
   total: number;
   state: State;
+};
+
+export type NewOrder = {
+  idProduct: number;
+  quantity: number;
+  idAlumn: number;
+  state: string;
+  total: number;
 };
 
 export type OrderResponse = {
