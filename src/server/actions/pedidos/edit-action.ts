@@ -1,12 +1,21 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { Order, ResponseAction, ValidationMessage } from "~/lib/types";
+import { ResponseAction, ValidationMessage } from "~/lib/types";
 import { ValidationError } from "~/lib/utils";
 import { OrderUpdateSchema } from "~/lib/validations/order.schema";
 import { service } from "~/server/services";
 
-export default async function editOrderAction(order: Order) {
+type OrderAction = {
+  id: number;
+  idProduct: number;
+  quantity: number;
+  idAlumn: number | null;
+  total: number;
+  state: string;
+};
+
+export default async function editOrderAction(order: OrderAction) {
   const Response: ResponseAction = {
     success: true,
     message: ValidationMessage.ORDER_UPDATED,

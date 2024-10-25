@@ -8,15 +8,7 @@ type Props = {
 };
 
 export default async function OrderEditPage({ params }: Props) {
-  const orderPromise = service.pedidos.getById(Number(params.id));
-  const alumnPromise = service.alumnos.listFullnames();
-  const productsPromise = service.precios.listWithPublicPriceAndName();
-
-  const [order, alumns, products] = await Promise.all([
-    orderPromise,
-    alumnPromise,
-    productsPromise,
-  ]);
+  const order = await service.pedidos.getById(Number(params.id));
 
   if (!order) {
     return (
@@ -26,6 +18,7 @@ export default async function OrderEditPage({ params }: Props) {
       </div>
     );
   }
+
   return (
     <section className="mx-auto flex max-w-[500px] flex-col gap-3">
       <div className="flex flex-col gap-2">
@@ -35,7 +28,7 @@ export default async function OrderEditPage({ params }: Props) {
           <EditIcon className="h-5 w-5" />
         </h1>
       </div>
-      <EditOrderForm alumns={alumns} order={order} products={products} />
+      <EditOrderForm order={order} />
     </section>
   );
 }

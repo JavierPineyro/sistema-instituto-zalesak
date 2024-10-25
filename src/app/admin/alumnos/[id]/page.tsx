@@ -82,17 +82,14 @@ export default async function AlumnInfoPage({ params }: Props) {
       </div>
 
       <footer className="mt-10 flex w-full justify-evenly gap-1">
-        <Button
-          asChild
-          className={cn("w-32 bg-blue-600 transition-colors hover:bg-blue-500")}
-        >
+        <Button asChild variant="default" className={cn("w-32")}>
           <Link href={`/admin/alumnos/${alumn.id}/editar`}>Editar</Link>
         </Button>
         <EnableOrDisable id={alumn.id} active={alumn.active} />
-        <Button asChild className={cn("w-32")}>
+        <Button variant="default" asChild className={cn("w-32")}>
           <Link href={`/admin/alumnos/${alumn.id}/pagar`}>Pagar Cuota</Link>
         </Button>
-        <Button asChild className={cn("w-32")}>
+        <Button variant="default" asChild className={cn("w-32")}>
           <Link href={`/admin/alumnos/${alumn.id}/hacer-pedido`}>
             Hacer Pedido
           </Link>

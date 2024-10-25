@@ -111,6 +111,7 @@ export default function PayForm({ id, alumn, amount }: Props) {
             Mes
           </label>
           <select
+            className="w-full rounded-md border-2 border-gray-400 px-3 py-2"
             id="month"
             {...register("month", {
               required: {

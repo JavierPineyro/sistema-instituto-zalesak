@@ -39,6 +39,7 @@ export enum ValidationMessage {
   PAYMENT_MALFORMED = "Datos incorrectos o malformados del pago",
   //RECIEVE
   SUCCESSFUL_RECEIVE = "El recibo se creó correctamente",
+  RECEIVE_MALFORMED = "Datos incorrectos o malformados del recibo",
   RECEIVE_ERROR = "Error al crear el recibo",
   RECEIVE_NOT_FOUND = "El recibo no existe",
   // PRODUCTS

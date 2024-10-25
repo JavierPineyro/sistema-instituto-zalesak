@@ -1,4 +1,4 @@
-import { number, object, z } from "zod";
+import { number, object, string, z } from "zod";
 
 export const OrderUpdateSchema = object({
   id: number({ required_error: "El id es obligatorio" }).positive(
@@ -41,4 +41,14 @@ export const OrderCreateSchema = object({
   total: number({ required_error: "El total es obligatorio" }).positive(
     "El total debe ser mayor a 0",
   ),
+  concept: string({ required_error: "El concepto es obligatorio" })
+    .min(1, "El concepto es requerido")
+    .max(254, "Máximo 254 caracteres"),
+  writtenAmount: string({ required_error: "El monto escrito es obligatorio" })
+    .min(1, "El monto escrito es requerido")
+    .max(254, "Máximo 254 caracteres"),
+  date: string({ required_error: "La fecha es obligatoria" }),
+  nameClient: string({ required_error: "El nombre del cliente es obligatorio" })
+    .min(1, "El nombre del cliente es requerido")
+    .max(254, "Máximo 254 caracteres"),
 });

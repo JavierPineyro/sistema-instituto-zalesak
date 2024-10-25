@@ -7,11 +7,6 @@ type Props = {
   };
 };
 
-// Traer el alumno con id, nombre
-// Despues de ahcer el pedido, puede haber un boton en el header para
-// hacer el pago, un modal que se abre y n el form  solo se pone el
-// writtenAmount y el concepto porque todo lo demas es automatico, ver en pay-action
-// HAcer una nueva action para este pago que es mas facil de manejar
 export default async function OrderPage({ params }: Props) {
   const alumnPromise = service.alumnos.getFullnameById(Number(params.id));
   const productsPromise = service.precios.listWithPublicPriceAndName();

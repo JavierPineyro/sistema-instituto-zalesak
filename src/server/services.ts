@@ -341,6 +341,7 @@ export const service = {
           name: true,
           publicPrice: true,
         },
+        where: eq(precios.active, true),
         orderBy: [asc(precios.name)],
       });
       return data;

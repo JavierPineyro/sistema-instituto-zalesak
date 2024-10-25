@@ -10,11 +10,9 @@ import editOrderAction from "~/server/actions/pedidos/edit-action";
 
 type Props = {
   order: OrderData;
-  alumns: { id: number; fullname: string }[];
-  products: { id: number; name: string; publicPrice: number }[];
 };
 
-export default function EditOrderForm({ order, alumns, products }: Props) {
+export default function EditOrderForm({ order }: Props) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
   const {
@@ -23,29 +21,19 @@ export default function EditOrderForm({ order, alumns, products }: Props) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      idProduct: order.idProduct,
-      quantity: order.quantity,
-      idAlumn: order.idAlumn,
       state: order.state,
     },
   });
 
-  function calculateTotal(idProduct: number, quantity: number) {
-    const product = products.find((product) => product.id === idProduct);
-    if (!product) return 0;
-    return product.publicPrice * quantity;
-  }
-
   async function onSubmit(data: FieldValues) {
     const orderToUpdate = {
       id: order.id,
-      idProduct: Number(data.idProduct),
-      quantity: Number(data.quantity),
-      idAlumn: Number(data.idAlumn),
+      idProduct: order.idProduct,
+      quantity: order.quantity,
+      idAlumn: order.idAlumn,
+      total: order.total,
       state: data.state,
-      total: calculateTotal(Number(data.idProduct), Number(data.quantity)),
     };
-    console.log("Data Pedido", orderToUpdate);
 
     startTransition(async () => {
       const response = await editOrderAction(orderToUpdate);
@@ -59,77 +47,6 @@ export default function EditOrderForm({ order, alumns, products }: Props) {
 
   return (
     <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
-      <div className="flex flex-col gap-1">
-        <label htmlFor="idAlumn">Alumno</label>
-        <input
-          id="idAlumn"
-          type="search"
-          autoComplete="off"
-          list="alumns"
-          placeholder="Buscar..."
-          {...register("idAlumn", { required: "*El alumno es requerido." })}
-        />
-        <datalist id="alumns">
-          {alumns.map((alumn) => (
-            <option key={alumn.id} value={alumn.id}>
-              {alumn.fullname}
-            </option>
-          ))}
-        </datalist>
-        {errors.idAlumn && (
-          <ErrorMessage>{String(errors.idAlumn.message)}</ErrorMessage>
-        )}
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <label htmlFor="idProduct">Nombre del producto</label>
-        <input
-          id="idProduct"
-          type="search"
-          autoComplete="off"
-          list="products"
-          placeholder="Buscar..."
-          {...register("idProduct", { required: "*El producto es requerido." })}
-        />
-        <datalist id="products">
-          {products.map((product) => (
-            <option
-              className="flex items-center gap-1"
-              key={product.id}
-              value={product.id}
-            >
-              {product.name} -
-              <span className="text-sm text-black/60">
-                ${product.publicPrice}
-              </span>
-            </option>
-          ))}
-        </datalist>
-        {errors.idProduct && (
-          <ErrorMessage>{String(errors.idProduct.message)}</ErrorMessage>
-        )}
-      </div>
-
-      <div className="flex flex-col gap-1">
-        <label htmlFor="quantity">Cantidad</label>
-        <input
-          id="quantity"
-          className="w-full rounded-md border-2 border-gray-400 px-3 py-2"
-          type="number"
-          min="1"
-          {...register("quantity", {
-            min: {
-              value: 1,
-              message: "*Debe ser 1 o mayor.",
-            },
-            required: "*La cantidad es requerida.",
-          })}
-        />
-        {errors.quantity && (
-          <ErrorMessage>{String(errors.quantity.message)}</ErrorMessage>
-        )}
-      </div>
-
       <div className="flex flex-col gap-1">
         <label htmlFor="state">Estado</label>
         <select
@@ -147,8 +64,8 @@ export default function EditOrderForm({ order, alumns, products }: Props) {
             Cancelado
           </option>
         </select>
-        {errors.quantity && (
-          <ErrorMessage>{String(errors.quantity.message)}</ErrorMessage>
+        {errors.state && (
+          <ErrorMessage>{String(errors.state.message)}</ErrorMessage>
         )}
       </div>
 
@@ -157,7 +74,7 @@ export default function EditOrderForm({ order, alumns, products }: Props) {
         disabled={isPending}
         type="submit"
       >
-        {isPending ? "Cargando pedido..." : "Actualizar"}
+        {isPending ? "Actualizando..." : "Actualizar"}
       </button>
     </form>
   );

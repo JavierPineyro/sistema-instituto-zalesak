@@ -1,13 +1,25 @@
 "use server";
 
 import { revalidatePath } from "next/cache";
-import { NewOrder, ResponseAction, ValidationMessage } from "~/lib/types";
+import { ResponseAction, ValidationMessage } from "~/lib/types";
 import { ValidationError } from "~/lib/utils";
 import { OrderCreateSchema } from "~/lib/validations/order.schema";
 import { service } from "~/server/services";
 
+type OrderAction = {
+  idProduct: number;
+  quantity: number;
+  idAlumn: number;
+  state: string;
+  total: number;
+  concept: string;
+  writtenAmount: string;
+  date: string;
+  nameClient: string;
+};
+
 export default async function createOrderAction(
-  order: NewOrder,
+  order: OrderAction,
   idAlumn: number,
 ) {
   const Response: ResponseAction = {
@@ -20,6 +32,8 @@ export default async function createOrderAction(
     if (!success) {
       throw new ValidationError(ValidationMessage.WRONG_ORDER_DATA);
     }
+
+    // CREO EL PEDIDO
     const [result] = await service.pedidos.save(data);
 
     if (result && result.id) {
@@ -27,6 +41,22 @@ export default async function createOrderAction(
       Response.message = ValidationMessage.ORDER_CREATED_SUCCESSFULLY;
     } else {
       throw new ValidationError(ValidationMessage.ORDER_CREATE_ERROR);
+    }
+
+    // CREAR EL RECIBO
+    const [recibo] = await service.recibos.save({
+      concept: data.concept,
+      writtenAmount: data.writtenAmount,
+      date: data.date,
+      idAlumn: idAlumn,
+      total: data.total,
+      amount: data.total,
+      nameClient: data.nameClient,
+      recharge: false,
+    });
+
+    if (!recibo) {
+      throw new ValidationError(ValidationMessage.RECEIVE_ERROR);
     }
   } catch (error) {
     Response.success = false;
