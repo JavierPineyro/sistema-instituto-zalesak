@@ -1,0 +1,1 @@
+ALTER TABLE "recibos" ALTER COLUMN "tipo" SET NOT NULL;

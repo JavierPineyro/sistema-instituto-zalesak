@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useTransition } from "react";
+import { useMemo, useState, useTransition } from "react";
 import { useForm, FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 import ErrorMessage from "~/components/error-message";
@@ -15,6 +15,9 @@ type Props = {
 
 export default function MakeOrderForm({ alumn, products }: Props) {
   const [isPending, startTransition] = useTransition();
+  const [quantity, setQuantity] = useState(1);
+  const [name, setName] = useState("");
+  const [unitaryPrice, setUnitaryPrice] = useState(0);
 
   const router = useRouter();
   const {
@@ -22,7 +25,14 @@ export default function MakeOrderForm({ alumn, products }: Props) {
     handleSubmit,
     getValues,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: {
+      idProduct: "",
+      quantity: 1,
+      concept: "",
+      writtenAmount: "",
+    },
+  });
 
   function calculateTotal(idProduct: number, quantity: number) {
     const product = products.find((product) => product.id === idProduct);
@@ -30,11 +40,10 @@ export default function MakeOrderForm({ alumn, products }: Props) {
     return product.publicPrice * quantity;
   }
 
-  function getNameProduct(idProduct: number) {
-    const product = products.find((product) => product.id === idProduct);
-    if (!product) return "";
-    return product.name;
-  }
+  const total = useMemo(
+    () => quantity * unitaryPrice,
+    [quantity, unitaryPrice],
+  );
 
   async function onSubmit(data: FieldValues) {
     const date = new Date();
@@ -72,31 +81,36 @@ export default function MakeOrderForm({ alumn, products }: Props) {
       >
         <div className="flex flex-col gap-1">
           <label htmlFor="idProduct">Nombre del producto</label>
-          <input
+          <select
             id="idProduct"
-            type="search"
             className="w-full rounded-md border-2 border-gray-400 px-3 py-2"
-            autoComplete="off"
-            list="products"
-            placeholder="Buscar..."
             {...register("idProduct", {
               required: "*El producto es requerido.",
+              minLength: {
+                value: 1,
+                message: "*Debe seleccionar un producto.",
+              },
+              onChange: (e) => {
+                const product = products.find(
+                  (product) => product.id === Number(e.target.value),
+                );
+                if (product) {
+                  setName(product.name);
+                  setUnitaryPrice(product.publicPrice);
+                }
+              },
             })}
-          />
-          <datalist id="products">
+          >
             {products.map((product) => (
               <option
                 className="flex items-center gap-1 text-sm text-black/80"
                 key={product.id}
                 value={product.id}
               >
-                {product.name} -
-                <span className={cn("text-md font-semibold text-black")}>
-                  ${parseTotalToLocale(product.publicPrice)}
-                </span>
+                {product.name} - {parseTotalToLocale(product.publicPrice)}
               </option>
             ))}
-          </datalist>
+          </select>
           {errors.idProduct && (
             <ErrorMessage>{String(errors.idProduct.message)}</ErrorMessage>
           )}
@@ -116,6 +130,9 @@ export default function MakeOrderForm({ alumn, products }: Props) {
                 message: "*Debe ser 1 o mayor.",
               },
               required: "*La cantidad es requerida.",
+              onChange: (e) => {
+                setQuantity(Number(e.target.value));
+              },
             })}
           />
           {errors.quantity && (
@@ -128,15 +145,12 @@ export default function MakeOrderForm({ alumn, products }: Props) {
             <h3 className="text-pretty text-lg font-semibold">
               Datos del recibo
             </h3>
-            <small className="flex gap-1 rounded-md bg-white text-sm text-gray-900">
-              {getNameProduct(Number(getValues("idProduct")))} - cantidad:{" "}
-              {getValues("quantity")} - total:{" "}
-              {parseTotalToLocale(
-                calculateTotal(
-                  Number(getValues("idProduct")),
-                  Number(getValues("quantity")),
-                ),
-              )}
+            <small className="flex flex-wrap gap-1 rounded-md bg-white text-sm text-gray-900">
+              {name}
+            </small>
+            <small className="flex flex-wrap gap-1 rounded-md bg-white text-sm text-gray-900">
+              precio: {parseTotalToLocale(unitaryPrice)} - cantidad:
+              {quantity} - total: {parseTotalToLocale(total)}
             </small>
           </div>
           <div className="flex flex-col gap-1">

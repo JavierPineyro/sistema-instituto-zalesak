@@ -24,7 +24,7 @@ export default async function EditarPage({ params }: Props) {
   }
 
   return (
-    <section className="min-w-[400px]">
+    <section className="min-w-[400px] pb-10">
       <h2 className="text-lg font-bold text-gray-800">Editar datos</h2>
       <div className="px-auto flex max-w-[500px] flex-col gap-3">
         <UpdateAlumnForm alumn={alumn} belts={belts} />

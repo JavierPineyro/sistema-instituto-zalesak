@@ -1,0 +1,1 @@
+ALTER TABLE "recibos" ADD COLUMN "tipo" varchar(10);

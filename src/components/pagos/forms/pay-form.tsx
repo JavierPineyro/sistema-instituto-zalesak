@@ -1,5 +1,6 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { FieldValues, useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -24,7 +25,7 @@ type Props = {
 
 export default function PayForm({ id, alumn, amount }: Props) {
   if (!alumn) throw new Error("No se encontró el alumno - Formulario Pago");
-
+  const router = useRouter();
   const currentDate = new Date();
   const [isPending, startTransition] = useTransition();
   const {
@@ -58,6 +59,7 @@ export default function PayForm({ id, alumn, amount }: Props) {
       if (response.success) {
         reset();
         toast.success(response.message);
+        router.refresh();
       } else {
         toast.error(response.message);
       }
@@ -175,16 +177,3 @@ export default function PayForm({ id, alumn, amount }: Props) {
     </div>
   );
 }
-
-/*
-  amount, (automatico)
-  date,(automatico)
-  idAlumn, (automatico)
-  recharge, (automatico)
-  total, (automatico)
-  nameClient, (Automatico)
-
-  concept, (manual)
-  writtenAmount, (manual)
-  month, (manual)
-*/

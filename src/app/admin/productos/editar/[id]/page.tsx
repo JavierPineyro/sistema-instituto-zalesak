@@ -19,7 +19,7 @@ export default async function ProductEditPage({ params }: Props) {
     );
   }
   return (
-    <section className="mx-auto flex max-w-[500px] flex-col gap-4">
+    <section className="mx-auto flex max-w-[500px] flex-col gap-4 pb-5">
       <div className="flex flex-col gap-2">
         <GoBack path="/admin/productos" />
         <h1 className="text-center text-2xl font-bold tracking-tight">

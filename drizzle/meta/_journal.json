@@ -15,6 +15,20 @@
       "when": 1725496978233,
       "tag": "0001_grey_swarm",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1729977233908,
+      "tag": "0002_futuristic_boomerang",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1729978631437,
+      "tag": "0003_chubby_exiles",
+      "breakpoints": true
     }
   ]
 }

@@ -22,7 +22,7 @@ export default async function OrderPage({ params }: Props) {
     );
 
   return (
-    <section className="px-5">
+    <section className="px-5 pb-10">
       <header className="mb-5 flex justify-between">
         <h2 className="text-pretty text-xl font-semibold">Hacer Pedido</h2>
       </header>
