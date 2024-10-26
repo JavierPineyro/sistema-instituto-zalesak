@@ -279,6 +279,27 @@ export const service = {
       const data = formatPedidosResponse(response);
       return data;
     },
+    getAllById: async (id: number) => {
+      const response = await db.query.pedidos.findMany({
+        where: eq(pedidos.idAlumn, id),
+        orderBy: [desc(pedidos.id)],
+        with: {
+          alumno: {
+            columns: {
+              fullname: true,
+            },
+          },
+          producto: {
+            columns: {
+              name: true,
+              publicPrice: true,
+            },
+          },
+        },
+      });
+      const data = formatPedidosResponse(response);
+      return data;
+    },
     getById: async (id: number) => {
       const response = await db.query.pedidos.findFirst({
         where: eq(pedidos.id, id),
@@ -320,6 +341,14 @@ export const service = {
         })
         .where(eq(pedidos.id, order.id))
         .returning({ id: pedidos.id });
+      return response;
+    },
+    delete: async (id: number) => {
+      const response = await db
+        .delete(pedidos)
+        .where(eq(pedidos.id, id))
+        .returning({ id: pedidos.id });
+
       return response;
     },
   },
