@@ -6,6 +6,7 @@ import Link from "next/link";
 import { DataTableColumnHeader } from "~/components/tables/data-table-column-header";
 import { OrderTable, State } from "~/lib/types";
 import { cn, getOrderState, parseTotalToLocale } from "~/lib/utils";
+import DeleteOrderModal from "../modals/delete-order-modal";
 
 export const columns: ColumnDef<OrderTable>[] = [
   {
@@ -155,14 +156,14 @@ export const columns: ColumnDef<OrderTable>[] = [
     enableSorting: false,
     enableHiding: false,
   },
-  /*{
+  {
     accessorKey: "delete",
     header: ({ column }) => <DataTableColumnHeader column={column} title="-" />,
     cell: ({ row }) => {
       const id = row.getValue("id") as number;
-      return <DeleteProductModal id={id} />;
+      return <DeleteOrderModal id={id} />;
     },
     enableSorting: false,
     enableHiding: false,
-  },*/
+  },
 ];
