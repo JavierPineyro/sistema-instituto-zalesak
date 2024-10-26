@@ -1,7 +1,5 @@
 import PdfRecieve from "~/components/pdf/PdfRecieve";
 import { service } from "~/server/services";
-import { Recieve } from "~/lib/types";
-import PDF from "~/components/pdf/PDF";
 
 type Props = {
   params: {
@@ -15,7 +13,7 @@ export default async function ReciboPage({ params }: Props) {
   if (!recieve) {
     return <div className="text-center ">Recibo no encontrado</div>;
   }
-  const fileName = `recibo-${recieve.id}.pdf`;
+  //const fileName = `recibo-${recieve.id}.pdf`;
   return (
     <div className="flex flex-col justify-center gap-2 text-center">
       <header>

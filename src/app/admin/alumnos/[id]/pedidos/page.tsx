@@ -16,7 +16,7 @@ export default async function OrdersPage({ params }: Props) {
           Pedidos del alumno
         </h2>
       </header>
-      <DataTable data={orders} columns={columns} />
+      {/** <DataTable data={orders} columns={columns} /> */}
     </section>
   );
 }

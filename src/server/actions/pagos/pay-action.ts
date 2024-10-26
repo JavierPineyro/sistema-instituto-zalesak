@@ -1,4 +1,4 @@
- "use server"
+"use server";
 
 import { revalidatePath } from "next/cache";
 import {
@@ -31,6 +31,7 @@ export default async function payAction(payment: PaymentFormData) {
       concept: data.concept,
       recharge: data.recharge,
       total: data.total,
+      tipo: "cuota",
     };
 
     const [recieve] = await service.recibos.save(newRecieve);

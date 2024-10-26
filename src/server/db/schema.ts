@@ -138,6 +138,7 @@ export const recibos = pgTable("recibos", {
   concept: varchar("concepto", { length: 255 }),
   recharge: boolean("recargo").notNull().default(false),
   total: real("total").notNull(),
+  tipo: varchar("tipo", { length: 10 }).notNull(),
 });
 
 export const recibosRelation = relations(recibos, ({ one }) => ({

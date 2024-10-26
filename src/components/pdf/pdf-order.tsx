@@ -5,7 +5,7 @@ import { Recieve } from "~/lib/types";
 type Props = {
   recieve: Recieve;
 };
-export default function PDF({ recieve }: Props) {
+export default function PDFOrder({ recieve }: Props) {
   const styles = StyleSheet.create({
     page: {
       flexDirection: "column",

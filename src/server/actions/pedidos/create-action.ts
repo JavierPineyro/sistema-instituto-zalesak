@@ -53,6 +53,7 @@ export default async function createOrderAction(
       amount: data.total,
       nameClient: data.nameClient,
       recharge: false,
+      tipo: "pedido",
     });
 
     if (!recibo) {

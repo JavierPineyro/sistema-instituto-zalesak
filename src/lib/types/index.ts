@@ -148,6 +148,7 @@ export type Recieve = {
   concept: string | null;
   recharge: boolean;
   total: number;
+  tipo: string;
 };
 
 //Products
