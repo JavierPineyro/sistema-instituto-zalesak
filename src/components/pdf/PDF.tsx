@@ -119,7 +119,7 @@ export default function PDF({ recieve }: Props) {
                 <Text style={styles.date}>Fecha de emisión:</Text>
                 <Text style={{ fontSize: 11 }}>{recieve.date}</Text>
               </View>
-              <Text>Consumidor final</Text>
+              <Text style={{ fontSize: 11 }}>Consumidor final</Text>
             </View>
           </View>
 
