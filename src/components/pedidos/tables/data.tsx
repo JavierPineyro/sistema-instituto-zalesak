@@ -1,10 +1,10 @@
-import { CheckCircleIcon, XCircle, Clock } from "lucide-react";
+import { CheckCircle, XCircle, Clock } from "lucide-react";
 
 export const statuses = [
   {
     value: "entregado",
     label: "Entregado",
-    icon: CheckCircleIcon,
+    icon: CheckCircle,
   },
   {
     value: "pendiente",
