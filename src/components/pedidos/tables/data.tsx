@@ -1,19 +1,18 @@
-import { CheckCircle, XCircle, Clock } from "lucide-react";
 
 export const statuses = [
   {
     value: "entregado",
     label: "Entregado",
-    icon: CheckCircle,
+    icon: null,
   },
   {
     value: "pendiente",
     label: "Pendiente",
-    icon: Clock,
+    icon: null,
   },
   {
     value: "cancelado",
     label: "Cancelado",
-    icon: XCircle,
+    icon: null,
   },
 ];
