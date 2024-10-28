@@ -124,9 +124,7 @@ export const columns: ColumnDef<OrderTable>[] = [
             "text-green-500": wasDelivered,
           })}
         >
-          {status?.icon && (
-            <status.icon className="text-muted-foreground mr-2 h-4 w-4" />
-          )}
+          {status?.icon && <status.icon />}
           <span>{status?.label}</span>
         </div>
       );
