@@ -14,7 +14,7 @@ export const columns: ColumnDef<OrderTable>[] = [
     header: ({ column }) => (
       <DataTableColumnHeader column={column} title="id" />
     ),
-    cell: ({ row }) => <div className="w-[80px]">{row.getValue("id")}</div>,
+    cell: ({ row }) => <div className="w-[40px]">{row.getValue("id")}</div>,
     enableSorting: true,
     enableHiding: false,
   },
@@ -26,8 +26,8 @@ export const columns: ColumnDef<OrderTable>[] = [
     cell: ({ row }) => {
       const name = row.getValue("name") as string;
       return (
-        <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">
+        <div className="flex space-x-1">
+          <span className="max-w-[400px] truncate font-medium">
             {name ?? "---"}
           </span>
         </div>
@@ -45,7 +45,7 @@ export const columns: ColumnDef<OrderTable>[] = [
       const publicPrice = row.getValue("publicPrice") as number;
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate text-center font-medium">
+          <span className="max-w-[400px] truncate text-center font-medium">
             {parseTotalToLocale(publicPrice)}
           </span>
         </div>
@@ -63,7 +63,7 @@ export const columns: ColumnDef<OrderTable>[] = [
       const quantity = row.getValue("quantity") as number;
       return (
         <div className="flex space-x-2">
-          <span className="max-w-[500px] truncate font-medium">{quantity}</span>
+          <span className="max-w-[300px] truncate font-medium">{quantity}</span>
         </div>
       );
     },

@@ -32,9 +32,12 @@ export const service = {
             },
           },
         },
-        // orderBy: (alumnos, { asc }) => [asc(alumnos.active)],
+        orderBy: [desc(alumnos.fullname)],
       });
-      return data;
+      const orderdDataByActive = data.sort(
+        (a, b) => Number(b.active) - Number(a.active),
+      );
+      return orderdDataByActive;
     },
     listFullnames: async () => {
       const data = await db.query.alumnos.findMany({
@@ -221,6 +224,7 @@ export const service = {
     getByAlumnId: async (id: number) => {
       const data = await db.query.pagos.findMany({
         where: eq(pagos.idAlumn, id),
+        orderBy: [desc(pagos.id)],
         with: {
           recibo: {
             columns: {
