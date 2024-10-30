@@ -253,6 +253,13 @@ export const service = {
         .returning({ id: recibos.id });
       return response;
     },
+    getAllByAlumnId: async (id: number) => {
+      const data = await db.query.recibos.findMany({
+        where: eq(recibos.idAlumn, id),
+        orderBy: [desc(recibos.date)],
+      });
+      return data;
+    },
   },
   precioServicio: {
     getAmount: async () => {
