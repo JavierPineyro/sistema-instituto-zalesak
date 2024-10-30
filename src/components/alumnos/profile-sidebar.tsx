@@ -60,7 +60,7 @@ export function ProfileSidebar({ className, id }: SidebarProps) {
               </Link>
             </Button>
             <Button asChild variant="ghost" className="w-full justify-start">
-              <Link href={`/admin/alumnos/${id}/recibos`}>
+              <Link href={`/admin/alumnos/${id}/recibos/lista`}>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"

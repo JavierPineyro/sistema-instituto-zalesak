@@ -11,7 +11,7 @@ import {
 } from "~/components/ui/dropdown-menu";
 import { Button } from "~/components/ui/button";
 import Link from "next/link";
-import { Belt, UpdateAlumn } from "~/lib/types";
+import { Belt } from "~/lib/types";
 import ActiveForm from "~/components/alumnos/forms/active-alumn-form";
 import { cn } from "~/lib/utils";
 
