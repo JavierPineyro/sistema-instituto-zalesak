@@ -3,7 +3,6 @@ import {
   AlumnCreateSchema,
   AlumnUpdateSchema,
 } from "~/lib/validations/alumn.schema";
-import { OrderCreateSchema } from "../validations/order.schema";
 
 export { type Alumn } from "~/lib/validations/alumn.schema";
 
@@ -78,7 +77,15 @@ export type Belt = {
   description?: string | null;
 };
 
-export type NewAlumn = z.infer<typeof AlumnCreateSchema>;
+export type NewAlumnToSave = {
+  fullname: string;
+  birthday: string;
+  idBelt: number;
+  phoneNumber?: string | undefined;
+  tutor?: string | undefined;
+};
+
+export type NewAlumn = z.infer<typeof AlumnCreateSchema>; // NO uSADO MAS
 export type UpdateAlumn = z.infer<typeof AlumnUpdateSchema>;
 export type UpdateAlumnWithNumberBeltId = Omit<UpdateAlumn, "idBelt"> & {
   idBelt: number;

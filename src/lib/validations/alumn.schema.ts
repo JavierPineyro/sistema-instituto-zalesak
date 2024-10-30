@@ -38,7 +38,9 @@ export const AlumnCreateSchema = object({
     .min(1, "El nombre es requerido")
     .max(255, "Máximo 255 caracteres"),
   birthday: string({ required_error: "Fecha de nacimiento obligatorio" }),
-  idBelt: string({ required_error: "El cinturón es requerido" }),
+  idBelt: number({ required_error: "El cinturón es requerido" }).positive({
+    message: "*El cinturón debe ser mayor a cero.",
+  }),
   phoneNumber: string().max(100, "Máximo 100 caracteres").optional(),
   tutor: string().max(255, "Máximo 255 caracteres").optional(),
 });

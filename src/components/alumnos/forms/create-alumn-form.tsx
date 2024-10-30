@@ -1,260 +1,214 @@
 "use client";
 
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useState, useTransition } from "react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
+import { useTransition } from "react";
+import { FieldValues, useForm } from "react-hook-form";
 import { Button } from "~/components/ui/button";
 import { DialogClose, DialogFooter } from "~/components/ui/dialog";
-import { AlumnCreateSchema } from "~/lib/validations/alumn.schema";
-import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
 import { cn } from "~/lib/utils";
-import { Input } from "~/components/ui/input";
 import { Belt } from "~/lib/types";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
+
 import createAlumnAction from "~/server/actions/alumnos/create-action";
+import ErrorMessage from "~/components/error-message";
+import { useRouter } from "next/navigation";
+import { toast } from "sonner";
 
 type Props = {
   belts?: Belt[];
 };
 
 export default function CreateAlumnForm({ belts }: Props) {
-  const [error, setError] = useState<string | undefined | null>(null);
   const [isPending, startTransition] = useTransition();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+  const router = useRouter();
 
-  const form = useForm<z.infer<typeof AlumnCreateSchema>>({
-    resolver: zodResolver(AlumnCreateSchema),
-    defaultValues: {
-      fullname: "",
-      birthday: undefined,
-      phoneNumber: "",
-      tutor: "",
-      idBelt: "",
-    },
-  });
-
-  async function onSubmit(values: z.infer<typeof AlumnCreateSchema>) {
-    setError(null);
+  async function onSubmit(values: FieldValues) {
     startTransition(async () => {
       const newAlumn = {
-        fullname: values.fullname.trim(),
-        birthday: values.birthday,
-        phoneNumber: values?.phoneNumber?.trim(),
-        tutor: values?.tutor?.trim(),
-        idBelt: values.idBelt,
+        fullname: values.fullname.trim() as string,
+        birthday: values.birthday as string,
+        phoneNumber: values?.phoneNumber?.trim() as string,
+        tutor: values?.tutor?.trim() as string,
+        idBelt: Number(values.idBelt),
       };
+
       const response = await createAlumnAction(newAlumn);
       if (response.success) {
-        setError(null);
-        window.location.reload();
+        reset();
+        toast.success(response.message);
+        router.refresh();
       } else {
-        setError(response.message);
+        toast.error(response.message);
       }
     });
   }
 
   return (
     <>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="">
-          <FormField
-            control={form.control}
-            name="fullname"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  htmlFor="fullname"
-                  className={cn(
-                    "leading-1 mt-2 block text-sm font-medium text-gray-900",
-                  )}
-                >
-                  Nombre Completo
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    id="fullname"
-                    className={cn(
-                      "block w-full rounded-md border-0 py-1 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-4",
-                    )}
-                    type="text"
-                    placeholder="ej: Luis Antonio ..."
-                    {...field}
-                  />
-                </FormControl>
-                <div className="h-3 items-center text-sm">
-                  <FormMessage />
-                </div>
-              </FormItem>
-            )}
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-1">
+        <div className="flex flex-col gap-1">
+          <label
+            className="leading-1 mt-1 block text-sm font-medium text-black/80"
+            htmlFor="fullname"
+          >
+            Nombre completo
+          </label>
+          <input
+            id="fullname"
+            type="text"
+            autoComplete="off"
+            className="w-full rounded-md border-2 border-gray-400 px-3 py-2"
+            placeholder="ej: Luis Antonio ..."
+            {...register("fullname", {
+              required: {
+                value: true,
+                message: "*Nombre es requerido.",
+              },
+              min: {
+                value: 1,
+                message: "*Debe ser mínimo 1 caracter.",
+              },
+              maxLength: {
+                value: 254,
+                message: "*No debe superar los 254 caracteres.",
+              },
+            })}
           />
-          <FormField
-            control={form.control}
-            name="birthday"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  htmlFor="birthday"
-                  className={cn(
-                    "leading-1 mt-2 block text-sm font-medium text-gray-900",
-                  )}
-                >
-                  Fecha de nac.
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    id="birthday"
-                    className={cn(
-                      "block w-full rounded-md border-0 py-1 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-4",
-                    )}
-                    type="date"
-                    {...field}
-                  />
-                </FormControl>
-                <div className="h-3 items-center text-sm">
-                  <FormMessage />
-                </div>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="idBelt"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  htmlFor="idBelt"
-                  className={cn(
-                    "leading-1 mt-2 block text-sm font-medium text-gray-900",
-                  )}
-                >
-                  Cinturón
-                </FormLabel>
-                <Select
-                  required
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="w-[180px]">
-                      <SelectValue placeholder="Cinturón" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {Array.isArray(belts) &&
-                      belts.map((belt) => {
-                        return (
-                          <SelectItem key={belt.id} value={String(belt.id)}>
-                            {belt.name}
-                          </SelectItem>
-                        );
-                      })}
-                  </SelectContent>
-                </Select>
-                <div className="h-3 items-center text-sm">
-                  <FormMessage />
-                </div>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="phoneNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  htmlFor="phoneNumber"
-                  className={cn(
-                    "leading-1 mt-2 block text-sm font-medium text-gray-900",
-                  )}
-                >
-                  Núm. Teléfono
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    id="phoneNumber"
-                    className={cn(
-                      "block w-full rounded-md border-0 py-1 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-4",
-                    )}
-                    type="text"
-                    placeholder="ej: 376-430329"
-                    {...field}
-                  />
-                </FormControl>
-                <div className="h-3 items-center text-sm">
-                  <FormMessage />
-                </div>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="tutor"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  htmlFor="tutor"
-                  className={cn(
-                    "leading-1 mt-2 block text-sm font-medium text-gray-900",
-                  )}
-                >
-                  Nombre de un tutor
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    id="tutor"
-                    className={cn(
-                      "block w-full rounded-md border-0 py-1 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-4",
-                    )}
-                    type="text"
-                    placeholder="ej: Carlos Alvarez"
-                    {...field}
-                  />
-                </FormControl>
-                <div className="h-3 items-center text-sm">
-                  <FormMessage />
-                </div>
-              </FormItem>
-            )}
-          />
+          {errors.fullname && (
+            <ErrorMessage>{String(errors.fullname.message)}</ErrorMessage>
+          )}
+        </div>
 
-          <div>
-            <DialogFooter>
-              <DialogClose asChild>
-                <Button disabled={isPending} type="button" variant="outline">
-                  Cancelar
-                </Button>
-              </DialogClose>
-              <Button
-                disabled={isPending}
-                className={cn(
-                  "flex w-full justify-center rounded-md bg-indigo-600 px-2 py-1.5 text-sm font-semibold leading-4 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
-                )}
-                type="submit"
-              >
-                Guardar
+        <div className="flex flex-col gap-1">
+          <label
+            className="leading-1 mt-1 block text-sm font-medium text-black/80"
+            htmlFor="birthday"
+          >
+            Fecha de nac.
+          </label>
+          <input
+            id="birthday"
+            type="date"
+            className="w-full rounded-md border-2 border-gray-400 px-3 py-2"
+            {...register("birthday", {
+              required: {
+                value: true,
+                message: "*Fecha de nac. es requerida.",
+              },
+            })}
+          />
+          {errors.birthday && (
+            <ErrorMessage>{String(errors.birthday.message)}</ErrorMessage>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label htmlFor="idBelt">Cinturón</label>
+          <select
+            id="idBelt"
+            className="w-full rounded-md border-2 border-gray-400 px-3 py-2"
+            {...register("idBelt", {
+              required: {
+                value: true,
+                message: "*El cinturón es requerido.",
+              },
+              minLength: {
+                value: 1,
+                message: "*Debe seleccionar un cinturón.",
+              },
+            })}
+          >
+            {Array.isArray(belts) &&
+              belts.map((belt) => {
+                return (
+                  <option
+                    className="flex items-center gap-1 text-sm text-black/80"
+                    key={belt.id}
+                    value={belt.id}
+                  >
+                    {belt.name}
+                  </option>
+                );
+              })}
+          </select>
+          {errors.idBelt && (
+            <ErrorMessage>{String(errors.idBelt.message)}</ErrorMessage>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label
+            className="leading-1 mt-1 block text-sm font-medium text-black/80"
+            htmlFor="phoneNumber"
+          >
+            Núm. Teléfono
+          </label>
+          <input
+            id="phoneNumber"
+            type="text"
+            autoComplete="off"
+            className="w-full rounded-md border-2 border-gray-400 px-3 py-2"
+            placeholder="ej: 376-430329"
+            {...register("phoneNumber", {
+              maxLength: {
+                value: 99,
+                message: "*No debe superar los 99 caracteres.",
+              },
+            })}
+          />
+          {errors.phoneNumber && (
+            <ErrorMessage>{String(errors.phoneNumber.message)}</ErrorMessage>
+          )}
+        </div>
+
+        <div className="mb-1 flex flex-col gap-1">
+          <label
+            className="leading-1 mt-1 block text-sm font-medium text-black/80"
+            htmlFor="tutor"
+          >
+            Nombre de un tutor
+          </label>
+          <input
+            id="tutor"
+            type="text"
+            autoComplete="off"
+            className="w-full rounded-md border-2 border-gray-400 px-3 py-2"
+            placeholder="ej: Carlos Alvarez"
+            {...register("tutor", {
+              maxLength: {
+                value: 254,
+                message: "*No debe superar los 254 caracteres.",
+              },
+            })}
+          />
+          {errors.tutor && (
+            <ErrorMessage>{String(errors.tutor.message)}</ErrorMessage>
+          )}
+        </div>
+
+        <div>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button disabled={isPending} type="button" variant="outline">
+                Cancelar
               </Button>
-            </DialogFooter>
-          </div>
-        </form>
-      </Form>
-      <div>
-        {error !== null && (
-          <p className="mt-1 text-center text-sm text-red-500">{error}</p>
-        )}
-      </div>
+            </DialogClose>
+            <Button
+              disabled={isPending}
+              className={cn(
+                "flex w-full justify-center rounded-md bg-indigo-600 px-2 py-1.5 text-sm font-semibold leading-4 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
+              )}
+              type="submit"
+            >
+              Guardar
+            </Button>
+          </DialogFooter>
+        </div>
+      </form>
     </>
   );
 }

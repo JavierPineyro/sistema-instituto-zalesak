@@ -1,6 +1,7 @@
 import { mockAlumn } from "~/components/alumnos/tables/data";
 import {
   NewAlumn,
+  NewAlumnToSave,
   NewOrder,
   NewPayment,
   Order,
@@ -135,9 +136,8 @@ export const service = {
       });
       return !!data;
     },
-    save: async (alumn: NewAlumn) => {
-      const { fullname, birthday, phoneNumber, tutor, idBelt: belt } = alumn;
-      const idBelt = Number(belt);
+    save: async (alumn: NewAlumnToSave) => {
+      const { fullname, birthday, phoneNumber, tutor, idBelt } = alumn;
       await db.insert(alumnos).values({
         fullname,
         birthday,
