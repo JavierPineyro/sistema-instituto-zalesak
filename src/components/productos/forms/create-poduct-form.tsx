@@ -49,6 +49,7 @@ export default function CreateProductForm() {
           <input
             id="name"
             type="text"
+            autoComplete="off"
             className="w-full rounded-md border-2 border-gray-400 px-3 py-2"
             placeholder="ej: Cinturón blanco..."
             {...register("name", {
@@ -56,7 +57,7 @@ export default function CreateProductForm() {
                 value: true,
                 message: "*Nombre es requerido.",
               },
-              minLength: {
+              min: {
                 value: 1,
                 message: "*No puede estar vacío.",
               },

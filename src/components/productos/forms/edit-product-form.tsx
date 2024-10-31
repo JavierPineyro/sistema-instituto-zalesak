@@ -39,6 +39,7 @@ export default function EditProductForm({ product }: Props) {
     startTransition(async () => {
       const response = await editProductAction(updatedProduct);
       if (response.success) {
+        toast.success(response.message);
         router.push(`/admin/productos`);
       } else {
         toast.error(response.message);
@@ -59,7 +60,7 @@ export default function EditProductForm({ product }: Props) {
               value: true,
               message: "*Nombre es requerido.",
             },
-            minLength: {
+            min: {
               value: 1,
               message: "*No puede estar vacío.",
             },

@@ -38,6 +38,7 @@ export default function EditOrderForm({ order }: Props) {
     startTransition(async () => {
       const response = await editOrderAction(orderToUpdate);
       if (response.success) {
+        toast.success(response.message);
         router.push(`/admin/pedidos`);
       } else {
         toast.error(response.message);
