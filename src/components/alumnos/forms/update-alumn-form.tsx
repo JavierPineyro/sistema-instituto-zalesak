@@ -2,32 +2,13 @@
 
 import { Belt } from "~/lib/types";
 import updateAlumnAction from "~/server/actions/alumnos/update-action";
-import { AlumnUpdateSchema } from "~/lib/validations/alumn.schema";
-import { z } from "zod";
 import { useTransition } from "react";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
-import {
-  Form,
-  FormControl,
-  FormDescription,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "~/components/ui/form";
+import { FieldValues, useForm } from "react-hook-form";
 import { cn } from "~/lib/utils";
-import { Input } from "~/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "~/components/ui/select";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import { Button } from "~/components/ui/button";
+import ErrorMessage from "~/components/error-message";
 
 type Props = {
   belts: Belt[] | null;
@@ -46,32 +27,33 @@ export default function UpdateAlumnForm({ belts, alumn }: Props) {
   const [isPending, startTransition] = useTransition();
   const router = useRouter();
 
-  const form = useForm<z.infer<typeof AlumnUpdateSchema>>({
-    resolver: zodResolver(AlumnUpdateSchema),
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
     defaultValues: {
-      id: alumn.id,
       fullname: alumn.fullname,
       birthday: alumn.birthday,
       phoneNumber: alumn.phoneNumber ?? "",
       tutor: alumn.tutor ?? "",
-      idBelt: String(alumn.idBelt),
+      idBelt: alumn.idBelt,
     },
   });
 
-  async function onSubmit(values: z.infer<typeof AlumnUpdateSchema>) {
-    const { id, ...valuesWithoutId } = values;
-    const data = { ...valuesWithoutId, id: alumn.id };
+  async function onSubmit(data: FieldValues) {
     const updateAlumn = {
-      id: data.id,
-      fullname: data.fullname.trim(),
-      birthday: data.birthday,
-      phoneNumber: data.phoneNumber?.trim(),
-      tutor: data.tutor?.trim(),
-      idBelt: data.idBelt,
+      id: alumn.id,
+      fullname: data.fullname.trim() as string,
+      birthday: data.birthday as string,
+      phoneNumber: data.phoneNumber?.trim() as string,
+      tutor: data.tutor?.trim() as string,
+      idBelt: Number(data.idBelt),
     };
     startTransition(async () => {
       const response = await updateAlumnAction(updateAlumn);
       if (response.success) {
+        toast.success(response.message);
         router.push(`/admin/alumnos/${alumn.id}`);
       } else {
         toast.error(response.message);
@@ -81,198 +63,161 @@ export default function UpdateAlumnForm({ belts, alumn }: Props) {
 
   return (
     <>
-      <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)}>
-          <FormField
-            control={form.control}
-            name="id"
-            render={({ field }) => (
-              <FormItem>
-                <FormControl>
-                  <Input
-                    id="id"
-                    className={cn("hidden")}
-                    type="number"
-                    {...field}
-                  />
-                </FormControl>
-                <div className="h-3 items-center text-sm">
-                  <FormMessage />
-                </div>
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="fullname"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  htmlFor="fullname"
-                  className={cn(
-                    "leading-1 mt-2 block text-sm font-medium text-gray-900",
-                  )}
-                >
-                  Nombre Completo
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    id="fullname"
-                    className={cn(
-                      "block w-full rounded-md border-0 py-1 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-4",
-                    )}
-                    type="text"
-                    placeholder="ej: Luis Antonio ..."
-                    {...field}
-                  />
-                </FormControl>
-                <div className="h-3 items-center text-sm">
-                  <FormMessage />
-                </div>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="birthday"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  htmlFor="birthday"
-                  className={cn(
-                    "leading-1 mt-2 block w-full text-sm font-medium text-gray-900",
-                  )}
-                >
-                  Fecha de nac.
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    id="birthday"
-                    className={cn(
-                      "block w-full rounded-md border-0 py-1 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-4",
-                    )}
-                    type="date"
-                    {...field}
-                  />
-                </FormControl>
-                <div className="h-3 items-center text-sm">
-                  <FormMessage />
-                </div>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="idBelt"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  htmlFor="idBelt"
-                  className={cn(
-                    "leading-1 mt-2 block text-sm font-medium text-gray-900",
-                  )}
-                >
-                  Cinturón
-                </FormLabel>
-                <Select
-                  required
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger aria-required className="w-full">
-                      <SelectValue placeholder="Cinturón" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    {Array.isArray(belts) &&
-                      belts.map((belt) => {
-                        return (
-                          <SelectItem key={belt.id} value={String(belt.id)}>
-                            {belt.name}
-                          </SelectItem>
-                        );
-                      })}
-                  </SelectContent>
-                </Select>
-                <div className="h-3 items-center text-sm">
-                  <FormMessage />
-                </div>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="phoneNumber"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  htmlFor="phoneNumber"
-                  className={cn(
-                    "leading-1 mt-2 block text-sm font-medium text-gray-900",
-                  )}
-                >
-                  Núm. Teléfono
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    id="phoneNumber"
-                    className={cn(
-                      "block w-full rounded-md border-0 py-1 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-4",
-                    )}
-                    type="text"
-                    placeholder="ej: 376-430329"
-                    {...field}
-                  />
-                </FormControl>
-                <div className="h-3 items-center text-sm">
-                  <FormMessage />
-                </div>
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="tutor"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel
-                  htmlFor="tutor"
-                  className={cn(
-                    "leading-1 mt-2 block text-sm font-medium text-gray-900",
-                  )}
-                >
-                  Nombre de un tutor
-                </FormLabel>
-                <FormControl>
-                  <Input
-                    id="tutor"
-                    className={cn(
-                      "block w-full rounded-md border-0 py-1 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-4",
-                    )}
-                    type="text"
-                    placeholder="ej: Carlos Alvarez"
-                    {...field}
-                  />
-                </FormControl>
-                <div className="h-3 items-center text-sm">
-                  <FormMessage />
-                </div>
-              </FormItem>
-            )}
-          />
-          <Button
-            disabled={isPending}
-            type="submit"
-            className={cn(
-              "flex h-10 w-full items-center justify-center rounded-md bg-indigo-600 px-2 py-1.5 text-sm font-semibold leading-4 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
-            )}
+      <form className="flex flex-col gap-3" onSubmit={handleSubmit(onSubmit)}>
+        <div className="flex flex-col gap-1">
+          <label
+            className="leading-1 mt-1 block text-sm font-medium text-black/80"
+            htmlFor="fullname"
           >
-            Guardar
-          </Button>
-        </form>
-      </Form>
+            Nombre Completo
+          </label>
+          <input
+            id="fullname"
+            className="w-full rounded-md border-2 border-gray-400 px-3 py-2"
+            type="text"
+            autoComplete="off"
+            {...register("fullname", {
+              required: {
+                value: true,
+                message: "*Nombre es requerido.",
+              },
+              min: {
+                value: 1,
+                message: "*No puede estar vacío.",
+              },
+              maxLength: {
+                value: 254,
+                message: "*No debe superar los 254 caracteres.",
+              },
+            })}
+          />
+          {errors.fullname && (
+            <ErrorMessage>{String(errors.fullname.message)}</ErrorMessage>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label
+            className="leading-1 mt-1 block text-sm font-medium text-black/80"
+            htmlFor="birthday"
+          >
+            Fecha de nac.
+          </label>
+          <input
+            id="birthday"
+            type="date"
+            className="w-full rounded-md border-2 border-gray-400 px-3 py-2"
+            {...register("birthday", {
+              required: {
+                value: true,
+                message: "*Fecha de nac. es requerida.",
+              },
+            })}
+          />
+          {errors.birthday && (
+            <ErrorMessage>{String(errors.birthday.message)}</ErrorMessage>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label
+            className="leading-1 mt-1 block text-sm font-medium text-black/80"
+            htmlFor="idBelt"
+          >
+            Cinturón
+          </label>
+          <select
+            id="idBelt"
+            className="w-full rounded-md border-2 border-gray-400 px-3 py-2"
+            {...register("idBelt", {
+              required: {
+                value: true,
+                message: "*El cinturón es requerido.",
+              },
+              minLength: {
+                value: 1,
+                message: "*Debe seleccionar un cinturón.",
+              },
+            })}
+          >
+            {Array.isArray(belts) &&
+              belts.map((belt) => {
+                return (
+                  <option
+                    className="flex items-center gap-1 text-sm text-black/80"
+                    key={belt.id}
+                    value={belt.id}
+                  >
+                    {belt.name}
+                  </option>
+                );
+              })}
+          </select>
+          {errors.idBelt && (
+            <ErrorMessage>{String(errors.idBelt.message)}</ErrorMessage>
+          )}
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <label
+            className="leading-1 mt-1 block text-sm font-medium text-black/80"
+            htmlFor="phoneNumber"
+          >
+            Núm. Teléfono
+          </label>
+          <input
+            id="phoneNumber"
+            type="text"
+            autoComplete="off"
+            className="w-full rounded-md border-2 border-gray-400 px-3 py-2"
+            placeholder="ej: 376-430329"
+            {...register("phoneNumber", {
+              maxLength: {
+                value: 99,
+                message: "*No debe superar los 99 caracteres.",
+              },
+            })}
+          />
+          {errors.phoneNumber && (
+            <ErrorMessage>{String(errors.phoneNumber.message)}</ErrorMessage>
+          )}
+        </div>
+
+        <div className="mb-1 flex flex-col gap-1">
+          <label
+            className="leading-1 mt-1 block text-sm font-medium text-black/80"
+            htmlFor="tutor"
+          >
+            Nombre de un tutor
+          </label>
+          <input
+            id="tutor"
+            type="text"
+            autoComplete="off"
+            className="w-full rounded-md border-2 border-gray-400 px-3 py-2"
+            placeholder="ej: Carlos Alvarez"
+            {...register("tutor", {
+              maxLength: {
+                value: 254,
+                message: "*No debe superar los 254 caracteres.",
+              },
+            })}
+          />
+          {errors.tutor && (
+            <ErrorMessage>{String(errors.tutor.message)}</ErrorMessage>
+          )}
+        </div>
+
+        <Button
+          disabled={isPending}
+          type="submit"
+          className={cn(
+            "flex h-10 w-full items-center justify-center rounded-md bg-indigo-600 px-2 py-1.5 text-sm font-semibold leading-4 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600",
+          )}
+        >
+          Guardar
+        </Button>
+      </form>
     </>
   );
 }
