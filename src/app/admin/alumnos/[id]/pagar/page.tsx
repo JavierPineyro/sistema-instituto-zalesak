@@ -10,7 +10,8 @@ type Props = {
 export default async function PayPage({ params }: Props) {
   const amount = await service.precioServicio.getAmount();
   if (!amount) {
-    throw new Error("No se encontró el precio de la cuota en PayPage");
+    console.error("No se encontró el precio de la cuota en PayPage");
+    return <h2>No se encontró el precio de la cuota, intente más tarde</h2>;
   }
 
   const { id } = params;
@@ -21,7 +22,8 @@ export default async function PayPage({ params }: Props) {
   );
 
   if (!alumn) {
-    throw new Error("No se encontró el alumno de la cuota en PayPage");
+    console.error("No se encontró el precio de la cuota en PayPage");
+    return <h2>No se encontró el alumno, intente más tarde</h2>;
   }
 
   const date = new Intl.DateTimeFormat("es-AR", {

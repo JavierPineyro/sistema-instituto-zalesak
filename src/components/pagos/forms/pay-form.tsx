@@ -59,7 +59,7 @@ export default function PayForm({ id, alumn, amount }: Props) {
       if (response.success) {
         reset();
         toast.success(response.message);
-        router.refresh();
+        router.push(`/admin/alumnos/${id}`);
       } else {
         toast.error(response.message);
       }
@@ -94,7 +94,7 @@ export default function PayForm({ id, alumn, amount }: Props) {
                 value: true,
                 message: "*Concepto del pago es requerido.",
               },
-              minLength: {
+              min: {
                 value: 1,
                 message: "*Debes completar en concepto del pago.",
               },
@@ -142,7 +142,7 @@ export default function PayForm({ id, alumn, amount }: Props) {
             placeholder="ej: Quince mil..."
             className="w-full rounded-md border-2 border-gray-400 px-3 py-2"
             {...register("writtenAmount", {
-              minLength: {
+              min: {
                 value: 1,
                 message: "*Debe escribir el monto del pago",
               },
