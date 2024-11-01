@@ -13,6 +13,7 @@ import { db } from "./db";
 import { count, eq, between, desc, asc } from "drizzle-orm";
 import {
   alumnos,
+  cinturones,
   pagos,
   pedidos,
   precioCuota,
@@ -20,6 +21,7 @@ import {
   recibos,
 } from "./db/schema";
 import { formatPedidoResponse, formatPedidosResponse } from "~/lib/utils";
+import { Database } from "lucide-react";
 
 export const service = {
   alumnos: {
@@ -182,7 +184,31 @@ export const service = {
   },
   cinturones: {
     list: async () => {
-      const data = await db.query.cinturones.findMany();
+      const data = await db.query.cinturones.findMany({
+        orderBy: [asc(cinturones.id)],
+      });
+      return data;
+    },
+    save: async (cinturon: { name: string; description: string|null }) => {
+      const { name, description } = cinturon;
+      await db.insert(cinturones).values({ name, description });
+      return cinturon;
+    },
+    delete: async (id: number) => {
+      const data = await db
+        .delete(pedidos)
+        .where(eq(pedidos.id, id))
+        .returning({ id: pedidos.id });
+
+      return data;
+    },
+    update: async (belt: { id: number; name: string; description: string|null }) => {
+      const { name, description } = belt;
+      const data = await db
+        .update(cinturones)
+        .set({ name, description })
+        .where(eq(cinturones.id, belt.id))
+        .returning({ id: cinturones.id });
       return data;
     },
   },
@@ -267,6 +293,26 @@ export const service = {
         where: eq(precioCuota.name, "cuota"),
       });
       return amount;
+    },
+    getCuotaService: async () => {
+      const data = await db.query.precioCuota.findFirst({
+        where: eq(precioCuota.name, "cuota"),
+      });
+      return data;
+    },
+    updateCuotaService: async (cuota: {
+      id: number;
+      name: string;
+      price: number;
+      updatedAt: Date;
+    }) => {
+      const { id, name, price, updatedAt } = cuota;
+      const data = await db
+        .update(precioCuota)
+        .set({ name, price, updatedAt })
+        .where(eq(precioCuota.id, id))
+        .returning({ id: precioCuota.id });
+      return data;
     },
   },
   pedidos: {

@@ -9,7 +9,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { LogOut } from "lucide-react";
+import { LogOut, Settings, Archive } from "lucide-react";
+import Link from "next/link";
 
 export default function UserNav() {
   return (
@@ -34,13 +35,29 @@ export default function UserNav() {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           <DropdownMenuItem>Cinturones</DropdownMenuItem>
-          <DropdownMenuItem>Crear Recibo</DropdownMenuItem>
-          <DropdownMenuItem>Ajustes</DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link
+              className="flex w-full gap-1 transition-colors hover:bg-gray-400"
+              href="/admin/recibos"
+            >
+              <Archive className="h-4 w-4 text-black/60" />
+              Ver Recibos
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem>
+            <Link
+              className="flex w-full gap-1 transition-colors hover:bg-gray-400"
+              href="/admin/ajustes"
+            >
+              <Settings className="h-4 w-4 text-black/60" />
+              Ajustes
+            </Link>
+          </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
+          <LogOut className="mr-auto h-4 w-4 text-black/60" />
           Cerrar Sesión
-          <LogOut className="ml-auto h-4 w-4 text-black/60" />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
