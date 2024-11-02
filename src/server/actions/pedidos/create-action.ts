@@ -67,6 +67,8 @@ export default async function createOrderAction(
       Response.message = ValidationMessage.UNEXPECTED_ERROR;
       console.error(error);
     }
+    console.error(error);
+
   }
 
   if (Response.success) {

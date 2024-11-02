@@ -51,7 +51,7 @@ export enum ValidationMessage {
   PRODUCT_DELETED = "El producto se eliminó correctamente",
   PRODUCT_NOT_DELETED = "El producto no se pudo eliminar",
   WRONG_PRODUCT_DATA = "Datos incorrectos o malformados del producto",
-  PRODUCT_ERROR = "Error inesperado al realizar esta acción",
+  PRODUCT_ERROR_MSG = "Error inesperado al realizar esta acción",
   // ORDERS
   ORDER_CREATED_SUCCESSFULLY = "El pedido se creó correctamente",
   ORDER_CREATE_ERROR = "Error al crear el pedido",
@@ -60,6 +60,14 @@ export enum ValidationMessage {
   ORDER_DELETED = "El pedido se eliminó correctamente",
   ORDER_NOT_DELETED = "El pedido no se pudo eliminar",
   WRONG_ORDER_DATA = "Datos incorrectos o malformados del pedido",
+  // EQUIPMENTS
+  EQUIPMENT_CREATED_SUCCESSFULLY = "El equipamiento se creó correctamente",
+  EQUIPMENT_CREATE_ERROR = "Error al crear el equipamiento",
+  EQUIPMENT_UPDATED = "El equipamiento se actualizó correctamente",
+  EQUIPMENT_UPDATE_ERROR = "Error al actualizar el equipamiento",
+  EQUIPMENT_DELETED = "El equipamiento se eliminó correctamente",
+  EQUIPMENT_NOT_DELETED = "El equipamiento no se pudo eliminar",
+  WRONG_EQUIPMENT_DATA = "Datos incorrectos o malformados del equipamiento",
 }
 
 export enum StatusActive {
@@ -220,4 +228,18 @@ export type OrderTable = {
   idAlumn: number | null;
   total: number;
   state: string;
+};
+
+// INVENTORY
+export type Inventory = {
+  id: number;
+  name: string;
+  quantity: number;
+  observation: string | null;
+};
+
+export type NewInventory = {
+  name: string;
+  quantity: number;
+  observation: string | null;
 };

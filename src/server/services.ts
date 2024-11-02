@@ -1,7 +1,9 @@
 import { mockAlumn } from "~/components/alumnos/tables/data";
 import {
+  Inventory,
   NewAlumn,
   NewAlumnToSave,
+  NewInventory,
   NewOrder,
   NewPayment,
   Order,
@@ -14,6 +16,7 @@ import { count, eq, between, desc, asc } from "drizzle-orm";
 import {
   alumnos,
   cinturones,
+  inventario,
   pagos,
   pedidos,
   precioCuota,
@@ -189,7 +192,7 @@ export const service = {
       });
       return data;
     },
-    save: async (cinturon: { name: string; description: string|null }) => {
+    save: async (cinturon: { name: string; description: string | null }) => {
       const { name, description } = cinturon;
       await db.insert(cinturones).values({ name, description });
       return cinturon;
@@ -202,7 +205,11 @@ export const service = {
 
       return data;
     },
-    update: async (belt: { id: number; name: string; description: string|null }) => {
+    update: async (belt: {
+      id: number;
+      name: string;
+      description: string | null;
+    }) => {
       const { name, description } = belt;
       const data = await db
         .update(cinturones)
@@ -465,6 +472,37 @@ export const service = {
         .where(eq(precios.id, product.id))
         .returning({ id: precios.id });
       return response;
+    },
+  },
+  inventario: {
+    list: async () => {
+      const data = await db.query.inventario.findMany({
+        orderBy: [desc(inventario.id)],
+      });
+      return data;
+    },
+    save: async (inventory: NewInventory) => {
+      const { name, quantity, observation } = inventory;
+      const data = await db.insert(inventario)
+        .values({ name, quantity, observation })
+        .returning({ id: inventario.id });
+      return data;
+    },
+    update: async (inventory: Inventory) => {
+      const { id, name, quantity, observation } = inventory;
+      const data = await db
+        .update(inventario)
+        .set({ name, quantity, observation })
+        .where(eq(inventario.id, id))
+        .returning({ id: inventario.id });
+      return data;
+    },
+    delete: async (id: number) => {
+      const data = await db
+        .delete(inventario)
+        .where(eq(inventario.id, id))
+        .returning({ id: inventario.id });
+      return data;
     },
   },
 };

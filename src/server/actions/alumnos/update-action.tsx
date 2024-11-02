@@ -33,6 +33,7 @@ export default async function updateAlumnAction(alumn: UpdateAlumn) {
     } else {
       Response.message = ValidationMessage.ALUMN_UPDATE_ERROR;
     }
+    console.error(error);
   }
 
   revalidatePath("/admin/alumnos");

@@ -26,6 +26,8 @@ export default async function deleteAction(id: number) {
     } else {
       Response.message = ValidationMessage.UNEXPECTED_ERROR;
     }
+    console.error(error);
+
   }
     revalidatePath("/admin/pedidos");
     return Response;

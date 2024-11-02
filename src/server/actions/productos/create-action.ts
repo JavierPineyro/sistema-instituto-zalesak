@@ -29,7 +29,7 @@ export default async function createProductAction(product: ProductAction) {
     if (error instanceof ValidationError) {
       Response.message = error.message;
     } else {
-      Response.message = ValidationMessage.PRODUCT_ERROR;
+      Response.message = ValidationMessage.PRODUCT_ERROR_MSG;
     }
     console.log("Error al crear producto", error);
   }

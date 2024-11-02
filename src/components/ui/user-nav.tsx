@@ -28,7 +28,7 @@ export default function UserNav() {
           <div className="flex flex-col space-y-1">
             <p className="text-sm font-medium leading-none">Administrador</p>
             <p className="text-muted-foreground text-xs leading-none">
-              m@example.com
+              tienes todos los permisos
             </p>
           </div>
         </DropdownMenuLabel>

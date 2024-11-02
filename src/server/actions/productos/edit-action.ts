@@ -31,8 +31,10 @@ export default async function editProductAction(product: Product) {
     if (error instanceof ValidationError) {
       Response.message = error.message;
     } else {
-      Response.message = ValidationMessage.PRODUCT_ERROR;
+      Response.message = ValidationMessage.PRODUCT_ERROR_MSG;
     }
+    console.error(error);
+
   }
 
   if (Response.success) {

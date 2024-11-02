@@ -42,6 +42,8 @@ export default async function editOrderAction(order: OrderAction) {
     } else {
       Response.message = ValidationMessage.UNEXPECTED_ERROR;
     }
+    console.error(error);
+
   }
 
   if (Response.success) {

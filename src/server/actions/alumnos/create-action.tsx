@@ -35,6 +35,7 @@ export default async function createAlumnAction(alumn: NewAlumnToSave) {
     } else {
       Response.message = ValidationMessage.ALUMN_CREATE_ERROR;
     }
+    console.error(error);
   }
 
   if (Response.success) {
