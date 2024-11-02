@@ -58,6 +58,30 @@ export default function UpdateCuotaModal({ cuota }: Props) {
     });
   }
 
+  function formatRelativeDate(updatedAt: Date) {
+    const now = new Date();
+    const secondsElapsed = Math.floor(
+      (now.getTime() - updatedAt.getTime()) / 1000,
+    );
+
+    const rtf = new Intl.RelativeTimeFormat("es", { numeric: "auto" });
+    const intervals: [number, Intl.RelativeTimeFormatUnit][] = [
+      [60, "second"],
+      [3600, "minute"],
+      [86400, "hour"],
+      [2592000, "day"],
+      [31536000, "month"],
+      [Infinity, "year"],
+    ];
+
+    for (const [limit, unit] of intervals) {
+      if (secondsElapsed < limit) {
+        const value = -Math.floor(secondsElapsed / (limit / 60));
+        return rtf.format(value, unit);
+      }
+    }
+  }
+
   return (
     <Dialog>
       <DialogTrigger asChild>
@@ -70,12 +94,7 @@ export default function UpdateCuotaModal({ cuota }: Props) {
         <DialogHeader>
           <DialogTitle>Editar cuota</DialogTitle>
           <p className="text-muted-foreground">
-            Última actualización:{" "}
-            {cuota.updatedAt.toLocaleDateString("es-AR", {
-              day: "2-digit",
-              month: "2-digit",
-              year: "numeric",
-            })}
+            Última actualización: {formatRelativeDate(cuota.updatedAt)}
           </p>
         </DialogHeader>
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-1">
