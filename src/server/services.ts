@@ -415,6 +415,26 @@ export const service = {
 
       return response;
     },
+    getPendingOrders: async () => {
+      const data = await db.query.pedidos.findMany({
+        orderBy: [desc(pedidos.id)],
+        where: eq(pedidos.state, "pendiente"),
+        columns: {
+          id: true,
+          idProduct: true,
+          quantity: true,
+        },
+        with: {
+          producto: {
+            columns: {
+              name: true,
+              teacherPrice: true,
+            },
+          },
+        },
+      });
+      return data;
+    },
   },
   precios: {
     list: async () => {
@@ -483,7 +503,8 @@ export const service = {
     },
     save: async (inventory: NewInventory) => {
       const { name, quantity, observation } = inventory;
-      const data = await db.insert(inventario)
+      const data = await db
+        .insert(inventario)
         .values({ name, quantity, observation })
         .returning({ id: inventario.id });
       return data;

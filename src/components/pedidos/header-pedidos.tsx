@@ -1,4 +1,6 @@
 import { Package } from "lucide-react";
+import { Button } from "../ui/button";
+import Link from "next/link";
 
 export default function HeaderPedidos() {
   return (
@@ -11,6 +13,9 @@ export default function HeaderPedidos() {
           Aquí podrás ver la lista de pedidos
         </p>
       </div>
+      <Button asChild>
+        <Link href="/admin/pedidos/lista"> Generar lista de pedidos </Link>
+      </Button>
     </div>
   );
 }
