@@ -51,6 +51,7 @@ export enum ValidationMessage {
   PRODUCT_DELETED = "El producto se eliminó correctamente",
   PRODUCT_NOT_DELETED = "El producto no se pudo eliminar",
   WRONG_PRODUCT_DATA = "Datos incorrectos o malformados del producto",
+  // eslint-disable-next-line @typescript-eslint/no-duplicate-enum-values
   PRODUCT_ERROR_MSG = "Error inesperado al realizar esta acción",
   // ORDERS
   ORDER_CREATED_SUCCESSFULLY = "El pedido se creó correctamente",
