@@ -72,13 +72,6 @@ export const authenticators = pgTable(
   }),
 );
 
-// addmissionDate por defecto en la db se va a crear con un dia más debido
-// a la diferencia horaria. esto puede hacer que en el componente cuotas
-// se vea mal los colores, si se da el caso que la inscricion del alumno
-// coincide con el ultimo dia del mes, esto hará que en la db se cree con el
-// primer dia del siguiente mes y va a marcar el mes inscripto con el color gris
-// eso se puede evitar creando la fecha de admision en la Action de crear alumno
-// agregando la fecha a mano con el new Date.
 export const alumnos = pgTable("alumnos", {
   id: serial("id").primaryKey(),
   fullname: varchar("nombre_completo", { length: 255 }).notNull(),
@@ -123,7 +116,7 @@ export const precios = pgTable("precios", {
 });
 
 export const preciosRelation = relations(precios, ({ many }) => ({
-  pedidos: many(pedidos), // ??????????????????
+  pedidos: many(pedidos),
 }));
 
 export const recibos = pgTable("recibos", {
@@ -152,8 +145,7 @@ export const recibosRelation = relations(recibos, ({ one }) => ({
 export const pedidos = pgTable("pedidos", {
   id: serial("id").primaryKey(),
   idProduct: integer("id_producto")
-    .references(() => precios.id)
-    .notNull(),
+    .references(() => precios.id, {onUpdate: "cascade", onDelete: "cascade"}),
   quantity: integer("cantidad").notNull(),
   idAlumn: integer("id_alumno").references(() => alumnos.id),
   total: real("total").notNull(),
