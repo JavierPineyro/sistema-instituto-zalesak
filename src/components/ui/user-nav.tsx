@@ -9,10 +9,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "~/components/ui/dropdown-menu";
-import { LogOut, Settings, Archive } from "lucide-react";
+import { LogOut, Settings, Archive, HomeIcon } from "lucide-react";
 import Link from "next/link";
+import { cn } from "~/lib/utils";
+import { auth, signOut } from "auth";
+import { redirect } from "next/navigation";
 
-export default function UserNav() {
+export default async function UserNav() {
+  const session = await auth();
+
+  if (!session?.user) {
+    redirect("/login");
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -26,27 +35,35 @@ export default function UserNav() {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">Administrador</p>
+            <p className="text-xs font-medium leading-none">Administrador</p>
             <p className="text-muted-foreground text-xs leading-none">
-              tienes todos los permisos
+              {session.user?.name}, tienes todos los permisos
             </p>
           </div>
         </DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>Cinturones</DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem className={cn("p-0")}>
             <Link
-              className="flex w-full gap-1 transition-colors hover:bg-gray-400"
-              href="/admin/recibos"
+              className="flex w-full gap-1 px-2 py-3 transition-colors hover:bg-gray-300"
+              href="/admin"
             >
-              <Archive className="h-4 w-4 text-black/60" />
-              Ver Recibos
+              <HomeIcon className="h-4 w-4 text-black/60" />
+              Inicio
             </Link>
           </DropdownMenuItem>
-          <DropdownMenuItem>
+          <DropdownMenuItem className={cn("p-0")}>
             <Link
-              className="flex w-full gap-1 transition-colors hover:bg-gray-400"
+              className="flex w-full gap-1 px-2 py-3 transition-colors hover:bg-gray-300"
+              href="/admin/equipamiento"
+            >
+              <Archive className="h-4 w-4 text-black/60" />
+              Ver inventario
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem className={cn("p-0")}>
+            <Link
+              className="flex w-full gap-1 px-2 py-3 transition-colors hover:bg-gray-300"
               href="/admin/ajustes"
             >
               <Settings className="h-4 w-4 text-black/60" />
@@ -55,9 +72,22 @@ export default function UserNav() {
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <LogOut className="mr-auto h-4 w-4 text-black/60" />
-          Cerrar Sesión
+        <DropdownMenuItem className={cn("p-0")}>
+          <form
+            className="flex w-full justify-start"
+            action={async () => {
+              "use server";
+              await signOut({ redirectTo: "/login" });
+            }}
+          >
+            <button
+              className="flex w-full items-center justify-start gap-1 bg-transparent px-2 py-3 transition-colors hover:bg-gray-300"
+              type="submit"
+            >
+              <LogOut className="mr-auto h-4 w-4 text-black/60" />
+              Cerrar Sesión
+            </button>
+          </form>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
