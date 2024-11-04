@@ -145,7 +145,8 @@ export const recibosRelation = relations(recibos, ({ one }) => ({
 export const pedidos = pgTable("pedidos", {
   id: serial("id").primaryKey(),
   idProduct: integer("id_producto")
-    .references(() => precios.id, {onUpdate: "cascade", onDelete: "cascade"}),
+    .references(() => precios.id, {onUpdate: "cascade", onDelete: "cascade"})
+    .notNull(),
   quantity: integer("cantidad").notNull(),
   idAlumn: integer("id_alumno").references(() => alumnos.id),
   total: real("total").notNull(),
