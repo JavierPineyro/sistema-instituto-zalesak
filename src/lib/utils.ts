@@ -41,6 +41,26 @@ export function formatPedidoResponse(response: OrderResponse) {
   return reestructurePedido(response);
 }
 
+export function getFirstAndLastDayOfMonth(
+  year: number,
+  month: number,
+): { firstDay: string; lastDay: string } {
+  // Crear una fecha para el primer día del mes
+  const firstDay = new Date(year, month - 1, 1);
+
+  // Crear una fecha para el último día del mes
+  const lastDay = new Date(year, month, 0);
+
+  // Formatear las fechas como "año-mes-día"
+  const formatDate = (date: Date) =>
+    `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, "0")}-${String(date.getDate()).padStart(2, "0")}`;
+
+  return {
+    firstDay: formatDate(firstDay),
+    lastDay: formatDate(lastDay),
+  };
+}
+
 function reestructurePedido(item: OrderResponse) {
   let fullname = "";
   const { alumno, producto, ...rest } = item;

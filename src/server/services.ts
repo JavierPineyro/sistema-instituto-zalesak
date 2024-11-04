@@ -1,7 +1,5 @@
-import { mockAlumn } from "~/components/alumnos/tables/data";
 import {
   Inventory,
-  NewAlumn,
   NewAlumnToSave,
   NewInventory,
   NewOrder,
@@ -23,8 +21,11 @@ import {
   precios,
   recibos,
 } from "./db/schema";
-import { formatPedidoResponse, formatPedidosResponse } from "~/lib/utils";
-import { Database } from "lucide-react";
+import {
+  formatPedidoResponse,
+  formatPedidosResponse,
+  getFirstAndLastDayOfMonth,
+} from "~/lib/utils";
 
 export const service = {
   alumnos: {
@@ -167,11 +168,6 @@ export const service = {
         .returning({ id: alumnos.id });
       return result;
     },
-    delete: async (id: number) => {
-      const index = mockAlumn.findIndex((a) => a.id === id);
-      mockAlumn.splice(index, 1);
-      return true;
-    },
     count: async () => {
       const data = await db.select({ count: count() }).from(alumnos);
       return data;
@@ -292,6 +288,22 @@ export const service = {
         orderBy: [desc(recibos.date)],
       });
       return data;
+    },
+    getLastMonthIncome: async (year: number, month: number) => {
+      const { firstDay, lastDay } = getFirstAndLastDayOfMonth(year, month);
+      const data = await db.query.recibos.findMany({
+        where: between(recibos.date, firstDay, lastDay),
+        columns: {
+          amount: true,
+          tipo: true,
+          total: true,
+        },
+      });
+      const income = data.reduce((acc, item) => {
+        if (item.tipo === "cuota") return acc + item.total;
+        else return acc;
+      }, 0);
+      return income;
     },
   },
   precioServicio: {
@@ -435,6 +447,37 @@ export const service = {
       });
       return data;
     },
+    getPendingOrdersCount: async () => {
+      const data = await db
+        .select({ count: count() })
+        .from(pedidos)
+        .where(eq(pedidos.state, "pendiente"));
+      return data;
+    },
+    getLastPendingOrders: async (limit = 5) => {
+      const data = await db.query.pedidos.findMany({
+        orderBy: [desc(pedidos.id)],
+        where: eq(pedidos.state, "pendiente"),
+        limit: limit,
+        columns: {
+          id: true,
+          idProduct: true,
+          quantity: true,
+          total:true
+        },
+        with: {
+          producto: {
+            columns: {
+              name: true,
+              publicPrice: true,
+              teacherPrice: true,
+            },
+          },
+        },
+      });
+
+      return data;
+    },
   },
   precios: {
     list: async () => {
@@ -523,6 +566,10 @@ export const service = {
         .delete(inventario)
         .where(eq(inventario.id, id))
         .returning({ id: inventario.id });
+      return data;
+    },
+    count: async () => {
+      const data = await db.select({ count: count() }).from(inventario);
       return data;
     },
   },
