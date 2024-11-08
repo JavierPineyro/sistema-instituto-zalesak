@@ -12,7 +12,7 @@ export default async function OrderPage({ params }: Props) {
   const productsPromise = service.precios.listWithPublicPriceAndName();
   const [alumn, products] = await Promise.all([alumnPromise, productsPromise]);
 
-  if (!alumn || !products)
+  if (!alumn)
     return (
       <section>
         Alumno no encontrado
@@ -20,6 +20,16 @@ export default async function OrderPage({ params }: Props) {
         <a href={`/admin/alumnos/${Number(params.id)}`}>Volver</a>
       </section>
     );
+
+  if (!products) {
+    return (
+      <section>
+        No hay o no se pudo cargar los productos
+        <br />
+        <a href={`/admin/alumnos/${Number(params.id)}`}>Volver</a>
+      </section>
+    );
+  }
 
   return (
     <section className="px-5 pb-10">

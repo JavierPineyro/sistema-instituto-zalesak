@@ -1,5 +1,11 @@
 import { number, object, string, z } from "zod";
 
+export const CuotaCreateSchema = object({
+  price: number({ required_error: "El precio es obligatorio" }).positive(
+    "El total debe ser mayor a 0",
+  ),
+});
+
 export const CuotaUpdateSchema = object({
   id: number({ required_error: "El id es obligatorio" }).positive(
     "El id del pedido debe ser mayor a 0",

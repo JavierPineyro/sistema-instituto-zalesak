@@ -333,6 +333,17 @@ export const service = {
         .returning({ id: precioCuota.id });
       return data;
     },
+    createCuotaService: async (cuota: { price: number }) => {
+      const { price } = cuota;
+      const name = "cuota";
+      const updatedAt = new Date();
+      
+      const data = await db
+        .insert(precioCuota)
+        .values({ price, name,updatedAt })
+        .returning({ id: precioCuota.id });
+      return data;
+    },
   },
   pedidos: {
     list: async () => {
@@ -463,7 +474,7 @@ export const service = {
           id: true,
           idProduct: true,
           quantity: true,
-          total:true
+          total: true,
         },
         with: {
           producto: {
