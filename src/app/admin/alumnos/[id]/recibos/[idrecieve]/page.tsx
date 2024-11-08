@@ -1,3 +1,4 @@
+import PdfRecieveDuplicate from "~/components/pdf/duplicate/pdf-recieve-duplicate";
 import PdfRecieve from "~/components/pdf/PdfRecieve";
 import { service } from "~/server/services";
 
@@ -17,9 +18,15 @@ export default async function ReciboPage({ params }: Props) {
   return (
     <div className="flex flex-col justify-center gap-2 text-center">
       <header>
-        <h1 className="text-3xl font-bold">Recibo de pago</h1>
+        <h1 className="text-3xl font-bold">Recibo Original</h1>
       </header>
       <PdfRecieve recieve={recieve} />
+      <div className="text-center">
+        <header>
+          <h2 className="text-3xl font-bold">Recibo Duplicado</h2>
+        </header>
+        <PdfRecieveDuplicate recieve={recieve} />
+      </div>
     </div>
   );
 }
